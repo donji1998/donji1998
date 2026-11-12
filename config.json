@@ -1,0 +1,13 @@
+{
+  "cityName": "Subville",
+  "mayorName": "Mayor Max",
+  "lang": "en",
+  "channel": "",
+  "videoId": "",
+  "startCash": 15000,
+  "economy": { "perSubscriber": 1000, "perLike": 1, "perComment": 2 },
+  "maxCommentBuildsPerDay": 4,
+  "maxHousingPerDay": 12,
+  "commentPages": 3,
+  "blocklist": []
+}

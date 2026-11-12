@@ -1,0 +1,18 @@
+{
+  "name": "subville",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A 3D city that grows with your YouTube subscribers and comments, rendered as daily Shorts.",
+  "scripts": {
+    "day": "node src/day.mjs",
+    "render": "node src/render.mjs",
+    "preview": "node src/serve.mjs",
+    "demo": "node src/day.mjs --dir demo --reset --input data/demo/day-1.json && node src/day.mjs --dir demo --input data/demo/day-2.json && node src/day.mjs --dir demo --input data/demo/day-3.json",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@fontsource/baloo-2": "^5.0.0",
+    "three": "^0.170.0"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "subscribers": 11900,
+  "video": { "id": "demo-3", "title": "Day 2 in Subville", "likes": 21800, "commentCount": 3105 },
+  "comments": [
+    { "author": "@greta.g", "text": "Can I open a sushi bar?", "likes": 1420 },
+    { "author": "@felix.fire", "text": "I want to be the fire chief", "likes": 1100 },
+    { "author": "@miss.maple", "text": "can i be a teacher? i'd love a school", "likes": 870 },
+    { "author": "@neo_nacho", "text": "I want to open a gaming store", "likes": 655 },
+    { "author": "@ida.ink", "text": "Can I open a bookstore?", "likes": 420 },
+    { "author": "@nurse.nele", "text": "can i work as a nurse at the hospital", "likes": 300 },
+    { "author": "@paw.pia", "text": "I want to help at the animal shelter", "likes": 280 },
+    { "author": "@vet.vic", "text": "i'm a vet, let me help the animals", "likes": 160 },
+    { "author": "@sam_sail", "text": "HARBOR. we need boats", "likes": 510 },
+    { "author": "@ava.air", "text": "airport so we can fly in", "likes": 480 },
+    { "author": "@port.pete", "text": "harbor all the way", "likes": 210 },
+    { "author": "@wave_wil", "text": "i vote harbor", "likes": 95 }
+  ]
+}

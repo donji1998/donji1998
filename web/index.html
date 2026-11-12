@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Subville player</title>
+<link rel="stylesheet" href="style.css">
+<script type="importmap">
+{ "imports": { "three": "/node_modules/three/build/three.module.js", "three/addons/": "/node_modules/three/examples/jsm/" } }
+</script>
+</head>
+<body>
+<div id="stage">
+  <canvas id="gl"></canvas>
+  <div id="ui">
+    <div id="hud">
+      <div class="row">
+        <div class="pill cash"><span class="coin">€</span><div><small id="l-cash"></small><b id="v-cash"></b></div></div>
+        <div class="pill"><span class="ico">👤</span><div><small id="l-res"></small><b id="v-res"></b></div></div>
+        <div class="pill day"><div><small id="l-day"></small><b id="v-day"></b></div></div>
+      </div>
+      <div class="pill wide" id="homes"><span class="ico">🏠</span><div><small id="l-home"></small><b id="v-home"></b></div><em id="v-tents"></em></div>
+    </div>
+    <div id="panels"></div>
+    <div id="tags"></div>
+    <div id="caption"></div>
+  </div>
+</div>
+<div id="controls"><button id="play">⏸</button><input id="seek" type="range" min="0" max="1" step="0.001" value="0"><span id="clock"></span></div>
+<script type="module" src="player.js"></script>
+</body>
+</html>

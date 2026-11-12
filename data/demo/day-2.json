@@ -1,0 +1,19 @@
+{
+  "subscribers": 5180,
+  "video": { "id": "demo-2", "title": "Day 1 in Subville", "likes": 9420, "commentCount": 1240 },
+  "comments": [
+    { "author": "@mira.moon", "text": "Can I open a kebab shop?", "likes": 812 },
+    { "author": "@tom_tinker", "text": "I want to run a garage with taxis for everyone", "likes": 640 },
+    { "author": "@dr.sunny", "text": "Could I be the head doctor of a hospital please?", "likes": 590 },
+    { "author": "@fiona.fern", "text": "Can I open a flower shop next to the bakery?", "likes": 402 },
+    { "author": "@ole_otter", "text": "I wanna open an animal shelter for strays", "likes": 377 },
+    { "author": "@captain.cas", "text": "let me join the police!", "likes": 150 },
+    { "author": "@ziggy_zo", "text": "I want to be a cop too", "likes": 96 },
+    { "author": "@bruno.b", "text": "police officer here, hire me", "likes": 61 },
+    { "author": "@hanna_h", "text": "we need a funfair with a ferris wheel", "likes": 240 },
+    { "author": "@kiwi.kev", "text": "STADIUM STADIUM STADIUM", "likes": 122 },
+    { "author": "@yuki.y", "text": "funfair!!", "likes": 80 },
+    { "author": "@pat_p", "text": "team funfair", "likes": 44 },
+    { "author": "@lena_luft", "text": "5000 people in tents lol", "likes": 310 }
+  ]
+}

@@ -1,0 +1,7 @@
+node_modules/
+*.mp4
+.env
+/demo/
+/demo-de/
+/city/videos/
+/city/stills/

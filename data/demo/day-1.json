@@ -1,0 +1,10 @@
+{
+  "subscribers": 42,
+  "video": { "id": "demo-1", "title": "I'm building a city out of my subscribers", "likes": 180, "commentCount": 23 },
+  "comments": [
+    { "author": "@pixel_paula", "text": "Can I open a bakery?", "likes": 14 },
+    { "author": "@nordlicht.jo", "text": "I want to be the police chief!!", "likes": 9 },
+    { "author": "@kiwi.kev", "text": "stadium please, we need football", "likes": 5 },
+    { "author": "@lena_luft", "text": "this is such a cool idea", "likes": 3 }
+  ]
+}
