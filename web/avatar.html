@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Leoville avatar</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  html, body { margin: 0; background: #0c0f1c; }
+  #wrap { position: relative; width: 800px; height: 800px; overflow: hidden; }
+  #wrap canvas { position: absolute; inset: 0; width: 800px; height: 800px; }
+  /* preview of how YouTube crops it */
+  body.preview #wrap { border-radius: 50%; margin: 20px; }
+</style>
+<script type="importmap">
+{ "imports": { "three": "/node_modules/three/build/three.module.js", "three/addons/": "/node_modules/three/examples/jsm/" } }
+</script>
+</head>
+<body>
+<div id="wrap"><canvas id="gl"></canvas></div>
+<script type="module">
+// YouTube profile picture: Leo waving in front of his cottage, centered for the circle crop.
+import * as THREE from 'three';
+import { buildingMesh, characterFigure, rng } from './world.js';
+
+const q = new URLSearchParams(location.search);
+document.body.classList.toggle('preview', q.has('preview'));
+await document.fonts.load('800 20px "Baloo 2"');
+const S = 800;
+const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('gl'), antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(devicePixelRatio); renderer.setSize(S, S, false);
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const scene = new THREE.Scene();
+// sky: warm gradient
+const cv = document.createElement('canvas'); cv.width = 2; cv.height = 256;
+const c = cv.getContext('2d'), gr = c.createLinearGradient(0, 0, 0, 256);
+gr.addColorStop(0, '#3fb0dd'); gr.addColorStop(0.55, '#8fd6ee'); gr.addColorStop(1, '#fff1c9');
+c.fillStyle = gr; c.fillRect(0, 0, 2, 256);
+const sky = new THREE.CanvasTexture(cv); sky.colorSpace = THREE.SRGBColorSpace; scene.background = sky;
+
+scene.add(new THREE.HemisphereLight('#fff7e6', '#7fa06a', 1.6));
+const sun = new THREE.DirectionalLight('#fff1d6', 2.2);
+sun.position.set(-8, 14, 12); sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
+Object.assign(sun.shadow.camera, { left: -14, right: 14, top: 14, bottom: -14, near: 1, far: 60 });
+sun.shadow.bias = -0.0005; sun.shadow.normalBias = 0.4;
+scene.add(sun);
+
+const ground = new THREE.Mesh(new THREE.CircleGeometry(80, 48).rotateX(-Math.PI / 2), new THREE.MeshLambertMaterial({ color: '#86c25a' }));
+ground.receiveShadow = true; scene.add(ground);
+
+// cottage behind him
+const house = buildingMesh({ id: 0, type: 'cottage', x: 3.5, z: -14 });
+scene.add(house);
+
+// a few trees for depth
+const r = rng(5);
+for (let k = 0; k < 14; k++) {
+  const side = k % 2 ? 1 : -1, x = side * (9 + r() * 14), z = -10 - r() * 18, s = 0.9 + r() * 0.8;
+  const t = new THREE.Group();
+  const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.45, 2.4, 6).translate(0, 1.2, 0), new THREE.MeshLambertMaterial({ color: '#7a5a3c' }));
+  const top = r() < 0.4
+    ? new THREE.Mesh(new THREE.ConeGeometry(1.9, 5.6, 7).translate(0, 4.6, 0), new THREE.MeshLambertMaterial({ color: new THREE.Color().setHSL(0.36, 0.42, 0.3 + r() * 0.1) }))
+    : new THREE.Mesh(new THREE.IcosahedronGeometry(2.2, 1).translate(0, 4, 0), new THREE.MeshLambertMaterial({ color: new THREE.Color().setHSL(0.28 + r() * 0.05, 0.5, 0.4 + r() * 0.08) }));
+  trunk.castShadow = top.castShadow = true; t.add(trunk, top); t.position.set(x, 0, z); t.scale.setScalar(s); scene.add(t);
+}
+// grass tufts + flowers near the camera
+{
+  const tuft = new THREE.InstancedMesh(new THREE.ConeGeometry(0.1, 0.45, 3).translate(0, 0.22, 0), new THREE.MeshLambertMaterial(), 900);
+  const fl = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(0.11, 0).translate(0, 0.2, 0), new THREE.MeshLambertMaterial(), 160);
+  const m = new THREE.Matrix4(), col = new THREE.Color(), FC = ['#ffffff', '#ffd24a', '#ff9fc0', '#c9b6ff'];
+  for (let k = 0; k < 900; k++) { const x = (r() - 0.5) * 24, z = -2 + r() * 10; if (Math.abs(x) < 1.2 && z < 2) continue; m.makeTranslation(x, 0, z); tuft.setMatrixAt(k, m); tuft.setColorAt(k, col.setHSL(0.27 + r() * 0.04, 0.5, 0.36 + r() * 0.1)); }
+  for (let k = 0; k < 160; k++) { m.makeTranslation((r() - 0.5) * 24, 0, -1 + r() * 9); fl.setMatrixAt(k, m); fl.setColorAt(k, col.set(FC[k % 4])); }
+  scene.add(tuft, fl);
+}
+
+const leo = characterFigure();
+leo.position.set(0, 0, 1.2); leo.rotation.y = 0.12;
+leo.pose(0.17, 'wave', {});            // arm raised mid-wave
+scene.add(leo);
+
+const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 500);
+camera.position.set(0.5, 2.4, 6.2);
+camera.lookAt(0.15, 1.88, 0);
+renderer.render(scene, camera);
+window.READY = true;
+</script>
+</body>
+</html>
