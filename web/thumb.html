@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Leoville thumbnail</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  html, body { margin: 0; background: #0c0f1c; }
+  #wrap { position: relative; overflow: hidden; font-family: "Baloo 2", sans-serif; color: #fff; }
+  #wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  #fg { filter: drop-shadow(0 0 0 #fff) drop-shadow(5px 0 0 #fff) drop-shadow(-5px 0 0 #fff) drop-shadow(0 5px 0 #fff) drop-shadow(0 -5px 0 #fff) drop-shadow(0 12px 14px #0b0e1c88); }
+  .t { position: absolute; left: 0; right: 0; text-align: center; font-weight: 800; line-height: 0.92;
+       -webkit-text-stroke: 14px #171c33; paint-order: stroke fill; text-shadow: 0 8px 0 #0b0e1c99; }
+  .t em { font-style: normal; color: #ffc93c; }
+  .pill { position: absolute; display: flex; align-items: center; gap: 10px; background: #171c33; border: 4px solid #0b0e1c;
+          border-radius: 22px; padding: 6px 18px 4px 10px; box-shadow: 0 6px 0 #0b0e1c66; font-weight: 800; }
+  .pill small { display: block; font-size: 15px; letter-spacing: .1em; opacity: .7; line-height: 1; }
+  .pill b { display: block; line-height: 1; }
+  .pill .i { font-size: 36px; }
+  .day { position: absolute; background: #3ddbb4; color: #06352a; border: 4px solid #0b0e1c; border-radius: 20px; font-weight: 800; text-align: center; box-shadow: 0 6px 0 #0b0e1c66; }
+  /* vertical 540x960 (x2) */
+  .v #wrap { width: 540px; height: 960px; }
+  .v #top { top: 36px; font-size: 62px; right: 120px; }
+  .v #bottom { bottom: 46px; font-size: 56px; }
+  .v .pill { right: 18px; top: 560px; } .v .pill b { font-size: 46px; }
+  .v .day { right: 26px; top: 40px; padding: 4px 16px 0; font-size: 22px; } .v .day b { display: block; font-size: 44px; line-height: 0.9; }
+  /* horizontal 640x360 (x2) */
+  .h #wrap { width: 640px; height: 360px; }
+  .h #top { top: 26px; left: 18px; right: auto; width: 330px; font-size: 54px; text-align: left; -webkit-text-stroke-width: 11px; }
+  .h #bottom { bottom: 22px; left: 18px; right: auto; width: 330px; font-size: 32px; text-align: left; -webkit-text-stroke-width: 9px; }
+  .h .pill { left: 18px; top: 172px; padding: 4px 14px 2px 8px; } .h .pill b { font-size: 32px; } .h .pill .i { font-size: 26px; } .h .pill small { font-size: 11px; }
+  .h .day { right: 16px; top: 16px; padding: 2px 12px 0; font-size: 15px; } .h .day b { display: block; font-size: 32px; line-height: 0.9; }
+</style>
+<script type="importmap">
+{ "imports": { "three": "/node_modules/three/build/three.module.js", "three/addons/": "/node_modules/three/examples/jsm/" } }
+</script>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="gl"></canvas>
+  <canvas id="fg"></canvas>
+  <div class="day">DAY<b>0</b></div>
+  <div class="t" id="top">He lives<br><em>ALONE…</em></div>
+  <div class="pill"><span class="i">👤</span><div><small>RESIDENTS</small><b>1</b></div></div>
+  <div class="t" id="bottom">Subscribe =<br><em>move in!</em></div>
+</div>
+<script type="module">
+import * as THREE from 'three';
+import { buildingMesh, characterFigure, rng } from './world.js';
+
+const q = new URLSearchParams(location.search), horiz = q.get('f') === 'h';
+document.body.className = horiz ? 'h' : 'v';
+await Promise.all(['800 20px "Baloo 2"'].map(f => document.fonts.load(f)));
+const W = horiz ? 640 : 540, H = horiz ? 360 : 960;
+const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('gl'), antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(devicePixelRatio); renderer.setSize(W, H, false);
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const scene = new THREE.Scene();
+const cv = document.createElement('canvas'); cv.width = 2; cv.height = 256;
+const c = cv.getContext('2d'), gr = c.createLinearGradient(0, 0, 0, 256);
+gr.addColorStop(0, '#2f9fd6'); gr.addColorStop(0.65, '#8fd6ee'); gr.addColorStop(1, '#fff1c9');
+c.fillStyle = gr; c.fillRect(0, 0, 2, 256);
+const sky = new THREE.CanvasTexture(cv); sky.colorSpace = THREE.SRGBColorSpace; scene.background = sky;
+
+scene.add(new THREE.HemisphereLight('#fff7e6', '#7fa06a', 1.55));
+const sun = new THREE.DirectionalLight('#fff1d6', 2.3);
+sun.position.set(-14, 22, 18); sun.castShadow = true; sun.shadow.mapSize.set(4096, 4096);
+Object.assign(sun.shadow.camera, { left: -30, right: 30, top: 30, bottom: -30, near: 1, far: 100 });
+sun.shadow.bias = -0.0005; sun.shadow.normalBias = 0.4; scene.add(sun);
+
+// a small island in a big sea, with Leo's tiny house in the middle: "alone" at a glance
+const IC = { x: 0, z: -60 }, IR = 42;
+const sea = new THREE.Mesh(new THREE.PlaneGeometry(3000, 3000).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: '#3fa2c6' }));
+sea.position.y = -1.2; scene.add(sea);
+const blob = (sc, col, y) => {
+  const pts = []; for (let k = 0; k < 72; k++) { const a = k / 72 * Math.PI * 2, rr = IR * sc * (1 + 0.08 * Math.sin(3 * a + 1) + 0.05 * Math.sin(5 * a + 2)); pts.push(new THREE.Vector2(Math.cos(a) * rr, -Math.sin(a) * rr)); }
+  const m = new THREE.Mesh(new THREE.ShapeGeometry(new THREE.Shape(pts)).rotateX(-Math.PI / 2), new THREE.MeshLambertMaterial({ color: col }));
+  m.position.set(IC.x, y, IC.z); m.receiveShadow = true; scene.add(m);
+};
+blob(1.22, '#63c3d6', -1.0); blob(1.12, '#8bd8dc', -0.8); blob(1.05, '#f1dfae', -0.4); blob(1, '#86c25a', 0);
+// Leo's own patch of meadow in the foreground (he stands on the island's near shore)
+const near = new THREE.Mesh(new THREE.CircleGeometry(16, 40).rotateX(-Math.PI / 2), new THREE.MeshLambertMaterial({ color: '#86c25a' }));
+near.position.set(0, 0.01, 4); near.receiveShadow = true; scene.add(near);
+const nearSand = new THREE.Mesh(new THREE.CircleGeometry(17.5, 40).rotateX(-Math.PI / 2), new THREE.MeshLambertMaterial({ color: '#f1dfae' }));
+nearSand.position.set(0, -0.3, 4); scene.add(nearSand);
+
+const r = rng(13);
+{
+  const trees = [];
+  for (let k = 0; k < 260; k++) {
+    const a = r() * Math.PI * 2, d = 8 + Math.sqrt(r()) * (IR - 12), x = IC.x + Math.cos(a) * d, z = IC.z + Math.sin(a) * d;
+    if (Math.hypot(x - IC.x, z - IC.z) < 9) continue;
+    trees.push([x, z, 0.7 + r() * 0.8, r()]);
+  }
+  const trunk = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.35, 0.45, 2.4, 5).translate(0, 1.2, 0), new THREE.MeshLambertMaterial({ color: '#7a5a3c' }), trees.length);
+  const round = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(2.2, 1).translate(0, 4, 0), new THREE.MeshLambertMaterial(), trees.length);
+  const pine = new THREE.InstancedMesh(new THREE.ConeGeometry(1.9, 5.6, 7).translate(0, 4.6, 0), new THREE.MeshLambertMaterial(), trees.length);
+  const m = new THREE.Matrix4(), zero = new THREE.Matrix4().makeScale(0, 0, 0), col = new THREE.Color();
+  trees.forEach(([x, z, s, v], i) => {
+    m.makeScale(s, s, s).setPosition(x, 0, z); trunk.setMatrixAt(i, m);
+    round.setMatrixAt(i, v < 0.3 ? zero : m); pine.setMatrixAt(i, v < 0.3 ? m : zero);
+    round.setColorAt(i, col.setHSL(0.27 + v * 0.07, 0.5, 0.36 + v * 0.1)); pine.setColorAt(i, col.setHSL(0.36, 0.42, 0.26 + v * 0.2));
+  });
+  for (const t of [trunk, round, pine]) { t.castShadow = true; scene.add(t); }
+  const tuft = new THREE.InstancedMesh(new THREE.ConeGeometry(0.1, 0.45, 3).translate(0, 0.22, 0), new THREE.MeshLambertMaterial(), 1500);
+  const fl = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(0.11, 0).translate(0, 0.2, 0), new THREE.MeshLambertMaterial(), 250);
+  const FC = ['#ffffff', '#ffd24a', '#ff9fc0', '#c9b6ff'];
+  for (let k = 0; k < 1500; k++) { const a = r() * 6.283, d = Math.sqrt(r()) * 14; m.makeTranslation(Math.cos(a) * d, 0, 4 + Math.sin(a) * d); tuft.setMatrixAt(k, m); tuft.setColorAt(k, col.setHSL(0.27 + r() * 0.04, 0.5, 0.36 + r() * 0.1)); }
+  for (let k = 0; k < 250; k++) { const a = r() * 6.283, d = Math.sqrt(r()) * 14; m.makeTranslation(Math.cos(a) * d, 0, 4 + Math.sin(a) * d); fl.setMatrixAt(k, m); fl.setColorAt(k, col.set(FC[k % 4])); }
+  scene.add(tuft, fl);
+}
+
+const house = buildingMesh({ id: 0, type: 'cottage', x: IC.x, z: IC.z }); scene.add(house);
+house.scale.setScalar(1.6);   // a bit bigger than life so it reads from the air
+near.visible = nearSand.visible = false;
+scene.children.filter(o => o.isInstancedMesh && o.count > 1000 || (o.isInstancedMesh && o.geometry.type === 'IcosahedronGeometry' && o.count === 250)).forEach(o => o.visible = false);
+
+// aerial view of the island
+const camera = new THREE.PerspectiveCamera(horiz ? 32 : 46, W / H, 1, 3000);
+if (horiz) { camera.position.set(IC.x - 14, 125, IC.z + 100); camera.lookAt(IC.x - 14, 0, IC.z + 8); }
+else { camera.position.set(IC.x, 160, IC.z + 150); camera.lookAt(IC.x, 0, IC.z + 58); }
+renderer.render(scene, camera);
+
+// Leo as a cut-out in front, on a transparent canvas with a white outline (CSS)
+const fr = new THREE.WebGLRenderer({ canvas: document.getElementById('fg'), antialias: true, alpha: true, preserveDrawingBuffer: true });
+fr.setPixelRatio(devicePixelRatio); fr.setSize(W, H, false); fr.setClearColor(0x000000, 0);
+const fs = new THREE.Scene();
+fs.add(new THREE.HemisphereLight('#fff7e6', '#9fb08a', 1.7));
+const key = new THREE.DirectionalLight('#fff1d6', 2.0); key.position.set(-3, 5, 6); fs.add(key);
+const leo = characterFigure(); leo.rotation.y = horiz ? -0.35 : 0.12;
+leo.pose(0.17, 'wave', { suitcase: true }); fs.add(leo);
+const fc = new THREE.PerspectiveCamera(30, W / H, 0.1, 100);
+if (horiz) { fc.position.set(-2.55, 1.5, 9.4); fc.lookAt(-2.55, 1.5, 0); }
+else { fc.position.set(0.3, 2.35, 12.5); fc.lookAt(0.3, 2.35, 0); }
+fr.render(fs, fc);
+
+window.READY = true;
+</script>
+</body>
+</html>
