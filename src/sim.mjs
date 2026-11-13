@@ -166,7 +166,7 @@ export function runDay(prev, input, cfg) {
     const sh = { t0: now, t1: now + dur, ...o };
     const caps = (o.captions ?? []).filter(Boolean);
     const lead = 0.15, per = (dur - lead) / Math.max(1, caps.length);
-    sh.captions = caps.map((c, k) => ({ lines: [].concat(c), t0: now + lead + k * per, t1: now + lead + (k + 1) * per }));
+    sh.captions = caps.map((c, k) => ({ lines: [].concat(c.lines ?? c), ...(c.say ? { say: c.say } : {}), t0: now + lead + k * per, t1: now + lead + (k + 1) * per }));
     shots.push(sh); now += dur; return sh;
   };
   const move = (name, at, to, dur = 0.9) => {
@@ -324,7 +324,7 @@ export function runDay(prev, input, cfg) {
     const civic = role.kind === 'civic';
     shot(5.0, {
       type: 'comment', cam: { x: b.x, z: b.z - 9, dist: civic ? 118 : 100, pitch: 36, yaw: builds % 2 ? 16 : -16 },
-      captions: [T.asks(rq.author), civic ? T.founded(rq.author, name, title) : T.opened(rq.author, name)],
+      captions: [{ lines: T.asks(rq.author), say: `${[].concat(T.asks(rq.author)).join(' ')} ${rq.text}` }, civic ? T.founded(rq.author, name, title) : T.opened(rq.author, name)],
       panel: { kind: 'comment', author: rq.author, text: rq.text, likes: rq.likes, hue: hash(rq.author) % 360,
         price: '−' + T.money(role.cost), label: name, at: 2.3 },
     });

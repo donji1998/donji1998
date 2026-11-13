@@ -272,7 +272,7 @@ const PANELS = {
   comment(p) {
     const el = mk('comment', `${avatar(p.author, p.hue)}<div><div class="who">${esc(p.author)}</div><div class="txt">${esc(p.text)}</div><div class="likes">♥ ${fmt(p.likes)}</div></div>`);
     const pr = mk('price', `<b>${esc(p.price)}</b><span>${esc(p.label)}</span>`); pr.style.top = '372px';
-    return lt => { show(el, lt > 3.45 ? 0 : pop(lt, 0.3), 'grid'); show(pr, lt > p.at + 1.25 ? 0 : pop(lt, p.at)); };
+    return lt => { show(el, lt > p.at + 1.15 ? 0 : pop(lt, 0.3), 'grid'); show(pr, lt > p.at + 1.25 ? 0 : pop(lt, p.at)); };
   },
   hires(p) {
     const el = mk('hires', `<h4>${p.icon} ${esc(p.title)}</h4>` + p.rows.map(r => `<div class="r">${avatar(r.handle, r.hue)}<span>${esc(r.handle)}</span><i>${esc(r.title)}</i></div>`).join('')
@@ -322,7 +322,7 @@ const camPose = (sh, k, dir) => {
 function cameraAt(t) {
   const i = Math.max(0, ep.shots.findIndex(s => t < s.t1)), s = ep.shots[i] ?? ep.shots.at(-1);
   let a = camPose(s, clamp((t - s.t0) / (s.t1 - s.t0)), i % 2 ? 1 : -1);
-  const blend = 1.1;
+  const blend = Math.min(1.1, (s.t1 - s.t0) * 0.45);
   if (i > 0 && t - s.t0 < blend) {
     const b = camPose(ep.shots[i - 1], 1, (i - 1) % 2 ? 1 : -1), k = easeIO((t - s.t0) / blend);
     a = { x: lerp(b.x, a.x, k), y: lerp(b.y, a.y, k), z: lerp(b.z, a.z, k), dist: Math.exp(lerp(Math.log(b.dist), Math.log(a.dist), k)), pitch: lerp(b.pitch, a.pitch, k), yaw: lerp(b.yaw, a.yaw, k) };
@@ -427,8 +427,11 @@ function renderAt(t) {
     capEl.style.fontSize = (longest > 27 ? 27 : longest > 22 ? 32 : longest > 18 ? 37 : 42) + 'px';
   }
   if (cap) {
-    const words = capEl.querySelectorAll('.w'), per = Math.min(0.3, (cap.t1 - cap.t0) * 0.55 / Math.max(1, words.length));
-    words.forEach((w, k) => { const v = clamp((t - cap.t0 - k * per) / 0.14); w.style.opacity = clamp(v * 2); w.style.scale = v <= 0 ? 0.5 : 0.5 + 0.5 * easeBack(v); });
+    // with a narrator, each word appears when it is spoken (estimated from its length)
+    const words = [...capEl.querySelectorAll('.w')], lens = words.map(w => w.textContent.length + 1), total = lens.reduce((x, y) => x + y, 0);
+    const span = cap.speech ? cap.speech * 0.92 : Math.min(0.3 * words.length, (cap.t1 - cap.t0) * 0.55);
+    let acc = 0; const at = lens.map(l => { const v = acc / total * span; acc += l; return v; });
+    words.forEach((w, k) => { const v = clamp((t - cap.t0 - at[k]) / 0.12); w.style.opacity = clamp(v * 2); w.style.scale = v <= 0 ? 0.5 : 0.5 + 0.5 * easeBack(v); });
   }
 }
 

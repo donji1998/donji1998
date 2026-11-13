@@ -47,6 +47,27 @@ The names come from `config.json` (`mayorName`, `cityName`); the money from
 `startCash` and `economy`. The spoken text is also written to
 `episodes/day-0.txt` / `.srt` for a voice-over.
 
+## Sound: narrator, music and effects
+
+`npm run render` gives every video a full soundtrack (made by `src/audio.py`):
+
+- **Narrator.** Every caption is spoken by a free, offline Piper voice
+  (`en-us-ryan-high`, downloaded once to `~/.cache/leoville`, ~100 MB). Comments
+  are read out: "nordlicht jo asks: I want to be the police chief!". The
+  episode is re-timed so each shot lasts as long as its narration, and the
+  captions pop up word by word as they are spoken.
+- **Sound effects** on what happens on screen: a pop and thump when a building
+  appears, cobblestones clicking down, coins and a cash register when money comes
+  in, a "spend" blip when it goes out, a bell for the village sign, whooshes for
+  big camera moves, the stream, birdsong and a jingle at milestones.
+- **Music.** An original ukulele/glockenspiel loop, generated on the fly, that
+  gets quieter whenever the narrator speaks.
+
+Everything is generated, so YouTube has nothing to flag for copyright.
+Setup once: `pip install -r requirements.txt`. Other voices:
+`python3 src/audio.py city/episodes/day-3.json --voice en-us-lessac-medium --speed 1.0`.
+`npm run render -- … --silent` renders without sound.
+
 ## Using your real channel
 
 1. Create a free, read-only **YouTube Data API v3** key in the
@@ -116,8 +137,6 @@ Roles, prices and keywords (English and German) live in `src/roles.mjs`.
   anything in `inputs/day-N.json` + `--redo`.
 - YouTube's API rounds public subscriber counts to three significant figures,
   so above 1,000 subs the daily gain moves in steps.
-- The video has a silent audio track — add your voice-over and music in your
-  editor or straight in the Shorts upload flow.
 - HUD, captions and panels stay inside the Shorts safe area (clear of the top
   bar, the right-hand buttons and the bottom title).
 

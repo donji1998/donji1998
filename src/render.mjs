@@ -4,7 +4,7 @@
 //   node src/render.mjs city/episodes/day-2.json [--fps 30] [--out file.mp4] [--still 12.5] [--draft]
 // --draft renders at half resolution (about 4x faster) for a quick check.
 // Without a GPU the 3D is drawn in software: expect ~0.5 s per frame at full quality.
-import { spawn } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -18,6 +18,16 @@ const epPath = args.find(a => a.endsWith('.json'));
 if (!epPath) { console.error('usage: node src/render.mjs <episode.json> [--fps 30] [--out file.mp4] [--still seconds]'); process.exit(1); }
 const epAbs = path.resolve(epPath), rel = path.relative(root, epAbs).split(path.sep).join('/');
 const fps = +opt('fps', 30), draft = args.includes('--draft');
+
+// Sound: narrate + mix first (this also re-times the episode to the voice).
+const still0 = args.includes('--still');
+let ep = JSON.parse(fs.readFileSync(epAbs, 'utf8'));
+if (!still0 && !args.includes('--silent') && !ep.audio) {
+  const r = spawnSync('python3', [path.join(root, 'src', 'audio.py'), epAbs], { stdio: 'inherit' });
+  if (r.status) { console.error('Sound failed (see above). Run with --silent to render without sound.'); process.exit(1); }
+  ep = JSON.parse(fs.readFileSync(epAbs, 'utf8'));
+}
+const audioFile = ep.audio && !args.includes('--silent') ? path.join(path.dirname(epAbs), ep.audio) : null;
 
 const require = createRequire(import.meta.url);
 let chromium;
@@ -47,9 +57,9 @@ if (still != null) {
   const out = path.resolve(opt('out', path.join(path.dirname(epAbs), '..', 'videos', path.basename(epAbs, '.json') + '.mp4')));
   fs.mkdirSync(path.dirname(out), { recursive: true });
   const ff = spawn('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-c:v', 'mjpeg', '-framerate', String(fps), '-i', '-',
-    '-f', 'lavfi', '-i', 'anullsrc=r=44100:cl=stereo', '-shortest',
+    ...(audioFile ? ['-i', audioFile] : ['-f', 'lavfi', '-i', 'anullsrc=r=44100:cl=stereo']), '-shortest',
     '-c:v', 'libx264', '-preset', 'medium', '-crf', '17', '-pix_fmt', 'yuv420p', '-vf', 'scale=1080:1920',
-    '-c:a', 'aac', '-b:a', '96k', '-movflags', '+faststart', out], { stdio: ['pipe', 'inherit', 'inherit'] });
+    '-c:a', 'aac', '-b:a', '192k', '-movflags', '+faststart', out], { stdio: ['pipe', 'inherit', 'inherit'] });
   const done = new Promise((ok, bad) => ff.on('close', c => c ? bad(new Error('ffmpeg exited ' + c)) : ok()));
   const cdp = await page.context().newCDPSession(page);
   const frames = Math.round(duration * fps), started = Date.now();
