@@ -313,13 +313,7 @@ def mix_episode(ep, clips):
 
     shots = ep['shots']
     for k, sh in enumerate(shots):
-        if k:                                            # camera moves between shots
-            a, b = shots[k - 1]['cam'], sh['cam']
-            ratio = max(a['dist'], b['dist']) / min(a['dist'], b['dist'])
-            moved = math.hypot(a['x'] - b['x'], a['z'] - b['z']) / max(10, min(a['dist'], b['dist']))
-            if ratio > 1.6 or moved > 0.8:
-                put(fx, sh['t0'] - 0.05, whoosh(0.9 if ratio > 4 else 0.6, b['dist'] > a['dist']), 0.35)
-        if sh.get('ring'): put(fx, sh['t0'] + 0.85, whoosh(0.45), 0.25)
+        # no whoosh on camera moves or the ring: it repeats on every cut and gets tiring
         p = sh.get('panel')
         if p:
             kind, t0 = p['kind'], sh['t0']

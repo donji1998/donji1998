@@ -58,8 +58,7 @@ The names come from `config.json` (`mayorName`, `cityName`); the money from
   captions pop up word by word as they are spoken.
 - **Sound effects** on what happens on screen: a pop and thump when a building
   appears, cobblestones clicking down, coins and a cash register when money comes
-  in, a "spend" blip when it goes out, a bell for the village sign, whooshes for
-  big camera moves, the stream, birdsong and a jingle at milestones.
+  in, a "spend" blip when it goes out, a bell for the village sign, the stream, birdsong and a jingle at milestones.
 - **Music.** An original ukulele/glockenspiel loop, generated on the fly, that
   gets quieter whenever the narrator speaks.
 
