@@ -5,10 +5,12 @@
 //   node src/day.mjs --redo          recompute the latest day (e.g. after editing its input)
 //   node src/day.mjs --dir demo      keep this city's files in ./demo instead of ./city
 //   node src/day.mjs --reset         start again from day 1
+//   node src/day.mjs --intro         make the day-0 episode that introduces the founder and the rules
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { initialState, runDay, scripts } from './sim.mjs';
+import { introEpisode } from './intro.mjs';
 import { fetchInput } from './youtube.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -24,10 +26,21 @@ const read = f => JSON.parse(fs.readFileSync(f, 'utf8'));
 const write = (f, o) => fs.writeFileSync(f, typeof o === 'string' ? o : JSON.stringify(o, null, 1) + '\n');
 
 if (flag('reset')) for (const d of ['state', 'episodes', 'inputs']) fs.rmSync(path.join(dir, d), { recursive: true, force: true });
-const days = fs.readdirSync(sub('state')).map(f => +f.match(/^day-(\d+)\.json$/)?.[1]).filter(Boolean).sort((a, b) => a - b);
+if (flag('intro')) {
+  const { state, episode } = introEpisode(cfg);
+  write(path.join(sub('state'), 'day-0.json'), state);
+  const f = path.join(sub('episodes'), 'day-0.json');
+  write(f, episode);
+  const sc = scripts(episode);
+  write(path.join(dir, 'episodes', 'day-0.txt'), sc.txt); write(path.join(dir, 'episodes', 'day-0.srt'), sc.srt);
+  console.log(`Day 0 of ${cfg.cityName}: intro episode ${episode.duration}s\n  script : ${path.relative(root, f)}\n  render : npm run render -- ${path.relative(root, f)}`);
+  process.exit(0);
+}
+const days = fs.readdirSync(sub('state')).map(f => +f.match(/^day-(\d+)\.json$/)?.[1]).filter(n => n > 0).sort((a, b) => a - b);
 const latest = days.at(-1) ?? 0;
 const day = flag('redo') ? Math.max(1, latest) : latest + 1;
-const prev = day > 1 ? read(path.join(dir, 'state', `day-${day - 1}.json`)) : initialState(cfg);
+const prevFile = path.join(dir, 'state', `day-${day - 1}.json`);
+const prev = fs.existsSync(prevFile) ? read(prevFile) : initialState(cfg);
 
 const inputFile = path.join(sub('inputs'), `day-${day}.json`);
 let input;

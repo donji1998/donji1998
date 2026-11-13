@@ -19,7 +19,9 @@ html, body { margin: 0; height: 100%; background: #0c0f1c; overflow: hidden; fon
 .pill b { display: block; font-weight: 800; font-size: 21px; line-height: 1.05; font-variant-numeric: tabular-nums; }
 .pill .ico { font-size: 19px; }
 .pill .coin { width: 26px; height: 26px; border-radius: 50%; background: var(--gold); color: #6b4a00; font-weight: 800; font-size: 16px; display: grid; place-items: center; box-shadow: inset 0 -3px 0 #d79a12; }
-.pill.cash { flex: 1.5; } .pill.cash b { color: var(--gold); }
+.pill.cash { flex: 1.5; transform-origin: 20% 50%; }
+.pill.glow { box-shadow: 0 0 0 4px var(--gold), 0 4px 0 #0b0e1c66; }
+#homes { transform-origin: 10% 50%; } .pill.cash b { color: var(--gold); }
 .pill.day { background: var(--mint); color: #06352a; padding: 0 14px; text-align: center; }
 .pill.wide { width: 100%; }
 .pill.wide em { margin-left: auto; font-style: normal; font-weight: 800; font-size: 14px; color: var(--mint); }
@@ -73,8 +75,21 @@ html, body { margin: 0; height: 100%; background: #0c0f1c; overflow: hidden; fon
 #caption { position: absolute; left: 30px; right: 30px; top: 596px; text-align: center; font-weight: 800; font-size: 41px; line-height: 1.08; color: #fff;
   -webkit-text-stroke: 9px var(--navy); paint-order: stroke fill; text-shadow: 0 5px 0 #0b0e1c88; letter-spacing: .005em; }
 #caption div { transform-origin: center; }
+#caption .w { display: inline-block; transform-origin: 50% 70%; }
 #caption em { font-style: normal; color: var(--gold); }
 
 #controls { position: fixed; left: 0; right: 0; bottom: 0; display: flex; gap: 10px; align-items: center; padding: 8px 12px; background: #000a; color: #fff; font: 13px system-ui; }
 #controls input { flex: 1; } #controls button { font-size: 16px; }
 .capture #controls { display: none; }
+
+.room { width: 400px; top: 236px; }
+.room .slots { display: flex; justify-content: space-between; gap: 8px; margin: 8px 0 6px; }
+.room .slot { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; font-weight: 800; font-size: 14px; }
+.room .slot .avatar { width: 56px; height: 56px; font-size: 28px; border: 3px dashed #ffffff55; color: #ffffff88; background: transparent; }
+.room .slot.on .avatar { border: 3px solid #0b0e1c; color: #3b2a00; }
+.room .note { text-align: center; background: var(--mint); color: #06352a; border-radius: 12px; font-weight: 800; font-size: 17px; padding: 2px 8px; }
+.rules { width: 450px; top: 236px; padding: 10px 18px; }
+.rules .r { display: grid; grid-template-columns: 36px 1fr auto; align-items: center; gap: 8px; padding: 7px 0; font-weight: 800; font-size: 20px; }
+.rules .r + .r { border-top: 2px dashed #ffffff22; }
+.rules .r .i { font-size: 24px; } .rules .r small { display: block; font-size: 14px; color: #ffffffaa; line-height: 1; }
+.rules .r b { color: var(--gold); font-size: 24px; }

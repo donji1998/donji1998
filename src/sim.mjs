@@ -12,7 +12,7 @@ const LOT_W = 15, GROUP = 4, GAP = 9, ROW = 24, COLS = 12;
 export const lotX = i => i * LOT_W + Math.floor(i / GROUP) * GAP + LOT_W / 2;
 export const lotZ = j => j * ROW;
 const colOrder = n => (n % 2 ? 2 + (n - 1) / 2 : 1 - n / 2); // 1,2,0,3,-1,4,...
-const TOWNHALL = { x: 30, z: 0 };
+export const TOWNHALL = { x: 30, z: 0 };
 const RESERVED = new Set(['1,0', '2,0']); // town hall plot
 
 function nthLot(zone, n) {
@@ -25,7 +25,7 @@ function nthLot(zone, n) {
   }
 }
 
-function roadTiles(i, j) {
+export function roadTiles(i, j) {
   const t = [{ k: `h${i},${j}`, x: lotX(i), z: lotZ(j) + 12, w: LOT_W, d: 8, lane: true }];
   const g = Math.floor(i / GROUP), m = ((i % GROUP) + GROUP) % GROUP;
   const gap = gg => ({ k: `v${gg},${j}`, x: gg * 69 + 64.5, z: lotZ(j) + 4, w: GAP, d: ROW });
@@ -34,7 +34,30 @@ function roadTiles(i, j) {
   return t;
 }
 
-const islandRadius = (R, a) => R * (1 + 0.07 * Math.sin(3 * a + 1) + 0.045 * Math.sin(5 * a + 2));
+export const islandRadius = (R, a) => R * (1 + 0.07 * Math.sin(3 * a + 1) + 0.045 * Math.sin(5 * a + 2));
+export function islandPts(R) {
+  const pts = [];
+  for (let k = 0; k < 96; k++) { const a = k / 96 * Math.PI * 2, r = islandRadius(R, a); pts.push([+(Math.cos(a) * r).toFixed(1), +(Math.sin(a) * r).toFixed(1)]); }
+  return pts;
+}
+/** The stream: from a spring at the foot of the mountain, past the west of town, into the sea. */
+export function riverPath(R) {
+  const pts = [[-R * 0.52 + R * 0.15, -R * 0.5 + R * 0.18], [-101, -55], [-95, -15], [-96, 25], [-103, 70], [-99, 120]];
+  for (let z = 170; ; z += 50) {
+    const x = -97 + 4 * Math.sin(z / 40), r = islandRadius(R, Math.atan2(z, x));
+    if (Math.hypot(x, z) > r - 4) { const a = Math.atan2(z, x), rr = islandRadius(R, a) - 3; pts.push([+(Math.cos(a) * rr).toFixed(1), +(Math.sin(a) * rr).toFixed(1)]); break; }
+    pts.push([+x.toFixed(1), z]);
+  }
+  return pts;
+}
+/** Leo's first cobblestone road, laid east to west from his front door to the village sign. */
+export function villageRoad() {
+  const t = [];
+  for (let k = 0; k < 8; k++) t.push({ k: 'c' + k, x: 32.5 - k * 15, z: 12, w: 15, d: 6, cobble: true, grow: -1 });
+  t.push({ k: 'c8', x: 30, z: 7, w: 2.6, d: 4.4, cobble: true });
+  return t;
+}
+export const VILLAGE_SIGN = { x: -84, z: 16.8, ry: -0.6 };
 
 // ---------- text ----------
 const L = {
@@ -115,9 +138,13 @@ const L = {
 // ---------- state ----------
 export function initialState(cfg) {
   return {
-    day: 0, cash: cfg.startCash ?? 15000, residents: 0, housing: 0,
-    next: { res: 0, com: 0 }, seq: 1,
-    buildings: [{ id: 0, type: 'townhall', x: TOWNHALL.x, z: TOWNHALL.z, day: 0 }],
+    day: 0, cash: cfg.startCash ?? 50000, residents: 1, housing: 4,
+    next: { res: 0, com: 0 }, seq: 2,
+    buildings: [
+      { id: 0, type: 'cottage', x: TOWNHALL.x, z: TOWNHALL.z, day: 0 },
+      { id: 1, type: 'sign', text: cfg.cityName, ...VILLAGE_SIGN, day: 0 },
+    ],
+    tiles: villageRoad(),
     citizens: {}, queue: [], votes: {}, goalsDone: 0, videos: {},
   };
 }
@@ -150,8 +177,9 @@ export function runDay(prev, input, cfg) {
   for (const b of s.buildings) if (b.i != null) for (const t of roadTiles(b.i, b.j)) knownTiles.add(t.k);
   const baseTiles = [];
   for (const b of s.buildings) if (b.i != null) for (const t of roadTiles(b.i, b.j)) if (!baseTiles.some(x => x.k === t.k)) baseTiles.push(t);
-  // the town hall plot always has its street
+  // the founder's plot always has its street, and the old village road stays
   for (const i of [1, 2]) for (const t of roadTiles(i, 0)) if (!knownTiles.has(t.k)) { knownTiles.add(t.k); baseTiles.push(t); }
+  for (const t of s.tiles ?? []) { const { grow, ...rest } = t; baseTiles.unshift(rest); }
 
   const place = (zone, rec, at) => {
     const { i, j } = nthLot(zone, s.next[zone]++);
@@ -367,15 +395,15 @@ export function runDay(prev, input, cfg) {
 
   // ----- outro -----
   const out = shot(4.6, {
-    type: 'outro', cam: { x: TOWNHALL.x, z: TOWNHALL.z + 5, y: 5.6, dist: 66, pitch: 20, yaw: 10 },
+    type: 'outro', cam: { x: TOWNHALL.x, z: TOWNHALL.z + 5, y: 2.2, dist: 34, pitch: 38, yaw: 10 },
+    actor: { x: TOWNHALL.x + 0.5, z: TOWNHALL.z + 5.3, ry: 0.15, anim: 'wave' },
     captions: [T.outro(cfg.cityName), T.outro2],
     panel: { kind: 'cta', lines: T.cta.slice(0, 3) },
   });
-  tags.push({ x: TOWNHALL.x, y: 8.3, z: TOWNHALL.z + 6.9, text: cfg.mayorName, sub: s.queue.length ? T.waiting(s.queue.length) : T.mayorSays, t0: out.t0 + 0.5, t1: out.t1, mayor: true });
+  tags.push({ x: TOWNHALL.x + 0.5, y: 3.4, z: TOWNHALL.z + 5.3, text: cfg.mayorName, sub: s.queue.length ? T.waiting(s.queue.length) : T.mayorSays, t0: out.t0 + 0.5, t1: out.t1, mayor: true });
 
   // ----- assemble -----
-  const island = { R, pts: [] };
-  for (let k = 0; k < 96; k++) { const a = k / 96 * Math.PI * 2, r = islandRadius(R, a); island.pts.push([+(Math.cos(a) * r).toFixed(1), +(Math.sin(a) * r).toFixed(1)]); }
+  const island = { R, pts: islandPts(R) };
   const streets = {};
   for (const b of s.buildings) if (b.i != null) { const r = streets[b.j] ??= { j: b.j, z: lotZ(b.j) + 12, x0: b.x, x1: b.x }; r.x0 = Math.min(r.x0, b.x - 7); r.x1 = Math.max(r.x1, b.x + 7); }
   (streets[0] ??= { j: 0, z: 12, x0: 15, x1: 45 });
@@ -385,7 +413,7 @@ export function runDay(prev, input, cfg) {
     duration: +now.toFixed(2), shots, tracks, tags,
     buildings: s.buildings.map(({ _at, ...b }) => ({ ...b, at: _at ?? null })),
     tiles: baseTiles.map(t => ({ ...t, at: null })).concat(newTiles),
-    streets: Object.values(streets), island, tentField, townhall: TOWNHALL,
+    streets: Object.values(streets), island, river: riverPath(R), tentField, townhall: TOWNHALL,
     clear: [{ x: tentField.x, z: tentField.z, r: 60 }, ...Object.values(sites).map(p => ({ ...p, r: 75 }))],
     cityBox: { x0: lotX(-4) - 30, x1: lotX(7) + 30, z0: e.z0 - 40, z1: e.z1 + 45 },
     peakResidents: maxHomeless,

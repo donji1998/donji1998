@@ -1,7 +1,7 @@
 // Plays an episode script. Everything on screen is a pure function of the
 // time t, so the same code drives the live preview and frame-exact video export.
 import * as THREE from 'three';
-import { Parts, MAT, rng, buildingMesh, mayorFigure } from './world.js';
+import { Parts, MAT, rng, buildingMesh, characterFigure } from './world.js';
 
 const q = new URLSearchParams(location.search);
 const CAPTURE = q.has('capture');
@@ -18,6 +18,7 @@ const ep = await (await fetch(q.get('ep') ?? '/demo/episodes/day-2.json')).json(
 await Promise.all(['700 20px "Baloo 2"', '800 20px "Baloo 2"'].map(f => document.fonts.load(f, 'Aä€@')));
 document.body.classList.toggle('capture', CAPTURE);
 
+const CROWD = ep.crowd !== false;
 const fmt = n => Math.round(n).toLocaleString(ep.locale);
 const money = n => ep.lang === 'de' ? fmt(n) + ' €' : '€' + fmt(n);
 const track = (name, t) => {
@@ -54,6 +55,7 @@ scene.add(sun, sun.target);
 
 // ---------- terrain ----------
 const R = ep.island.R;
+const V3 = new THREE.Vector3();
 {
   const shape = new THREE.Shape(ep.island.pts.map(([x, z]) => new THREE.Vector2(x, -z)));
   const flat = (col, scale, y) => {
@@ -74,13 +76,53 @@ const R = ep.island.R;
   }
   scene.add(p.mesh());
 
+  // the stream from the mountain spring to the sea
+  const river = ep.river ?? [];
+  const rpts = river.length ? new THREE.CatmullRomCurve3(river.map(([x, z]) => new THREE.Vector3(x, 0, z))).getSpacedPoints(160) : [];
+  const riverDist = (x, z) => { let d = 1e9; for (let k = 0; k < rpts.length; k += 2) d = Math.min(d, Math.hypot(x - rpts[k].x, z - rpts[k].z)); return d; };
+  const ribbon = (width, y, color) => {
+    const pos = [], idx = [];
+    rpts.forEach((pt, k) => {
+      const a = rpts[Math.max(0, k - 1)], b = rpts[Math.min(rpts.length - 1, k + 1)];
+      const tx = b.x - a.x, tz = b.z - a.z, l = Math.hypot(tx, tz) || 1, w = width(k / (rpts.length - 1)) / 2;
+      pos.push(pt.x - tz / l * w, y, pt.z + tx / l * w, pt.x + tz / l * w, y, pt.z - tx / l * w);
+      if (k) { const o = (k - 1) * 2; idx.push(o, o + 2, o + 1, o + 1, o + 2, o + 3); }
+    });
+    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setIndex(idx); g.computeVertexNormals();
+    const m = new THREE.Mesh(g, new THREE.MeshLambertMaterial({ color, side: THREE.DoubleSide })); m.receiveShadow = true; scene.add(m);
+  };
+  if (rpts.length) {
+    ribbon(u => 8.5 + 6 * u, 0.06, '#a6c98a');
+    ribbon(u => 6 + 5 * u, 0.08, '#9ed6e6');
+    ribbon(u => 4.4 + 4 * u, 0.1, '#5cb3d8');
+    ribbon(u => 1.2 + 1.4 * u, 0.11, '#8fd0ea');
+    const sp = rpts[0], pond = new Parts().cyl(7.4, 7.8, 0.1, '#b9c2c9', 0, 0, 0, 16).cyl(6, 6, 0.14, '#5cb3d8', 0, 0, 0, 16).cyl(3.4, 3.4, 0.16, '#8fd0ea', 0, 0, 0, 16);
+    for (let k = 0; k < 11; k++) { const a = k / 11 * Math.PI * 2; pond.ball(0.7 + (k % 3) * 0.25, '#9aa1ab', Math.cos(a) * 7.4, -0.3, Math.sin(a) * 7.4); }
+    const pm = pond.mesh(); pm.position.set(sp.x, 0, sp.z); scene.add(pm);
+  }
+  const onTile = (x, z, pad) => ep.tiles.some(t => Math.abs(x - t.x) < t.w / 2 + pad && Math.abs(z - t.z) < t.d / 2 + pad);
+  const onLot = (x, z, pad) => ep.buildings.some(b => b.type !== 'sign' && Math.abs(x - b.x) < (b.type === 'cottage' ? 11 : 8) + pad && Math.abs(z - b.z) < (b.type === 'cottage' ? 10 : 8) + pad)
+    || ep.buildings.some(b => b.type === 'sign' && Math.hypot(x - b.x, z - b.z) < 3 + pad);
+
+  // grass tufts and flowers around the village, so close-ups are not one flat green
+  {
+    const NT = 7000, tuft = new THREE.InstancedMesh(new THREE.ConeGeometry(0.13, 0.55, 3).translate(0, 0.27, 0), new THREE.MeshLambertMaterial(), NT);
+    const NF = 900, flower = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(0.13, 0).translate(0, 0.22, 0), new THREE.MeshLambertMaterial(), NF);
+    const tm = new THREE.Matrix4(), tc = new THREE.Color(), rr = rng(11);
+    const spot = () => { for (;;) { const x = -125 + rr() * 210, z = -55 + rr() * 110; if (!onTile(x, z, 0.6) && !onLot(x, z, 0) && riverDist(x, z) > 4.5) return [x, z]; } };
+    for (let k = 0; k < NT; k++) { const [x, z] = spot(), sc = 0.7 + rr() * 0.8; tuft.setMatrixAt(k, tm.makeRotationY(rr() * 6).scale(V3.set(sc, sc, sc)).setPosition(x, 0, z)); tuft.setColorAt(k, tc.setHSL(0.27 + rr() * 0.04, 0.5, 0.36 + rr() * 0.1)); }
+    const FC = ['#ffffff', '#fff3b0', '#ffd24a', '#ff9fc0', '#c9b6ff'];
+    for (let k = 0; k < NF; k++) { const [x, z] = spot(); flower.setMatrixAt(k, tm.makeTranslation(x, 0, z)); flower.setColorAt(k, tc.set(FC[k % 5])); }
+    scene.add(tuft, flower);
+  }
+
   // forest
-  const blocked = (x, z) => (x > ep.cityBox.x0 && x < ep.cityBox.x1 && z > ep.cityBox.z0 && z < ep.cityBox.z1)
+  const blocked = (x, z) => riverDist(x, z) < 9 || (x > ep.cityBox.x0 && x < ep.cityBox.x1 && z > ep.cityBox.z0 && z < ep.cityBox.z1)
     || ep.clear.some(c => Math.hypot(x - c.x, z - c.z) < c.r) || Math.hypot(x - mx, z - mz) < R * 0.2;
-  const n = Math.round(R * R / 55), spots = [];
+  const n = Math.round(R * R / 24), spots = [];
   for (let k = 0; k < n; k++) {
     const a = r() * Math.PI * 2, d = Math.sqrt(r()) * R * 0.9, x = Math.cos(a) * d, z = Math.sin(a) * d;
-    const inner = d < R * 0.62 && r() < 0.6; // sparser meadow around the town
+    const inner = d < R * 0.45 && r() < 0.75; // sparser meadow around the town
     if (!blocked(x, z) && !inner) spots.push([x, z, 0.7 + r() * 0.9, r()]);
   }
   const trunk = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.35, 0.45, 2.4, 5).translate(0, 1.2, 0), new THREE.MeshLambertMaterial({ color: '#7a5a3c' }), spots.length);
@@ -97,20 +139,42 @@ const R = ep.island.R;
   });
   for (const t of [trunk, round, pine]) { t.castShadow = true; scene.add(t); }
 
-  // meadow patches so the grass is not one flat colour
-  const NP = 260, patch = new THREE.InstancedMesh(new THREE.CircleGeometry(1, 9).rotateX(-Math.PI / 2), new THREE.MeshLambertMaterial(), NP);
-  for (let k = 0; k < NP; k++) {
-    const a = r() * Math.PI * 2, d = Math.sqrt(r()) * R * 0.84, s = 5 + r() * 16;
-    patch.setMatrixAt(k, m.makeScale(s, 1, s * (0.6 + r() * 0.5)).setPosition(Math.cos(a) * d, 0.02 + k * 0.0001, Math.sin(a) * d));
-    patch.setColorAt(k, col.setHSL(0.262 + r() * 0.012, 0.46, r() < 0.5 ? 0.543 : 0.574));
+  // small bushes scattered over the meadow, so it reads as a landscape from above
+  const NB = 2600, bush = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1, 0).translate(0, 0.5, 0), new THREE.MeshLambertMaterial(), NB);
+  let nb = 0;
+  for (let k = 0; k < NB * 3 && nb < NB; k++) {
+    const a = r() * Math.PI * 2, d = Math.sqrt(r()) * R * 0.92, x = Math.cos(a) * d, z = Math.sin(a) * d, sc = 0.6 + r() * 0.9;
+    if (blocked(x, z) || Math.hypot(x - ep.townhall.x, z - ep.townhall.z) < 40) continue;
+    bush.setMatrixAt(nb, m.makeScale(sc * 1.3, sc, sc * 1.3).setPosition(x, 0, z)); bush.setColorAt(nb++, col.setHSL(0.28 + r() * 0.05, 0.45, 0.3 + r() * 0.1));
   }
-  patch.receiveShadow = true; scene.add(patch);
+  bush.count = nb; scene.add(bush);
 }
 
 // ---------- streets ----------
-const tiles = ep.tiles;
+const tiles = ep.tiles.filter(t => !t.cobble), cobbles = ep.tiles.filter(t => t.cobble);
 const M4 = new THREE.Matrix4(), V = new THREE.Vector3(), Q = new THREE.Quaternion(), S = new THREE.Vector3();
-const road = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 0.16, 1).translate(0, 0.08, 0), new THREE.MeshLambertMaterial({ color: '#4d5361' }), tiles.length);
+const road = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 0.16, 1).translate(0, 0.08, 0), new THREE.MeshLambertMaterial({ color: '#4d5361' }), Math.max(1, tiles.length));
+if (!tiles.length) road.setMatrixAt(0, new THREE.Matrix4().makeScale(0, 0, 0));
+// cobblestones: one texture drawn for a 15 x 6 segment
+const cobbleTex = (() => {
+  const cv = document.createElement('canvas'); cv.width = 750; cv.height = 300; const c = cv.getContext('2d'), r = rng(3);
+  c.fillStyle = '#8f8a80'; c.fillRect(0, 0, 750, 300);
+  for (let y = 0, row = 0; y < 300; y += 30, row++) for (let x = -(row % 2) * 22; x < 750; x += 44) {
+    const v = 168 + r() * 30 | 0; c.fillStyle = `rgb(${v},${v - 4},${v - 12})`;
+    c.beginPath(); c.roundRect(x + 3, y + 3, 38 + r() * 4, 24, 7); c.fill();
+  }
+  c.fillStyle = '#7d786e'; c.fillRect(0, 0, 750, 10); c.fillRect(0, 290, 750, 10);
+  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t;
+})();
+const cobble = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 0.12, 1).translate(0, 0.06, 0), new THREE.MeshLambertMaterial({ map: cobbleTex }), Math.max(1, cobbles.length));
+cobble.receiveShadow = true; scene.add(cobble);
+function setCobble(i, k) {
+  const t = cobbles[i], w = t.w * k, x = t.grow === -1 ? t.x + t.w / 2 - w / 2 : t.x;
+  cobble.setMatrixAt(i, M4.compose(V.set(x, 0, t.z), Q.identity(), k > 0 ? S.set(w, 1, t.d) : S.set(0, 0, 0)));
+}
+cobbles.forEach((t, i) => setCobble(i, t.at == null ? 1 : 0));
+if (!cobbles.length) cobble.setMatrixAt(0, new THREE.Matrix4().makeScale(0, 0, 0));
+const liveCobbles = cobbles.map((t, i) => i).filter(i => cobbles[i].at != null);
 const walk = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 0.26, 1).translate(0, 0.13, 0), new THREE.MeshLambertMaterial({ color: '#cfcabd' }), tiles.length * 2);
 const dash = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 0.02, 1).translate(0, 0.18, 0), new THREE.MeshBasicMaterial({ color: '#f4f1e6' }), tiles.length * 2);
 road.receiveShadow = walk.receiveShadow = true;
@@ -133,9 +197,8 @@ for (const b of ep.buildings) {
   const g = buildingMesh(b); scene.add(g);
   if (b.at != null) { live.push({ g, at: b.at }); g.visible = false; }
 }
-const mayor = mayorFigure();
-mayor.position.set(ep.townhall.x, 1.1, ep.townhall.z + 6.9); mayor.scale.setScalar(1.5); scene.add(mayor);
-{ const pod = new Parts().cyl(2.1, 2.4, 1.1, '#b8b2a4', 0, 0, 0, 14).cyl(2.2, 2.2, 0.15, '#ffc93c', 0, 1.0, 0, 14).mesh(); pod.position.set(ep.townhall.x, 0.1, ep.townhall.z + 6.9); scene.add(pod); }
+const hero = characterFigure(); scene.add(hero);
+const HERO_HOME = { x: ep.townhall.x + 0.5, z: ep.townhall.z + 5.3, ry: 0.15, anim: 'idle' };
 
 // ---------- people, cars, tents ----------
 const streets = {};
@@ -146,7 +209,9 @@ const MAXW = 420, pr = rng(ep.day * 31 + 5);
 const SKIN = ['#f0c7a0', '#d9a878', '#a8744d', '#7a4f33', '#f4d6b8'];
 const walkers = Array.from({ length: MAXW }, (_, i) => {
   const st = i < 30 ? streetList.find(s => s.z === 12) ?? streetList[0] : streetList[pr() * streetList.length | 0];
-  return { st, side: pr() < 0.5 ? -1 : 1, off: pr() * 0.8, ph: pr() * 1000, sp: 2.2 + pr() * 2.2, h: 0.85 + pr() * 0.3, hue: pr(), skin: SKIN[pr() * 5 | 0] };
+  const sd = pr() < 0.5 ? -1 : 1;
+  // keep the pavement in front of Leo's door clear, so he is never hidden in the crowd
+  return { st, side: st.z === 12 ? 1 : sd, off: pr() * 0.8, ph: pr() * 1000, sp: 2.2 + pr() * 2.2, h: 0.85 + pr() * 0.3, hue: pr(), skin: SKIN[pr() * 5 | 0] };
 });
 const bodies = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.3, 0.42, 1.25, 6).translate(0, 0.9, 0), new THREE.MeshLambertMaterial(), MAXW);
 const heads = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(0.34, 1).translate(0, 1.85, 0), new THREE.MeshLambertMaterial(), MAXW);
@@ -221,6 +286,18 @@ const PANELS = {
     const bar = el.querySelector('i'), num = el.querySelector('.num');
     return lt => { show(el, pop(lt, 0.4)); const k = easeOut(clamp((lt - 0.8) / 1.2)); bar.style.width = clamp(p.cur / p.target) * 100 * k + '%'; num.textContent = `${fmt(p.cur * k)} / ${fmt(p.target)} ${p.unit}`; };
   },
+  room(p) {
+    const el = mk('room', `<h4>🏠 ${esc(p.title)}</h4><div class="slots">` + Array.from({ length: p.total }, (_, k) => k < p.filled
+      ? `<div class="slot on"><div class="avatar" style="background:#f2b632">${esc(ep.mayor[0] ?? '?')}</div><span>${esc(ep.mayor)}</span></div>`
+      : `<div class="slot"><div class="avatar">+</div><span>&nbsp;</span></div>`).join('') + `</div><div class="note">${esc(p.note)}</div>`);
+    const kids = [...el.querySelectorAll('.slot, .note')];
+    return lt => { show(el, pop(lt, p.at)); kids.forEach((c, k) => { const v = pop(lt, p.at + 0.25 + k * 0.28, 0.25); c.style.opacity = clamp(v * 3); c.style.scale = v <= 0 ? 0.5 : easeBack(clamp(v)) * 0.5 + 0.5; }); };
+  },
+  rules(p) {
+    const el = mk('rules', p.rows.map(r => `<div class="r"><span class="i">${r.icon}</span><span class="l">${esc(r.label)}${r.mid ? `<small>${esc(r.mid)}</small>` : ''}</span><b>${esc(r.amount)}</b></div>`).join(''));
+    const rows = [...el.querySelectorAll('.r')];
+    return lt => { show(el, pop(lt, p.at[0])); rows.forEach((r, k) => { const v = pop(lt, p.at[k], 0.25); r.style.opacity = clamp(v * 3); r.style.translate = v <= 0 ? '-30px 0' : `${-30 * (1 - easeOut(clamp(v)))}px 0`; }); };
+  },
   cta(p) {
     const el = mk('cta', p.lines.map(l => `<div class="b">${esc(l)}</div>`).join('') + (p.note ? `<div class="note">${esc(p.note)}</div>` : ''));
     const kids = [...el.children];
@@ -234,21 +311,28 @@ const capEl = $('#caption');
 let capKey = null;
 
 // ---------- camera ----------
-const camPose = (c, k, dir) => ({ x: c.x, y: c.y ?? 0, z: c.z, dist: c.dist * (1 - 0.07 * k), pitch: c.pitch, yaw: c.yaw + dir * 5 * k });
+const camPose = (sh, k, dir) => {
+  const c = sh.cam;
+  if (sh.cam2) {
+    const d = sh.cam2, e = easeIO(k);
+    return { x: lerp(c.x, d.x, e), y: lerp(c.y ?? 0, d.y ?? 0, e), z: lerp(c.z, d.z, e), dist: Math.exp(lerp(Math.log(c.dist), Math.log(d.dist), e)), pitch: lerp(c.pitch, d.pitch, e), yaw: lerp(c.yaw, d.yaw, e) };
+  }
+  return { x: c.x, y: c.y ?? 0, z: c.z, dist: c.dist * (1 - 0.07 * k), pitch: c.pitch, yaw: c.yaw + dir * 5 * k };
+};
 function cameraAt(t) {
   const i = Math.max(0, ep.shots.findIndex(s => t < s.t1)), s = ep.shots[i] ?? ep.shots.at(-1);
-  let a = camPose(s.cam, clamp((t - s.t0) / (s.t1 - s.t0)), i % 2 ? 1 : -1);
+  let a = camPose(s, clamp((t - s.t0) / (s.t1 - s.t0)), i % 2 ? 1 : -1);
   const blend = 1.1;
   if (i > 0 && t - s.t0 < blend) {
-    const b = camPose(ep.shots[i - 1].cam, 1, (i - 1) % 2 ? 1 : -1), k = easeIO((t - s.t0) / blend);
+    const b = camPose(ep.shots[i - 1], 1, (i - 1) % 2 ? 1 : -1), k = easeIO((t - s.t0) / blend);
     a = { x: lerp(b.x, a.x, k), y: lerp(b.y, a.y, k), z: lerp(b.z, a.z, k), dist: Math.exp(lerp(Math.log(b.dist), Math.log(a.dist), k)), pitch: lerp(b.pitch, a.pitch, k), yaw: lerp(b.yaw, a.yaw, k) };
   }
   const p = a.pitch * Math.PI / 180, y = a.yaw * Math.PI / 180;
   camera.position.set(a.x + a.dist * Math.sin(y) * Math.cos(p), a.y + a.dist * Math.sin(p), a.z + a.dist * Math.cos(y) * Math.cos(p));
   camera.lookAt(a.x, a.y, a.z);
-  camera.near = Math.max(2, a.dist * 0.05); camera.far = a.dist * 6 + 3000; camera.updateProjectionMatrix();
+  camera.near = Math.max(0.15, a.dist * 0.03); camera.far = a.dist * 6 + 3000; camera.updateProjectionMatrix();
   // keep the shadow map tight around whatever the shot is looking at
-  const e = clamp(a.dist * 0.75, 70, 520);
+  const e = clamp(a.dist * 0.75, 10, 520);
   sun.target.position.set(a.x, 0, a.z); sun.position.set(a.x - e * 0.55, e * 1.25, a.z + e * 0.7);
   Object.assign(sun.shadow.camera, { left: -e, right: e, top: e, bottom: -e, near: 1, far: e * 4 }); sun.shadow.camera.updateProjectionMatrix();
   return { i, s, a };
@@ -266,12 +350,14 @@ function renderAt(t) {
     if (k > 0) { const kk = clamp(k); b.g.scale.set(easeOut(clamp(kk * 1.7)), Math.max(0.02, easeBack(kk)), easeOut(clamp(kk * 1.7))); }
   }
   for (const idx of liveTiles) setTile(idx, easeOut(clamp((t - tiles[idx].at) / 0.35)));
+  for (const idx of liveCobbles) setCobble(idx, clamp((t - cobbles[idx].at) / 0.2));
+  if (liveCobbles.length) cobble.instanceMatrix.needsUpdate = true;
   if (liveTiles.length) road.instanceMatrix.needsUpdate = walk.instanceMatrix.needsUpdate = dash.instanceMatrix.needsUpdate = true;
 
   const residents = track('residents', t), housing = track('housing', t), cash = track('cash', t);
   const homeless = Math.max(0, Math.round(residents) - Math.round(housing));
 
-  const nWalk = Math.min(MAXW, Math.round(5 * Math.sqrt(residents))), nCamp = homeless > 0 ? Math.min(60, Math.ceil(homeless / perTent)) : 0;
+  const nWalk = CROWD ? Math.min(MAXW, Math.round(5 * Math.sqrt(residents))) : 0, nCamp = homeless > 0 ? Math.min(60, Math.ceil(homeless / perTent)) : 0;
   walkers.forEach((w, k) => {
     let x, z, sc = k < nWalk ? 1 : 0;
     if (k >= nWalk - nCamp && k < nWalk && campers[nWalk - 1 - k]) { // some of the crowd hangs around the camp
@@ -288,7 +374,7 @@ function renderAt(t) {
 
   cars.forEach((c, k) => {
     const len = c.st.x1 - c.st.x0 - 4, u = (c.ph * 9 + t * c.sp) % len;
-    const x = c.dir > 0 ? c.st.x0 + 2 + u : c.st.x1 - 2 - u, edge = clamp(Math.min(u, len - u) / 3);
+    const x = c.dir > 0 ? c.st.x0 + 2 + u : c.st.x1 - 2 - u, edge = CROWD ? clamp(Math.min(u, len - u) / 3) : 0;
     M4.compose(V.set(x, 0.1, c.st.z + c.dir * 1.9), Q.setFromAxisAngle(V.clone().set(0, 1, 0), c.dir > 0 ? 0 : Math.PI), S.setScalar(edge));
     carBody.setMatrixAt(k, M4); carTop.setMatrixAt(k, M4);
   });
@@ -298,9 +384,10 @@ function renderAt(t) {
   tentPos.forEach((p, k) => tents.setMatrixAt(k, M4.compose(V.set(p[0], 0, p[1]), Q.setFromAxisAngle(V.clone().set(0, 1, 0), p[2]), S.setScalar(k < nTents ? 1 : 0))));
   tents.instanceMatrix.needsUpdate = true;
 
-  const waving = s.type === 'outro';
-  mayor.position.y = 1.2 + (waving ? Math.abs(Math.sin(t * 5.5)) * 0.3 : 0);
-  mayor.arms.forEach((arm, k) => { const side = k ? 1 : -1; arm.rotation.z = waving ? -side * (0.6 + 0.35 * Math.sin(t * 9 + k)) : Math.PI + side * 0.15; });
+  const act = s.actor ?? HERO_HOME, ak = clamp(lt / (s.t1 - s.t0));
+  hero.position.set(act.to ? lerp(act.x, act.to.x, ak) : act.x, 0, act.to ? lerp(act.z, act.to.z, ak) : act.z);
+  hero.rotation.y = act.ry ?? 0;
+  hero.pose(t, act.anim, act);
 
   renderer.render(scene, camera);
 
@@ -310,6 +397,10 @@ function renderAt(t) {
   $('#v-res').textContent = fmt(residents);
   $('#v-home').textContent = `${fmt(Math.min(residents, housing))} / ${fmt(housing)}`;
   $('#homes').classList.toggle('warn', homeless > 0);
+  const hk = ep.homesFrom == null ? 1 : clamp((t - ep.homesFrom) / 0.3);
+  $('#homes').style.display = hk > 0 ? 'flex' : 'none'; $('#homes').style.scale = 0.7 + 0.3 * easeBack(hk);
+  const pk = s.hudPulse === 'cash' ? Math.sin(Math.PI * clamp((lt - 0.4) / 1.6)) : 0;
+  $('.pill.cash').style.scale = 1 + 0.16 * pk; $('.pill.cash').classList.toggle('glow', pk > 0.05);
   $('#v-tents').textContent = homeless > 0 ? `⛺ ${fmt(homeless)} ${ep.hud.tents}` : housing - residents >= 1 ? `${fmt(housing - residents)} ${ep.hud.free}` : ep.hud.full;
 
   panelFns.forEach((fn, k) => { if (!fn) return; if (k === i) fn(lt); else fn(-1); });
@@ -325,15 +416,20 @@ function renderAt(t) {
     Object.assign(ringEl.style, { display: 'block', left: x + 'px', top: y + 'px', width: rp * 2 + 'px', height: rp * 2 * Math.sin(a.pitch * Math.PI / 180) + 'px', opacity: clamp((lt - 0.9) * 4) });
   } else ringEl.style.display = 'none';
 
+  // captions appear word by word, like a narrator speaking them
   const cap = s.captions.find(c => t >= c.t0 && t < c.t1);
   const key = cap ? cap.t0 : null;
   if (key !== capKey) {
     capKey = key;
-    capEl.innerHTML = cap ? cap.lines.map(l => `<div>${esc(l).replace(/\*([^*]+)\*/g, '<em>$1</em>')}</div>`).join('') : '';
+    capEl.innerHTML = cap ? cap.lines.map(l => '<div>' + [...l.matchAll(/\*([^*]+)\*|([^*]+)/g)].flatMap(m => (m[1] ?? m[2]).split(/\s+/).filter(Boolean)
+      .map(w => m[1] != null ? `<em class="w">${esc(w)}</em>` : `<span class="w">${esc(w)}</span>`)).join(' ') + '</div>').join('') : '';
     const longest = cap ? Math.max(...cap.lines.map(l => l.replace(/\*/g, '').length)) : 0;
     capEl.style.fontSize = (longest > 27 ? 27 : longest > 22 ? 32 : longest > 18 ? 37 : 42) + 'px';
   }
-  if (cap) [...capEl.children].forEach((d, k) => { const v = clamp((t - cap.t0 - k * 0.1) / 0.16); d.style.opacity = clamp(v * 2); d.style.scale = v <= 0 ? 0.6 : 0.6 + 0.4 * easeBack(v); });
+  if (cap) {
+    const words = capEl.querySelectorAll('.w'), per = Math.min(0.3, (cap.t1 - cap.t0) * 0.55 / Math.max(1, words.length));
+    words.forEach((w, k) => { const v = clamp((t - cap.t0 - k * per) / 0.14); w.style.opacity = clamp(v * 2); w.style.scale = v <= 0 ? 0.5 : 0.5 + 0.5 * easeBack(v); });
+  }
 }
 
 window.renderAt = renderAt;

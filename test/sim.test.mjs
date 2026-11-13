@@ -2,8 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { classify, votesIn, cleanHandle } from '../src/comments.mjs';
 import { initialState, runDay } from '../src/sim.mjs';
+import { introEpisode } from '../src/intro.mjs';
 
-const cfg = { cityName: 'Testville', mayorName: 'M', lang: 'en', startCash: 15000, maxCommentBuildsPerDay: 4 };
+const cfg = { cityName: 'Testville', mayorName: 'Leo', lang: 'en', startCash: 50000, maxCommentBuildsPerDay: 4 };
 
 test('comments are mapped to jobs', () => {
   assert.equal(classify('Can I open a kebab shop?').role, 'kebab');
@@ -55,4 +56,19 @@ test('requests the city cannot afford wait in the queue', () => {
   assert.equal(state.queue.length, 1);
   const next = runDay(state, { subscribers: 900, video: { id: 'w', likes: 0, commentCount: 0 }, comments: [] }, cfg);
   assert.equal(next.state.citizens['@doc'].title, 'Head Doctor');
+});
+
+test('day 0 introduces the founder and hands over to day 1', () => {
+  const { state, episode } = introEpisode(cfg);
+  assert.equal(state.cash, 50000);
+  assert.equal(state.residents, 1);
+  assert.equal(state.housing - state.residents, 3, 'room for three roommates');
+  assert.ok(episode.duration > 35 && episode.duration < 60);
+  const text = episode.shots.flatMap(s => s.captions).map(c => c.lines.join(' ').replace(/\*/g, '')).join(' ');
+  for (const bit of ['This is Leo.', 'Welcome to Testville!', '€50,000', '€1,000', 'Tell me in the comments!']) assert.ok(text.includes(bit), bit);
+  const cash = episode.tracks.cash;
+  assert.equal(cash[0][1], 67000); assert.equal(cash.at(-1)[1], 50000);
+  const day1 = runDay(state, { subscribers: 12, video: { id: 'x', likes: 0, commentCount: 0 }, comments: [] }, cfg);
+  assert.ok(day1.episode.tiles.some(t => t.cobble), 'the village road survives into day 1');
+  assert.ok(day1.state.buildings.some(b => b.type === 'cottage') && day1.state.buildings.some(b => b.type === 'sign'));
 });

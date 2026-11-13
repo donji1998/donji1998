@@ -27,7 +27,7 @@ catch { console.error('Playwright is missing. Run: npm i -D playwright && npx pl
 const { server, port } = await serve();
 const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--enable-webgl'] });
 const page = await browser.newPage({ viewport: { width: 540, height: 960 }, deviceScaleFactor: draft ? 1 : 2 });
-page.on('pageerror', e => console.error('page error:', e.message));
+page.on('pageerror', e => { console.error('page error:', e.message); process.exit(1); });
 page.on('console', m => { if (m.type() === 'error') console.error('console:', m.text()); });
 await page.goto(`http://127.0.0.1:${port}/web/index.html?capture=1&ep=/${rel}`);
 await page.waitForFunction('window.READY === true', null, { timeout: 120000 });

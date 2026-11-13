@@ -209,7 +209,7 @@ function airport(p) {
 const BUILD = {
   house: (p, b, r) => house(p, r), block: (p, b, r) => block(p, r), tower: (p, b, r) => tower(p, r),
   mega: (p, b, r) => mega(p, r, 1), arco: (p, b, r) => mega(p, r, 1.9),
-  shop: (p, b) => shop(p, b), civic: (p, b) => civic(p, b), townhall: p => townhall(p),
+  shop: (p, b) => shop(p, b), civic: (p, b) => civic(p, b), townhall: p => townhall(p), cottage: p => cottage(p), sign: () => {},
   stadium: p => stadium(p), funfair: p => funfair(p), harbor: p => harbor(p), airport: p => airport(p),
 };
 
@@ -217,10 +217,10 @@ export function buildingMesh(b) {
   const p = new Parts();
   (BUILD[b.type] ?? BUILD.house)(p, b, rng(b.seed ?? b.id));
   const g = new THREE.Group();
-  const body = p.mesh(), back = { civic: -3.2, shop: -1.5, house: -1, block: -1.5, tower: -1.5 }[b.type] ?? 0;
-  body.position.z = back; // sit back from the pavement
-  g.add(body);
-  if (b.sign) {
+  const back = { civic: -3.2, shop: -1.5, house: -1, block: -1.5, tower: -1.5 }[b.type] ?? 0;
+  if (p.g.length) { const body = p.mesh(); body.position.z = back; g.add(body); } // sit back from the pavement
+  if (b.type === 'sign') g.add(villageSign(b.text));
+  else if (b.sign) {
     const s = b.type === 'shop' ? signMesh(b.sign, 9.6, 1.75) : signMesh(b.sign, 9.6, 1.9);
     if (b.type === 'shop') s.position.set(0, 4.65, 4.2);
     else if (b.style?.feature === 'columns') s.position.set(0, 4.3, 6.5);
@@ -229,19 +229,140 @@ export function buildingMesh(b) {
     g.add(s);
   }
   g.position.set(b.x, 0, b.z);
+  if (b.ry) g.rotation.y = b.ry;
   return g;
 }
 
-/** The mayor: top hat, sash, and arms that wave. */
-export function mayorFigure() {
+
+// ---------- the founder's cottage ----------
+function cottage(p) {
+  const W = 9, D = 7, H = 3.9, wall = '#f6ecd6', beam = '#6b4a33', roof = '#c9553c', shutter = '#3f7d6e';
+  p.cyl(9.5, 9.8, 0.08, '#e6d6ad', 0, 0, 1.2, 18);                        // sandy plot
+  p.box(W + 0.4, 0.55, D + 0.4, '#a9a39a', 0, 0, 0);                      // stone base
+  p.box(W, H - 0.55, D, wall, 0, 0.55, 0);
+  for (const x of [-W / 2, W / 2]) for (const z of [-D / 2, D / 2]) p.box(0.32, H - 0.55, 0.32, beam, x, 0.55, z);
+  for (const z of [-D / 2 - 0.02, D / 2 + 0.02]) p.box(W + 0.1, 0.26, 0.12, beam, 0, 2.2, z).box(W + 0.1, 0.26, 0.12, beam, 0, H - 0.2, z);
+  for (const x of [-W / 2 - 0.02, W / 2 + 0.02]) p.box(0.12, 0.26, D + 0.1, beam, x, 2.2, 0);
+  // roof with tile rows
+  const rh = 3.5, half = D / 2 + 0.7, ang = Math.atan2(rh, half), len = Math.hypot(rh, half);
+  p.gable(W + 1.2, rh, D + 1.4, roof, 0, H, 0);
+  for (const s of [-1, 1]) for (let k = 0; k < 6; k++) {
+    const f = (k + 0.5) / 6, g = new THREE.BoxGeometry(W + 1.3, 0.1, len / 6 * 0.55);
+    g.rotateX(s * ang);
+    p.add(g, k % 2 ? '#b8452f' : '#d9654a', 0, H + rh * f + 0.05 * Math.cos(ang), s * half * (1 - f) + s * 0.05 * Math.sin(ang));
+  }
+  p.box(W + 1.3, 0.25, 0.35, '#9e3a28', 0, H + rh - 0.12, 0);              // ridge
+  p.box(1, 2.6, 1, '#9b5a45', 2.6, H + 1.2, -1.4).box(1.2, 0.2, 1.2, '#5b5650', 2.6, H + 3.8, -1.4);
+  // front: door, windows, shutters, flower boxes
+  const fz = D / 2 + 0.06;
+  p.box(1.5, 2.45, 0.14, '#7a4a2e', 0, 0.55, fz).box(0.5, 0.5, 0.16, '#bfe3f2', 0, 2.2, fz).box(0.14, 0.14, 0.2, '#e8c35a', 0.5, 1.6, fz + 0.05);
+  p.box(1.8, 0.6, 0.15, '#f3efe6', 0, 0, fz + 0.75).box(2.4, 0.3, 1.5, '#a9a39a', 0, 0, fz + 0.75);
+  p.add(new THREE.BoxGeometry(2.2, 0.12, 1.1).rotateX(0.35), '#c9553c', 0, 3.25, fz + 0.45);
+  for (const x of [-2.75, 2.75]) {
+    p.box(1.7, 1.45, 0.12, '#f3efe6', x, 1.25, fz).box(1.4, 1.2, 0.14, '#9fd0ea', x, 1.37, fz);
+    p.box(0.08, 1.2, 0.18, '#f3efe6', x, 1.37, fz).box(1.4, 0.08, 0.18, '#f3efe6', x, 1.93, fz);
+    for (const sx of [-1, 1]) p.box(0.55, 1.45, 0.1, shutter, x + sx * 1.15, 1.25, fz + 0.04);
+    p.box(1.8, 0.35, 0.45, '#8a5a3a', x, 1.0, fz + 0.25);
+    for (let k = 0; k < 4; k++) p.ball(0.17, ['#e8485a', '#ffd24a', '#ff8fb1', '#e8485a'][k], x - 0.6 + k * 0.4, 1.3, fz + 0.27);
+    p.box(1.1, 0.95, 0.12, '#f3efe6', x, 2.65, fz).box(0.85, 0.75, 0.14, '#9fd0ea', x, 2.75, fz);
+  }
+  // side windows
+  for (const sx of [-1, 1]) p.box(0.14, 1.2, 1.3, '#9fd0ea', sx * (W / 2 + 0.03), 1.4, 0).box(0.1, 1.45, 0.5, shutter, sx * (W / 2 + 0.06), 1.25, 0.95).box(0.1, 1.45, 0.5, shutter, sx * (W / 2 + 0.06), 1.25, -0.95);
+  // garden bits
+  p.ball(0.8, '#5aa856', -5.6, 0, 3.2).ball(0.6, '#6dbb5f', -6.2, 0, 2.2).ball(0.7, '#5aa856', 5.8, 0, 3);
+  p.box(1.2, 0.8, 0.8, '#8a5a3a', 6.3, 0, -2).box(1, 0.1, 0.6, '#6dbb5f', 6.3, 0.8, -2);
+}
+
+/** The yellow "Welcome to …" board at the edge of town. */
+export function villageSign(text) {
   const g = new THREE.Group(), p = new Parts();
-  p.cyl(0.55, 0.7, 1.7, '#27407a', 0, 0.9, 0).cyl(0.22, 0.22, 0.9, '#3a3f4d', -0.28, 0, 0, 6).cyl(0.22, 0.22, 0.9, '#3a3f4d', 0.28, 0, 0, 6);
-  p.ball(0.5, '#f0c7a0', 0, 2.55, 0).cyl(0.75, 0.75, 0.1, '#1d2233', 0, 3.4, 0).cyl(0.45, 0.48, 0.8, '#1d2233', 0, 3.5, 0).cyl(0.47, 0.47, 0.18, '#ffc93c', 0, 3.52, 0);
-  p.add(new THREE.BoxGeometry(0.25, 1.9, 1.3).rotateZ(0.6), '#ffc93c', 0, 1.75, 0.02);
+  for (const x of [-2.3, 2.3]) p.box(0.25, 3.2, 0.25, '#6b6f78', x, 0, 0);
+  p.box(5.6, 2.1, 0.22, '#1d2233', 0, 1.9, 0).box(5.2, 1.7, 0.26, '#f5c518', 0, 2.1, 0);
   g.add(p.mesh());
-  g.arms = [-1, 1].map(s => {
-    const a = new Parts().cyl(0.17, 0.17, 1.25, '#27407a', 0, 0, 0, 6).ball(0.2, '#f0c7a0', 0, 1.2, 0).mesh();
-    a.position.set(s * 0.72, 2.25, 0); g.add(a); return a;
+  const cv = document.createElement('canvas'); cv.width = 520; cv.height = 170;
+  const c = cv.getContext('2d');
+  c.fillStyle = '#f5c518'; c.fillRect(0, 0, 520, 170);
+  c.strokeStyle = '#1d2233'; c.lineWidth = 8; c.strokeRect(14, 14, 492, 142);
+  c.fillStyle = '#1d2233'; c.textAlign = 'center'; c.textBaseline = 'middle';
+  let px = 96; do { c.font = `800 ${px}px "Baloo 2", sans-serif`; px -= 4; } while (c.measureText(text).width > 450);
+  c.fillText(text, 260, 92);
+  const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4;
+  for (const side of [1, -1]) {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(5.2, 1.7), new THREE.MeshBasicMaterial({ map: tex }));
+    m.position.set(0, 2.95, side * 0.14); if (side < 0) m.rotation.y = Math.PI; g.add(m);
+  }
+  g.traverse(o => { o.castShadow = true; });
+  return g;
+}
+
+/**
+ * The founder: a chunky low-poly character with jointed arms and legs.
+ * pose(t, anim) animates him: 'idle', 'wave', 'walk', 'look'.
+ */
+export function characterFigure() {
+  const SKIN = '#f1c6a0', HOOD = '#f2b632', PANTS = '#3e5a8a', SHOE = '#5a3a26', HAT = '#2f9c95';
+  const g = new THREE.Group(), body = new THREE.Group(); g.add(body);
+  const mesh = p => { const m = p.mesh(); return m; };
+  const torso = new Parts()
+    .cyl(0.36, 0.44, 0.85, HOOD, 0, 0.95, 0, 12)
+    .add(new THREE.TorusGeometry(0.3, 0.09, 6, 14).rotateX(Math.PI / 2), '#e0a020', 0, 1.78, -0.02)
+    .box(0.42, 0.22, 0.06, '#e0a020', 0, 1.15, 0.38)
+    .cyl(0.13, 0.15, 0.16, SKIN, 0, 1.78, 0, 8);
+  body.add(mesh(torso));
+  const head = new THREE.Group(); head.position.set(0, 1.92, 0); body.add(head);
+  const hp = new Parts().ball(0.36, SKIN, 0, -0.02, 0)
+    .add(new THREE.SphereGeometry(0.39, 14, 8, 0, Math.PI * 2, 0, Math.PI * 0.5), HAT, 0, 0.47, -0.03)
+    .cyl(0.4, 0.4, 0.12, '#25807a', 0, 0.45, -0.03, 14).ball(0.1, '#f3efe6', 0, 0.84, -0.03)
+    .ball(0.2, '#6b4a33', 0, 0.36, -0.2)
+    .ball(0.048, '#1d2233', -0.12, 0.3, 0.31).ball(0.048, '#1d2233', 0.12, 0.3, 0.31)
+    .ball(0.016, '#ffffff', -0.105, 0.36, 0.355).ball(0.016, '#ffffff', 0.135, 0.36, 0.355)
+    .box(0.12, 0.028, 0.03, '#5a3a26', -0.12, 0.42, 0.33).box(0.12, 0.028, 0.03, '#5a3a26', 0.12, 0.42, 0.33)
+    .ball(0.042, '#e6a988', 0, 0.2, 0.35).add(new THREE.TorusGeometry(0.07, 0.016, 4, 10, Math.PI).rotateZ(Math.PI), '#a8584a', 0, 0.12, 0.34)
+    .ball(0.045, '#f3b3a3', -0.2, 0.17, 0.29).ball(0.045, '#f3b3a3', 0.2, 0.17, 0.29)
+    .ball(0.09, '#6b4a33', -0.33, 0.24, -0.05).ball(0.09, '#6b4a33', 0.33, 0.24, -0.05);
+  head.add(mesh(hp));
+  g.legs = [-1, 1].map(s => {
+    const j = new THREE.Group(); j.position.set(s * 0.17, 0.95, 0); body.add(j);
+    j.add(mesh(new Parts().cyl(0.15, 0.13, 0.82, PANTS, 0, -0.85, 0, 8).box(0.3, 0.2, 0.46, SHOE, 0, -0.95, 0.07)));
+    return j;
   });
+  g.arms = [-1, 1].map(s => {
+    const j = new THREE.Group(); j.position.set(s * 0.47, 1.66, 0); body.add(j);
+    j.add(mesh(new Parts().cyl(0.11, 0.13, 0.72, HOOD, 0, -0.74, 0, 8).ball(0.12, SKIN, 0, -0.88, 0)));
+    return j;
+  });
+  // props
+  g.suitcase = mesh(new Parts().box(0.8, 0.6, 0.3, '#8a4b2a', 0, 0, 0).box(0.82, 0.08, 0.32, '#5a2f1a', 0, 0.3, 0)
+    .box(0.3, 0.12, 0.06, '#3a2418', 0, 0.62, 0).box(0.1, 0.62, 0.32, '#5a2f1a', -0.22, 0, 0).box(0.1, 0.62, 0.32, '#5a2f1a', 0.22, 0, 0));
+  g.bucket = mesh(new Parts().cyl(0.2, 0.16, 0.38, '#7c95ad', 0, -0.4, 0, 10).cyl(0.17, 0.17, 0.02, '#6cc3e0', 0, -0.06, 0, 10)
+    .add(new THREE.TorusGeometry(0.19, 0.02, 4, 12, Math.PI), '#5b6f82', 0, -0.03, 0));
+  g.arms[0].add(g.bucket); g.bucket.position.set(0, -0.95, 0);
+  g.add(g.suitcase); g.suitcase.position.set(0.95, 0, 0.35); g.suitcase.rotation.y = -0.3;
+  g.traverse(o => { if (o.isMesh) { o.castShadow = true; } });
+
+  g.pose = (t, anim = 'idle', props = {}) => {
+    g.suitcase.visible = !!props.suitcase; g.bucket.visible = !!props.bucket;
+    const [L, Rr] = g.arms, [LL, RL] = g.legs;
+    body.position.y = 0; body.rotation.set(0, 0, 0); head.rotation.set(0, 0, 0);
+    LL.rotation.x = RL.rotation.x = 0;
+    const breathe = Math.sin(t * 2.4) * 0.02;
+    body.scale.set(1, 1 + breathe, 1);
+    L.rotation.set(0, 0, -0.1 + (props.bucket ? -0.12 : 0)); Rr.rotation.set(0, 0, 0.1);
+    if (anim === 'wave') {
+      Rr.rotation.z = 2.55 + 0.32 * Math.sin(t * 9); Rr.rotation.x = -0.2;
+      head.rotation.z = 0.08 * Math.sin(t * 4.5); body.rotation.z = -0.04;
+      body.position.y = Math.abs(Math.sin(t * 4.5)) * 0.04;
+    } else if (anim === 'walk') {
+      const w = Math.sin(t * 8.5);
+      LL.rotation.x = w * 0.55; RL.rotation.x = -w * 0.55;
+      L.rotation.x = props.bucket ? 0 : -w * 0.5; Rr.rotation.x = w * 0.5;
+      body.position.y = Math.abs(Math.cos(t * 8.5)) * 0.08;
+    } else if (anim === 'look') {
+      head.rotation.y = Math.sin(t * 1.6) * 0.75; body.rotation.y = Math.sin(t * 1.6 - 0.6) * 0.15;
+    } else if (anim === 'cheer') {
+      L.rotation.z = -2.6 - 0.2 * Math.sin(t * 10); Rr.rotation.z = 2.6 + 0.2 * Math.sin(t * 10);
+      body.position.y = Math.abs(Math.sin(t * 5)) * 0.25;
+    }
+  };
   return g;
 }
