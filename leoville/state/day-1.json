@@ -1,7 +1,7 @@
 {
  "day": 1,
- "cash": 11072,
- "residents": 10,
+ "cash": 58042,
+ "residents": 57,
  "housing": 130,
  "next": {
   "res": 0,
@@ -162,7 +162,7 @@
   "@ORBIT12367": {
    "role": "resident",
    "title": "Roommate",
-   "name": "Orbit",
+   "name": "ExtTalCat",
    "day": 1
   },
   "@Yasmin-h5o": {
@@ -183,12 +183,6 @@
    "name": "Yoan",
    "day": 1
   },
-  "@doodleandarkeyeditzYT": {
-   "role": "resident",
-   "title": "Resident",
-   "name": "Doodleandarkeyeditz",
-   "day": 1
-  },
   "@Someromeroboboboi": {
    "role": "resident",
    "title": "Resident",
@@ -200,6 +194,48 @@
    "title": "Resident",
    "name": "Everlight",
    "day": 1
+  },
+  "@doodleandarkeyeditzYT": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "doodle and arkey editz",
+   "day": 1
+  },
+  "@AmboAmarD": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "Ambo",
+   "day": 1
+  },
+  "@kratos-t2e": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "kratos",
+   "day": 1
+  },
+  "@Arvinteeluck": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "Minijr",
+   "day": 1
+  },
+  "@thiktaphonbonrak9860": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "Thiktaphon Bonrak",
+   "day": 1
+  },
+  "@jemsherlock": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "James Sherlock",
+   "day": 1
+  },
+  "@RaydeBruijn": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "Ray de Bruijn",
+   "day": 1
   }
  },
  "queue": [],
@@ -207,7 +243,7 @@
  "goalsDone": 0,
  "videos": {
   "day-0": {
-   "likes": 30,
+   "likes": 0,
    "comments": 21
   }
  },
@@ -307,7 +343,7 @@
   },
   {
    "id": "@ORBIT12367",
-   "name": "Orbit",
+   "name": "ExtTalCat",
    "handle": "@ORBIT12367",
    "x": 32.2,
    "z": 5.8999999999999995,
@@ -354,23 +390,8 @@
    "id": "@YoanKobler-z1k",
    "name": "Yoan",
    "handle": "@YoanKobler-z1k",
-   "x": 48.3,
+   "x": 50.2,
    "z": 7.4,
-   "ry": 0,
-   "colors": {
-    "hood": "#46a36a",
-    "hat": "#e85a8c",
-    "pants": "#4a3a2c",
-    "skin": "#a8744d",
-    "hair": "#120c08"
-   }
-  },
-  {
-   "id": "@doodleandarkeyeditzYT",
-   "name": "Doodleandarkeyeditz",
-   "handle": "@doodleandarkeyeditzYT",
-   "x": 51.099999999999994,
-   "z": 8,
    "ry": 0,
    "colors": {
     "hood": "#46a36a",
@@ -384,8 +405,8 @@
    "id": "@Someromeroboboboi",
    "name": "Gabor",
    "handle": "@Someromeroboboboi",
-   "x": 53.9,
-   "z": 7.4,
+   "x": 52.5,
+   "z": 7.9,
    "ry": 0,
    "colors": {
     "hood": "#3d9bd6",
@@ -399,8 +420,8 @@
    "id": "@EverlightEverligh",
    "name": "Everlight",
    "handle": "@EverlightEverligh",
-   "x": 56.699999999999996,
-   "z": 8,
+   "x": 54.800000000000004,
+   "z": 7.4,
    "ry": 0,
    "colors": {
     "hood": "#f08a24",

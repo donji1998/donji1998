@@ -18,72 +18,81 @@ showed up!
 Yesterday: 1 resident.
 
 5
-00:00:07,563 --> 00:00:08,187
-Today? 10!
+00:00:07,563 --> 00:00:08,826
+Today? 57!
 
 6
-00:00:08,527 --> 00:00:11,764
+00:00:09,166 --> 00:00:12,461
 That brings
-€9,072 into the budget!
+€56,042 into the budget!
 
 7
-00:00:12,104 --> 00:00:14,829
-Ecaterina, Orbit and Kalina
+00:00:12,801 --> 00:00:15,840
+Ecaterina, ExtTalCat and Kalina
 move in with Leo!
 
 8
-00:00:14,829 --> 00:00:16,043
+00:00:15,840 --> 00:00:17,054
 His house is full!
 
 9
-00:00:16,383 --> 00:00:18,482
+00:00:17,394 --> 00:00:19,493
 Joshua asked for
 a separate house…
 
 10
-00:00:18,482 --> 00:00:19,177
+00:00:19,493 --> 00:00:20,187
 Here it is!
 
 11
-00:00:19,517 --> 00:00:21,436
+00:00:20,527 --> 00:00:22,882
+But 47 of you
+still sleep in tents!
+
+12
+00:00:23,222 --> 00:00:25,141
 2 of you wanted
 an apartment block…
 
-12
-00:00:21,436 --> 00:00:23,117
+13
+00:00:25,141 --> 00:00:26,822
 Room for 120 more!
 
-13
-00:00:23,457 --> 00:00:25,556
-Yoan, Gabor and 2 more
+14
+00:00:27,162 --> 00:00:29,725
+Yoan, Gabor and 45 more
 move in!
 
-14
-00:00:25,896 --> 00:00:27,072
+15
+00:00:29,725 --> 00:00:33,252
+Welcome Ambo, kratos, Minijr, James and Ray!
+
+16
+00:00:33,592 --> 00:00:34,768
 And what do you
 want next?
 
-15
-00:00:27,072 --> 00:00:29,092
+17
+00:00:34,768 --> 00:00:36,788
 School and police station
 are tied!
 
-16
-00:00:29,432 --> 00:00:32,019
+18
+00:00:37,128 --> 00:00:39,715
 The school costs
 €120,000.
 
-17
-00:00:32,019 --> 00:00:34,058
+19
+00:00:39,715 --> 00:00:41,755
 Keep subscribing,
 and we can build it!
 
-18
-00:00:34,398 --> 00:00:36,185
+20
+00:00:42,095 --> 00:00:43,881
 Who wants to be
 the first principal?
 
-19
-00:00:36,185 --> 00:00:37,402
+21
+00:00:43,881 --> 00:00:45,098
 Tell me in the
 comments!

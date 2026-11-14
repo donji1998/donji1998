@@ -100,7 +100,13 @@ export function storyDay(prev, input, cfg) {
   const eco = { perSubscriber: 1000, perLike: 1, perComment: 2, ...cfg.economy };
   const fmt = n => Math.round(n).toLocaleString('en-US'), money = n => '€' + fmt(n);
   const H = TOWNHALL, door = { x: H.x + 0.5, z: H.z + 5.3 };
-  const { movers, greets, ranked } = readComments(input.comments ?? [], input.subscribed, cfg.blocklist);
+  // public subscribers from YouTube Studio: [{ handle, name }]. Most subscriptions are private,
+  // so commenters who say they subscribed are believed unless input.onlySubscribers is set.
+  const pub = (input.publicSubscribers ?? []).map(p => ({ handle: cleanHandle(p.handle ?? p), name: p.name ?? null }));
+  const pubName = new Map(pub.map(p => [p.handle.toLowerCase(), p.name]));
+  const { movers, greets, ranked } = readComments(input.comments ?? [], input.onlySubscribers ? pub.map(p => p.handle) : null, cfg.blocklist);
+  for (const m of movers) { m.said = !!m.name; m.name ??= pubName.get(m.author.toLowerCase()) ?? null; }
+  const nameOf = m => m.name ?? pubName.get(m.author.toLowerCase()) ?? pretty(m.author);
 
   // ---- money ----
   const before = s.residents, after = Math.max(1, (input.subscribers ?? 0) + 1);   // + Leo himself
@@ -110,7 +116,7 @@ export function storyDay(prev, input, cfg) {
   const gained = Math.max(0, after - before);
   const rows = [
     { icon: '👤', label: `${fmt(gained)} new subscriber${gained === 1 ? '' : 's'}`, amount: '+' + money(gained * eco.perSubscriber) },
-    { icon: '❤️', label: `${fmt(likes)} like${likes === 1 ? '' : 's'}`, amount: '+' + money(likes * eco.perLike) },
+    ...(vid.likes == null ? [] : [{ icon: '❤️', label: `${fmt(likes)} like${likes === 1 ? '' : 's'}`, amount: '+' + money(likes * eco.perLike) }]),
     { icon: '💬', label: `${fmt(nComments)} comment${nComments === 1 ? '' : 's'}`, amount: '+' + money(nComments * eco.perComment) },
   ];
   const income = gained * eco.perSubscriber + likes * eco.perLike + nComments * eco.perComment;
@@ -135,7 +141,7 @@ export function storyDay(prev, input, cfg) {
     return b;
   };
   const person = (m, x, z, at, ry = 0, title = 'Resident') => {
-    const name = m.name ?? pretty(m.author);
+    const name = nameOf(m);
     const p = { id: m.author, name, handle: m.author, x, z, ry, at, colors: COLORS[hash(m.author) % COLORS.length] };
     people.push(p);
     s.citizens[m.author] = { role: 'resident', title, name, day: s.day };
@@ -168,14 +174,14 @@ export function storyDay(prev, input, cfg) {
 
   // 5. roommates: people who asked to live with Leo first, then other named movers
   const free = Math.max(0, s.housing - before);
-  const order = [...movers.filter(m => m.withLeo), ...movers.filter(m => !m.withLeo && !m.own && m.name), ...movers.filter(m => !m.withLeo && !m.own && !m.name)];
+  const order = [...movers.filter(m => m.withLeo), ...movers.filter(m => !m.withLeo && !m.own && m.said), ...movers.filter(m => !m.withLeo && !m.own && !m.said)];
   const mates = order.slice(0, free);
   let at;
   if (mates.length) {
     const sh = shot({ type: 'roommates', cam: { x: door.x - 0.9, y: 3.6, z: door.z + 1, dist: 30, pitch: 13, yaw: 8 }, cam2: { x: door.x - 0.9, y: 3.6, z: door.z + 1, dist: 28, pitch: 12, yaw: 2 },
       actor: { ...door, ry: 0, anim: 'cheer' },
       panel: { kind: 'room', title: `${who}'s house`, filled: 1, total: 4, at: 0.3, mates: [] } },
-    [[[names(mates.map(m => m.name ?? pretty(m.author))), `move in with ${who}!`], 3.2], [[mates.length >= free ? `His house is *full!*` : `There's still room for *${free - mates.length}!*`], 1.8]]);
+    [[[names(mates.map(nameOf)), `move in with ${who}!`], 3.2], [[mates.length >= free ? `His house is *full!*` : `There's still room for *${free - mates.length}!*`], 1.8]]);
     const spots = [[-1.7, 0.6], [1.7, 0.6], [-3.4, 1.3]];
     mates.forEach((m, k) => {
       at = sh.t0 + 0.9 + k * 0.6;
@@ -189,7 +195,7 @@ export function storyDay(prev, input, cfg) {
   const own = movers.filter(m => m.own && !mates.includes(m)).slice(0, 2);
   for (const m of own) {
     if (s.cash < HOUSE.cost) break;
-    const name = m.name ?? pretty(m.author);
+    const name = nameOf(m);
     const t0 = now;
     const b = place({ type: 'house', cap: HOUSE.cap, owner: m.author, sign: { icon: '🏠', name: `${name}'s house`, handle: m.author } }, t0 + 1.2);
     const sh = shot({ type: 'build', cam: { x: b.x + 1.8, y: 3.6, z: b.z + 4, dist: 36, pitch: 16, yaw: -12 }, cam2: { x: b.x + 1.8, y: 3.6, z: b.z + 4, dist: 33, pitch: 15, yaw: -5 },
@@ -224,18 +230,24 @@ export function storyDay(prev, input, cfg) {
      [[tall ? `Room for *${fmt(w.build.cap)}* more!` : 'Here it is!'], 1.8]], 0.3);
     if (w.build.cap) {
       // everyone who asked to move in and has no bed yet moves in here
-      const rest = movers.filter(m => !mates.includes(m) && !own.includes(m));
+      // commenters without a bed yet, then public subscribers who did not comment
+      const rest = [...movers.filter(m => !mates.includes(m) && !own.includes(m)),
+        ...pub.filter(p => !movers.some(m => m.author.toLowerCase() === p.handle.toLowerCase()) && !s.citizens[p.handle]).map(p => ({ author: p.handle, name: p.name }))];
+      const total = Math.max(rest.length, s.residents - s.housing);   // s.housing does not include the new block yet
       if (rest.length) {
-        const shown = rest.slice(0, 4), t1 = now;
-        const nm = shown.map(m => m.name ?? pretty(m.author)), short = nm.filter(n => n.length <= 11).slice(0, 2);
-        const more = rest.length - short.length;
-        const sh2 = shot({ type: 'movein', cam: { x: b.x, y: 1.6, z: b.z + 6.5, dist: 20, pitch: 12, yaw: -10 }, cam2: { x: b.x, y: 1.6, z: b.z + 6.5, dist: 18, pitch: 11, yaw: -2 } },
-          [[[short.length ? names(more ? [...short, `${more} more`] : short) : `*${rest.length}* of you`, 'move in!'], 2.6]], 0.3);
+        const shown = [...rest].sort((a, b) => (nameOf(a).length <= 11 ? 0 : 1) - (nameOf(b).length <= 11 ? 0 : 1)).slice(0, 3), t1 = now;
+        const welcome = pub.filter(p => p.name && !(input.comments ?? []).some(c => cleanHandle(c.author).toLowerCase() === p.handle.toLowerCase()))
+          .map(p => p.name.split(' ')[0]).filter(n => n.length <= 11).slice(0, 5);
+        const nm = shown.map(nameOf), short = nm.filter(n => n.length <= 11).slice(0, 2);
+        const more = total - short.length;
+        const sh2 = shot({ type: 'movein', cam: { x: b.x, y: 2.4, z: b.z + 7, dist: 22, pitch: 13, yaw: -8 }, cam2: { x: b.x, y: 2.4, z: b.z + 7, dist: 20, pitch: 12, yaw: -2 } },
+          [[[short.length ? names(more ? [...short, `${more} more`] : short) : `*${total}* of you`, 'move in!'], 2.6],
+           welcome.length ? [['Welcome ' + names(welcome) + '!'], 2.6] : null], 0.3);
         shown.forEach((m, k) => {
-          const p = person(m, b.x - 4.2 + k * 2.8, b.z + 7.4 + (k % 2) * 0.6, sh2.t0 + 0.4 + k * 0.35, 0);
+          const p = person(m, b.x - 2.3 + k * 2.3, b.z + 7.4 + (k % 2) * 0.5, sh2.t0 + 0.4 + k * 0.35, 0);
           tags.push({ x: p.x, y: 3.0, z: p.z, text: p.name.length <= 11 ? p.name : m.author, t0: sh2.t0 + 0.6 + k * 0.35, t1: sh2.t1 });
         });
-        for (const m of rest.slice(4)) s.citizens[m.author] = { role: 'resident', title: 'Resident', name: m.name ?? pretty(m.author), day: s.day };
+        for (const m of rest.filter(m => !shown.includes(m))) s.citizens[m.author] = { role: 'resident', title: 'Resident', name: m.name ?? pretty(m.author), day: s.day };
       }
     }
     tags.push({ x: b.x, y: tall ? 7.5 : 6, z: b.z + 6, text: 'Idea: ' + credit, t0: t0 + 2.0, t1: sh.t1 });

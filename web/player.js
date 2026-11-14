@@ -391,6 +391,7 @@ function renderAt(t) {
       const len = w.st.x1 - w.st.x0, u = (w.ph * 7 + t * w.sp) % (2 * len);
       x = w.st.x0 + (u < len ? u : 2 * len - u); z = w.st.z + w.side * (4.3 + w.off);
     }
+    if (sc && Math.hypot(x - camera.position.x, z - camera.position.z) < 16 && camera.position.y < 12) sc = 0;   // never block a close-up
     const hop = Math.abs(Math.sin(t * 7 + w.ph)) * 0.16;
     M4.compose(V.set(x, 0.2 + hop, z), Q.identity(), S.set(sc, sc * w.h, sc));
     bodies.setMatrixAt(k, M4); heads.setMatrixAt(k, M4);
