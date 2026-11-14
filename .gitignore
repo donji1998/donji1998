@@ -7,3 +7,4 @@ node_modules/
 /city/stills/
 /leoville/stills/
 /leoville/videos/
+*.wav
