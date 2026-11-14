@@ -1,10 +1,11 @@
 {
-  "_note": "Day 1 of the real channel: 56 subscribers (8 of them public). Likes not known yet, so the likes row is left out.",
+  "_note": "Day 1 of the real channel: 56 subscribers (8 of them public), 46 likes, 21 comments.",
   "subscribers": 56,
   "video": {
     "id": "day-0",
     "title": "He lives ALONE on this island… subscribe to move in",
-    "commentCount": 21
+    "commentCount": 21,
+    "likes": 46
   },
   "comments": [
     {

@@ -1,6 +1,6 @@
 {
  "day": 1,
- "cash": 58042,
+ "cash": 58088,
  "residents": 57,
  "housing": 130,
  "next": {
@@ -243,7 +243,7 @@
  "goalsDone": 0,
  "videos": {
   "day-0": {
-   "likes": 0,
+   "likes": 46,
    "comments": 21
   }
  },
