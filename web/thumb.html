@@ -23,7 +23,8 @@
   .v #wrap { width: 540px; height: 960px; }
   .v #top { top: 36px; font-size: 62px; right: 120px; }
   .v #bottom { bottom: 46px; font-size: 56px; }
-  .v .pill { right: 18px; top: 560px; } .v .pill b { font-size: 46px; }
+  .v .pill { right: 18px; top: 560px; }
+  .v.group .pill { right: auto; left: 50%; translate: -50% 0; top: 392px; } .v .pill b { font-size: 46px; }
   .v .day { right: 26px; top: 40px; padding: 4px 16px 0; font-size: 22px; } .v .day b { display: block; font-size: 44px; line-height: 0.9; }
   /* horizontal 640x360 (x2) */
   .h #wrap { width: 640px; height: 360px; }
@@ -51,6 +52,15 @@ import { buildingMesh, characterFigure, rng } from './world.js';
 
 const q = new URLSearchParams(location.search), horiz = q.get('f') === 'h';
 document.body.className = horiz ? 'h' : 'v';
+// texts and numbers can be set per episode: ?day=1&top=..&em=..&bottom=..&bem=..&res=57&ep=/path/day-1.json
+const esc = x => String(x).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+if (q.has('day')) document.querySelector('.day b').textContent = q.get('day');
+if (q.has('top')) document.getElementById('top').innerHTML = esc(q.get('top')) + '<br><em>' + esc(q.get('em') ?? '') + '</em>';
+if (q.has('bottom')) document.getElementById('bottom').innerHTML = esc(q.get('bottom')) + '<br><em>' + esc(q.get('bem') ?? '') + '</em>';
+if (q.has('res')) document.querySelector('.pill b').textContent = Number(q.get('res')).toLocaleString('en-US');
+const ep = q.has('ep') ? await (await fetch(q.get('ep'))).json() : null;
+// buildings around Leo's cottage, at their real offsets from it
+const extra = ep ? ep.buildings.filter(b => !['cottage', 'sign', 'townhall'].includes(b.type)) : [];
 await Promise.all(['800 20px "Baloo 2"'].map(f => document.fonts.load(f)));
 const W = horiz ? 640 : 540, H = horiz ? 360 : 960;
 const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('gl'), antialias: true, preserveDrawingBuffer: true });
@@ -91,7 +101,7 @@ const r = rng(13);
   const trees = [];
   for (let k = 0; k < 260; k++) {
     const a = r() * Math.PI * 2, d = 8 + Math.sqrt(r()) * (IR - 12), x = IC.x + Math.cos(a) * d, z = IC.z + Math.sin(a) * d;
-    if (Math.hypot(x - IC.x, z - IC.z) < 9) continue;
+    if (Math.hypot(x - IC.x, z - IC.z) < 9 + (extra.length ? 24 : 0)) continue;
     trees.push([x, z, 0.7 + r() * 0.8, r()]);
   }
   const trunk = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.35, 0.45, 2.4, 5).translate(0, 1.2, 0), new THREE.MeshLambertMaterial({ color: '#7a5a3c' }), trees.length);
@@ -114,6 +124,13 @@ const r = rng(13);
 
 const house = buildingMesh({ id: 0, type: 'cottage', x: IC.x, z: IC.z }); scene.add(house);
 house.scale.setScalar(1.6);   // a bit bigger than life so it reads from the air
+for (const b of extra) {
+  const g = buildingMesh({ ...b, x: IC.x + (b.x - 30) * 1.25, z: IC.z + b.z * 1.25 }); g.scale.setScalar(1.6); scene.add(g);
+}
+if (extra.length) {   // the cobblestone road through the village
+  const road = new THREE.Mesh(new THREE.BoxGeometry(70, 0.15, 7).translate(0, 0.07, 0), new THREE.MeshLambertMaterial({ color: '#b9b2a4' }));
+  road.position.set(IC.x, 0, IC.z + 15); road.receiveShadow = true; scene.add(road);
+}
 near.visible = nearSand.visible = false;
 scene.children.filter(o => o.isInstancedMesh && o.count > 1000 || (o.isInstancedMesh && o.geometry.type === 'IcosahedronGeometry' && o.count === 250)).forEach(o => o.visible = false);
 
@@ -130,9 +147,18 @@ const fs = new THREE.Scene();
 fs.add(new THREE.HemisphereLight('#fff7e6', '#9fb08a', 1.7));
 const key = new THREE.DirectionalLight('#fff1d6', 2.0); key.position.set(-3, 5, 6); fs.add(key);
 const leo = characterFigure(); leo.rotation.y = horiz ? -0.35 : 0.12;
-leo.pose(0.17, 'wave', { suitcase: true }); fs.add(leo);
+const friends = (ep?.people ?? []).slice(0, 3);
+leo.pose(0.17, friends.length ? 'cheer' : 'wave', { suitcase: !friends.length }); fs.add(leo);
+// roommates around Leo, a step behind him
+const spots = [[-1.25, -0.9], [1.25, -0.9], [0, -1.8]];
+friends.forEach((p, k) => {
+  const f = characterFigure(p.colors); f.position.set(spots[k][0] + (horiz ? -2.55 : 0) * 0, 0, spots[k][1]);
+  f.rotation.y = -spots[k][0] * 0.15; f.pose(0.4 + k * 0.23, 'cheer', {}); fs.add(f);
+});
 const fc = new THREE.PerspectiveCamera(30, W / H, 0.1, 100);
-if (horiz) { fc.position.set(-2.55, 1.5, 9.4); fc.lookAt(-2.55, 1.5, 0); }
+const wide = friends.length ? 1.35 : 1;
+if (horiz) { fc.position.set(-2.55 * wide, 1.5, 9.4 * wide); fc.lookAt(-2.55 * wide, 1.5, 0); }
+else if (friends.length) { fc.position.set(0, 3.0, 19); fc.lookAt(0, 3.0, 0); document.body.classList.add('group'); }
 else { fc.position.set(0.3, 2.35, 12.5); fc.lookAt(0.3, 2.35, 0); }
 fr.render(fs, fc);
 
