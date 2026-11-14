@@ -32,7 +32,7 @@ test('a day grows the city, founds institutions and hires staff', () => {
       { author: '@a', text: 'Can I open a bakery too?', likes: 1 },
     ],
   }, cfg);
-  assert.equal(state.residents, 5000);
+  assert.equal(state.residents, 5001, "5000 subscribers + Leo");
   assert.equal(state.citizens['@a'].title, 'Police Chief');
   assert.equal(state.citizens['@b'].title, 'Officer');
   assert.equal(state.citizens['@c'].role, 'bakery');
@@ -71,4 +71,33 @@ test('day 0 introduces the founder and hands over to day 1', () => {
   const day1 = runDay(state, { subscribers: 12, video: { id: 'x', likes: 0, commentCount: 0 }, comments: [] }, cfg);
   assert.ok(day1.episode.tiles.some(t => t.cobble), 'the village road survives into day 1');
   assert.ok(day1.state.buildings.some(b => b.type === 'cottage') && day1.state.buildings.some(b => b.type === 'sign'));
+});
+
+test('village stage: comments become roommates, own houses and wishes', async () => {
+  const { storyDay, readComments } = await import('../src/story.mjs');
+  const comments = [
+    { author: '@ORBIT12367', text: 'Add me in the room! ❤' },
+    { author: '@Yasmin-h5o', text: 'can I move them and my name is kalina' },
+    { author: '@Oceangreen_ninye', text: "I'm moving in, my name is Joshua only in the city. I'd like a separate house." },
+    { author: '@thiktaphonbonrak9860', text: 'Get a apartment' },
+    { author: '@manohartambe3528', text: 'Go for school then police station when city will grow' },
+    { author: '@raven_xlkie', text: 'Hai leo' },
+    { author: '@erikkeijser9035', text: 'Build a banana store' },
+  ];
+  const r = readComments(comments);
+  assert.deepEqual(r.movers.map(m => m.name ?? m.author), ['@ORBIT12367', 'Kalina', 'Joshua']);
+  assert.ok(r.movers[0].withLeo && r.movers[2].own);
+  assert.equal(r.greets[0].author, '@raven_xlkie');
+  assert.ok(r.ranked.some(w => w.key === 'custom:banana store'));
+
+  const { state } = introEpisode(cfg);
+  const { state: s1, episode } = storyDay(state, { subscribers: 6, video: { id: 'd0', likes: 10, commentCount: 7 }, comments }, cfg);
+  assert.equal(s1.residents, 7);
+  assert.equal(s1.citizens['@ORBIT12367'].title, 'Roommate');
+  assert.equal(s1.citizens['@Oceangreen_ninye'].title, 'Home owner');
+  assert.ok(s1.buildings.some(b => b.owner === '@Oceangreen_ninye'));
+  assert.ok(s1.cash >= 0);
+  assert.ok(episode.people.length >= 3);
+  const text = episode.shots.flatMap(s => s.captions).map(c => c.lines.join(' ')).join(' ');
+  assert.ok(!/\bhis own\b/.test(text), 'no guessed pronouns for commenters');
 });

@@ -114,6 +114,7 @@ def retime(ep, narrate):
             for key in ('at', 'c0', 'c1'):
                 if isinstance(p.get(key), (int, float)): p[key] = round(f(o0 + p[key]) - f(o0), 3)
                 elif isinstance(p.get(key), list): p[key] = [round(f(o0 + v) - f(o0), 3) for v in p[key]]
+            for m in p.get('mates', []): m['at'] = round(f(o0 + m['at']) - f(o0), 3)
         sh['t0'], sh['t1'] = r(sh['t0']), r(sh['t1'])
         for c in sh['captions']:
             c['t0'], c['t1'] = round(c.pop('_n0'), 3), round(c.pop('_n1'), 3)
@@ -124,6 +125,8 @@ def retime(ep, narrate):
     for t in ep['tiles']:
         if t.get('at') is not None: t['at'] = r(t['at'])
     for g in ep.get('tags', []): g['t0'], g['t1'] = r(g['t0']), r(g['t1'])
+    for pp in ep.get('people', []):
+        if pp.get('at') is not None: pp['at'] = r(pp['at'])
     if ep.get('homesFrom') is not None: ep['homesFrom'] = r(ep['homesFrom'])
     ep['shots'][-1]['t1'] = round(cur, 3)
     ep['duration'] = round(cur, 2)
@@ -318,12 +321,18 @@ def mix_episode(ep, clips):
         if p:
             kind, t0 = p['kind'], sh['t0']
             if kind == 'comment': put(fx, t0 + 0.3, notify(), 0.5)
-            elif kind in ('followers', 'income', 'hires', 'goal', 'room', 'rules', 'price'): put(fx, t0 + (p['at'] if isinstance(p.get('at'), (int, float)) else p['at'][0] if isinstance(p.get('at'), list) else 0.25), pop(1.2), 0.35)
+            elif kind in ('followers', 'income', 'hires', 'goal', 'room', 'rules', 'price', 'votes'): put(fx, t0 + (p['at'] if isinstance(p.get('at'), (int, float)) else p['at'][0] if isinstance(p.get('at'), list) else 0.25), pop(1.2), 0.35)
             if kind == 'followers': put(fx, t0 + p['c1'], chaching(), 0.45)
             if kind == 'rules':
                 for a in p['at']: put(fx, t0 + a + 0.05, coin(), 0.4)
             if kind == 'room':
                 for i in range(4): put(fx, t0 + p['at'] + 0.25 + i * 0.28, pop(1 + i * 0.12), 0.3)
+            if kind == 'room':
+                for m in p.get('mates', []): put(fx, t0 + m['at'], pop(1.5), 0.35)
+            if kind == 'greet':
+                for i in range(len(p['items'])): put(fx, t0 + 0.4 + i * 0.45, notify(), 0.3)
+            if kind == 'votes':
+                for i in range(len(p['rows'])): put(fx, t0 + 0.6 + i * 0.22, pop(1.0 + 0.08 * i), 0.22)
             if kind == 'cta':
                 for i in range(len(p['lines'])): put(fx, t0 + 1.0 + i * 0.45, pop(1.1 + 0.1 * i), 0.3)
             if kind == 'hires':

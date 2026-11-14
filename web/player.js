@@ -198,12 +198,19 @@ for (const b of ep.buildings) {
   if (b.at != null) { live.push({ g, at: b.at }); g.visible = false; }
 }
 const hero = characterFigure(); scene.add(hero);
+// residents who have a name: roommates, home owners
+const folk = (ep.people ?? []).map((p, k) => {
+  const f = characterFigure(p.colors); f.position.set(p.x, 0, p.z); f.rotation.y = p.ry ?? 0; f.visible = p.at == null; scene.add(f);
+  return { p, f, ph: k * 0.37 };
+});
 const HERO_HOME = { x: ep.townhall.x + 0.5, z: ep.townhall.z + 5.3, ry: 0.15, anim: 'idle' };
 
 // ---------- people, cars, tents ----------
 const streets = {};
 for (const b of ep.buildings) if (b.i != null && b.at == null) { const s = streets[b.j] ??= { z: b.j * 24 + 12, x0: b.x, x1: b.x }; s.x0 = Math.min(s.x0, b.x); s.x1 = Math.max(s.x1, b.x); }
 (streets[0] ??= { z: 12, x0: 22, x1: 38 });
+// village: people stroll along the whole cobblestone road
+{ const cob = ep.tiles.filter(t => t.cobble && t.z === 12); if (cob.length && ep.cars === false) { streets[0].x0 = Math.min(...cob.map(t => t.x - t.w / 2)) + 8; streets[0].x1 = Math.max(...cob.map(t => t.x + t.w / 2)) - 8; } }
 const streetList = Object.values(streets).map(s => ({ ...s, x0: Math.min(s.x0, 15) - 7, x1: Math.max(s.x1, 45) + 7 }));
 const MAXW = 420, pr = rng(ep.day * 31 + 5);
 const SKIN = ['#f0c7a0', '#d9a878', '#a8744d', '#7a4f33', '#f4d6b8'];
@@ -282,16 +289,34 @@ const PANELS = {
   },
   goal(p) {
     const el = mk('goal', `<h4>🎯 ${esc(p.title)}</h4><div class="bar"><i></i></div><div class="num"></div>`
-      + (p.options.length > 1 ? `<div class="votes">${p.options.map(o => `<div>${o.icon} ${esc(o.name)}<b>${fmt(o.votes)}</b></div>`).join('')}</div>` : ''));
+      + ((p.options ?? []).length > 1 ? `<div class="votes">${p.options.map(o => `<div>${o.icon} ${esc(o.name)}<b>${fmt(o.votes)}</b></div>`).join('')}</div>` : ''));
     const bar = el.querySelector('i'), num = el.querySelector('.num');
-    return lt => { show(el, pop(lt, 0.4)); const k = easeOut(clamp((lt - 0.8) / 1.2)); bar.style.width = clamp(p.cur / p.target) * 100 * k + '%'; num.textContent = `${fmt(p.cur * k)} / ${fmt(p.target)} ${p.unit}`; };
+    return lt => { show(el, pop(lt, 0.4)); const k = easeOut(clamp((lt - 0.8) / 1.2)); bar.style.width = clamp(p.cur / p.target) * 100 * k + '%'; num.textContent = p.money ? `${money(p.cur * k)} / ${money(p.target)}` : `${fmt(p.cur * k)} / ${fmt(p.target)} ${p.unit}`; };
   },
   room(p) {
-    const el = mk('room', `<h4>🏠 ${esc(p.title)}</h4><div class="slots">` + Array.from({ length: p.total }, (_, k) => k < p.filled
+    const mates = p.mates ?? [];
+    const slot = (k) => k < p.filled
       ? `<div class="slot on"><div class="avatar" style="background:#f2b632">${esc(ep.mayor[0] ?? '?')}</div><span>${esc(ep.mayor)}</span></div>`
-      : `<div class="slot"><div class="avatar">+</div><span>&nbsp;</span></div>`).join('') + `</div><div class="note">${esc(p.note)}</div>`);
-    const kids = [...el.querySelectorAll('.slot, .note')];
-    return lt => { show(el, pop(lt, p.at)); kids.forEach((c, k) => { const v = pop(lt, p.at + 0.25 + k * 0.28, 0.25); c.style.opacity = clamp(v * 3); c.style.scale = v <= 0 ? 0.5 : easeBack(clamp(v)) * 0.5 + 0.5; }); };
+      : `<div class="slot"><div class="avatar empty">+</div>` + (mates[k - p.filled] ? `<div class="avatar mate" style="background:hsl(${mates[k - p.filled].hue} 62% 52%)">${esc(mates[k - p.filled].name[0] ?? '?')}</div>` : '')
+        + `<span>${mates[k - p.filled] ? esc(mates[k - p.filled].name) : '&nbsp;'}</span></div>`;
+    const el = mk('room', `<h4>🏠 ${esc(p.title)}</h4><div class="slots">` + Array.from({ length: p.total }, (_, k) => slot(k)).join('') + `</div>` + (p.note ? `<div class="note">${esc(p.note)}</div>` : ''));
+    const kids = [...el.querySelectorAll('.slot, .note')], mateEls = [...el.querySelectorAll('.avatar.mate')], names = [...el.querySelectorAll('.slot span')];
+    return lt => {
+      show(el, pop(lt, p.at));
+      kids.forEach((c, k) => { const v = pop(lt, p.at + 0.25 + k * 0.2, 0.25); c.style.opacity = clamp(v * 3); c.style.scale = v <= 0 ? 0.5 : easeBack(clamp(v)) * 0.5 + 0.5; });
+      mateEls.forEach((a, k) => { const v = pop(lt, mates[k].at, 0.3); a.style.opacity = clamp(v * 3); a.style.scale = v <= 0 ? 0.3 : easeBack(clamp(v)); names[p.filled + k].style.opacity = clamp(v * 3); });
+    };
+  },
+  greet(p) {
+    const el = mk('greet', p.items.map(c => `<div class="b">${avatar(c.author, c.hue)}<div><small>${esc(c.author)}</small>${esc(c.text)}</div></div>`).join(''));
+    const kids = [...el.children];
+    return lt => { el.style.display = 'block'; kids.forEach((c, k) => { const v = pop(lt, 0.4 + k * 0.45, 0.25); c.style.opacity = clamp(v * 3); c.style.scale = v <= 0 ? 0.6 : easeBack(clamp(v)) * 0.4 + 0.6; }); };
+  },
+  votes(p) {
+    const max = Math.max(...p.rows.map(r => r.votes));
+    const el = mk('votes', `<h4>💬 ${esc(p.title)}</h4>` + p.rows.map(r => `<div class="r"><span class="i">${r.icon}</span><span class="l">${esc(r.name)}</span><span class="bar"><i style="width:${r.votes / max * 100}%"></i></span><b>${r.votes}</b></div>`).join(''));
+    const rows = [...el.querySelectorAll('.r')], bars = [...el.querySelectorAll('.bar i')];
+    return lt => { show(el, pop(lt, 0.3)); rows.forEach((r, k) => { const v = pop(lt, 0.6 + k * 0.22, 0.25); r.style.opacity = clamp(v * 3); bars[k].style.scale = `${easeOut(clamp(v / 2))} 1`; }); };
   },
   rules(p) {
     const el = mk('rules', p.rows.map(r => `<div class="r"><span class="i">${r.icon}</span><span class="l">${esc(r.label)}${r.mid ? `<small>${esc(r.mid)}</small>` : ''}</span><b>${esc(r.amount)}</b></div>`).join(''));
@@ -357,7 +382,7 @@ function renderAt(t) {
   const residents = track('residents', t), housing = track('housing', t), cash = track('cash', t);
   const homeless = Math.max(0, Math.round(residents) - Math.round(housing));
 
-  const nWalk = CROWD ? Math.min(MAXW, Math.round(5 * Math.sqrt(residents))) : 0, nCamp = homeless > 0 ? Math.min(60, Math.ceil(homeless / perTent)) : 0;
+  const nWalk = !CROWD ? 0 : ep.cars === false ? Math.max(0, Math.round(residents) - 1 - folk.filter(o => o.p.at == null || t >= o.p.at).length) : Math.min(MAXW, Math.round(5 * Math.sqrt(residents))), nCamp = homeless > 0 ? Math.min(60, Math.ceil(homeless / perTent)) : 0;
   walkers.forEach((w, k) => {
     let x, z, sc = k < nWalk ? 1 : 0;
     if (k >= nWalk - nCamp && k < nWalk && campers[nWalk - 1 - k]) { // some of the crowd hangs around the camp
@@ -374,7 +399,7 @@ function renderAt(t) {
 
   cars.forEach((c, k) => {
     const len = c.st.x1 - c.st.x0 - 4, u = (c.ph * 9 + t * c.sp) % len;
-    const x = c.dir > 0 ? c.st.x0 + 2 + u : c.st.x1 - 2 - u, edge = CROWD ? clamp(Math.min(u, len - u) / 3) : 0;
+    const x = c.dir > 0 ? c.st.x0 + 2 + u : c.st.x1 - 2 - u, edge = CROWD && ep.cars !== false ? clamp(Math.min(u, len - u) / 3) : 0;
     M4.compose(V.set(x, 0.1, c.st.z + c.dir * 1.9), Q.setFromAxisAngle(V.clone().set(0, 1, 0), c.dir > 0 ? 0 : Math.PI), S.setScalar(edge));
     carBody.setMatrixAt(k, M4); carTop.setMatrixAt(k, M4);
   });
@@ -388,6 +413,13 @@ function renderAt(t) {
   hero.position.set(act.to ? lerp(act.x, act.to.x, ak) : act.x, 0, act.to ? lerp(act.z, act.to.z, ak) : act.z);
   hero.rotation.y = act.ry ?? 0;
   hero.pose(t, act.anim, act);
+  for (const { p, f, ph } of folk) {
+    const k = p.at == null ? 1 : (t - p.at) / 0.35;
+    f.visible = k > 0; if (k <= 0) continue;
+    f.scale.setScalar(easeBack(clamp(k)));
+    const fresh = p.at != null && t - p.at < 1.8;
+    f.pose(t + ph, s.type === 'outro' ? 'wave' : fresh ? 'cheer' : 'idle', {});
+  }
 
   renderer.render(scene, camera);
 

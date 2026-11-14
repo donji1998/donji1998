@@ -15,7 +15,7 @@ const colOrder = n => (n % 2 ? 2 + (n - 1) / 2 : 1 - n / 2); // 1,2,0,3,-1,4,...
 export const TOWNHALL = { x: 30, z: 0 };
 const RESERVED = new Set(['1,0', '2,0']); // town hall plot
 
-function nthLot(zone, n) {
+export function nthLot(zone, n) {
   for (let k = 0, seen = -1; ; k++) {
     // homes fill each row west to east, so a day's new blocks stand together in one shot
     const i = zone === 'res' ? (k % COLS) - 4 : colOrder(k % COLS), row = Math.floor(k / COLS);
@@ -149,7 +149,7 @@ export function initialState(cfg) {
   };
 }
 
-const hash = s => { let h = 2166136261; for (const c of String(s)) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return h >>> 0; };
+export const hash = s => { let h = 2166136261; for (const c of String(s)) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return h >>> 0; };
 
 export function runDay(prev, input, cfg) {
   const lang = L[cfg.lang] ? cfg.lang : 'en', T = L[lang];
@@ -192,7 +192,8 @@ export function runDay(prev, input, cfg) {
 
   // ----- 1. numbers -----
   const before = s.residents;
-  const after = Math.max(0, Math.round(input.subscribers ?? before));
+  const founder = s.buildings.some(b => b.type === 'cottage') ? 1 : 0;   // Leo counts as a resident
+  const after = input.subscribers == null ? before : Math.max(0, Math.round(input.subscribers) + founder);
   const gained = after - before;
   const vid = input.video ?? {};
   const seen = s.videos[vid.id] ?? { likes: 0, comments: 0 };

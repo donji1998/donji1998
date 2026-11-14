@@ -223,6 +223,7 @@ export function buildingMesh(b) {
   else if (b.sign) {
     const s = b.type === 'shop' ? signMesh(b.sign, 9.6, 1.75) : signMesh(b.sign, 9.6, 1.9);
     if (b.type === 'shop') s.position.set(0, 4.65, 4.2);
+    else if (b.type === 'house') { s.scale.setScalar(0.5); s.position.set(0, 2.75, 3.45); }
     else if (b.style?.feature === 'columns') s.position.set(0, 4.3, 6.5);
     else s.position.set(0, 6.35, 4.62);
     s.position.z += back;
@@ -299,27 +300,28 @@ export function villageSign(text) {
  * The founder: a chunky low-poly character with jointed arms and legs.
  * pose(t, anim) animates him: 'idle', 'wave', 'walk', 'look'.
  */
-export function characterFigure() {
-  const SKIN = '#f1c6a0', HOOD = '#f2b632', PANTS = '#3e5a8a', SHOE = '#5a3a26', HAT = '#2f9c95';
+export function characterFigure(o = {}) {
+  const SKIN = o.skin ?? '#f1c6a0', HOOD = o.hood ?? '#f2b632', PANTS = o.pants ?? '#3e5a8a', SHOE = '#5a3a26', HAT = o.hat ?? '#2f9c95', HAIR = o.hair ?? '#6b4a33';
+  const ACC = '#' + new THREE.Color(HOOD).multiplyScalar(0.85).getHexString(), HATB = '#' + new THREE.Color(HAT).multiplyScalar(0.8).getHexString();
   const g = new THREE.Group(), body = new THREE.Group(); g.add(body);
   const mesh = p => { const m = p.mesh(); return m; };
   const torso = new Parts()
     .cyl(0.36, 0.44, 0.85, HOOD, 0, 0.95, 0, 12)
-    .add(new THREE.TorusGeometry(0.3, 0.09, 6, 14).rotateX(Math.PI / 2), '#e0a020', 0, 1.78, -0.02)
-    .box(0.42, 0.22, 0.06, '#e0a020', 0, 1.15, 0.38)
+    .add(new THREE.TorusGeometry(0.3, 0.09, 6, 14).rotateX(Math.PI / 2), ACC, 0, 1.78, -0.02)
+    .box(0.42, 0.22, 0.06, ACC, 0, 1.15, 0.38)
     .cyl(0.13, 0.15, 0.16, SKIN, 0, 1.78, 0, 8);
   body.add(mesh(torso));
   const head = new THREE.Group(); head.position.set(0, 1.92, 0); body.add(head);
   const hp = new Parts().ball(0.36, SKIN, 0, -0.02, 0)
     .add(new THREE.SphereGeometry(0.39, 14, 8, 0, Math.PI * 2, 0, Math.PI * 0.5), HAT, 0, 0.47, -0.03)
-    .cyl(0.4, 0.4, 0.12, '#25807a', 0, 0.45, -0.03, 14).ball(0.1, '#f3efe6', 0, 0.84, -0.03)
-    .ball(0.2, '#6b4a33', 0, 0.36, -0.2)
+    .cyl(0.4, 0.4, 0.12, HATB, 0, 0.45, -0.03, 14).ball(0.1, '#f3efe6', 0, 0.84, -0.03)
+    .ball(0.2, HAIR, 0, 0.36, -0.2)
     .ball(0.048, '#1d2233', -0.12, 0.3, 0.31).ball(0.048, '#1d2233', 0.12, 0.3, 0.31)
     .ball(0.016, '#ffffff', -0.105, 0.36, 0.355).ball(0.016, '#ffffff', 0.135, 0.36, 0.355)
     .box(0.12, 0.028, 0.03, '#5a3a26', -0.12, 0.42, 0.33).box(0.12, 0.028, 0.03, '#5a3a26', 0.12, 0.42, 0.33)
     .ball(0.042, '#e6a988', 0, 0.2, 0.35).add(new THREE.TorusGeometry(0.07, 0.016, 4, 10, Math.PI).rotateZ(Math.PI), '#a8584a', 0, 0.12, 0.34)
     .ball(0.045, '#f3b3a3', -0.2, 0.17, 0.29).ball(0.045, '#f3b3a3', 0.2, 0.17, 0.29)
-    .ball(0.09, '#6b4a33', -0.33, 0.24, -0.05).ball(0.09, '#6b4a33', 0.33, 0.24, -0.05);
+    .ball(0.09, HAIR, -0.33, 0.24, -0.05).ball(0.09, HAIR, 0.33, 0.24, -0.05);
   head.add(mesh(hp));
   g.legs = [-1, 1].map(s => {
     const j = new THREE.Group(); j.position.set(s * 0.17, 0.95, 0); body.add(j);

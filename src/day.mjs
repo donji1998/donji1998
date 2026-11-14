@@ -11,6 +11,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { initialState, runDay, scripts } from './sim.mjs';
 import { introEpisode } from './intro.mjs';
+import { storyDay } from './story.mjs';
 import { fetchInput } from './youtube.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -49,7 +50,10 @@ else if (flag('redo') && fs.existsSync(inputFile)) input = read(inputFile);
 else input = await fetchInput(cfg, process.env.YOUTUBE_API_KEY ?? cfg.apiKey);
 write(inputFile, input);
 
-const { state, episode } = runDay(prev, input, cfg);
+// village stage: while the town is small every comment gets its own moment
+const village = (prev.stage ?? 'village') === 'village' && (input.subscribers ?? 0) + 1 <= (cfg.villageUntil ?? 120);
+const { state, episode } = village ? storyDay(prev, input, cfg) : runDay(prev, input, cfg);
+if (!village) state.stage = 'city';
 write(path.join(dir, 'state', `day-${day}.json`), state);
 const epFile = path.join(sub('episodes'), `day-${day}.json`);
 write(epFile, episode);

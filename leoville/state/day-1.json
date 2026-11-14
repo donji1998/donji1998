@@ -1,0 +1,414 @@
+{
+ "day": 1,
+ "cash": 11072,
+ "residents": 10,
+ "housing": 130,
+ "next": {
+  "res": 0,
+  "com": 2
+ },
+ "seq": 4,
+ "buildings": [
+  {
+   "id": 0,
+   "type": "cottage",
+   "x": 30,
+   "z": 0,
+   "day": 0
+  },
+  {
+   "id": 1,
+   "type": "sign",
+   "text": "Leoville",
+   "x": -84,
+   "z": 16.8,
+   "ry": -0.6,
+   "day": 0
+  },
+  {
+   "id": 2,
+   "i": 0,
+   "j": 0,
+   "x": 7.5,
+   "z": 0,
+   "day": 1,
+   "seed": 208,
+   "type": "house",
+   "cap": 6,
+   "owner": "@Oceangreen_ninye",
+   "sign": {
+    "icon": "🏠",
+    "name": "Joshua's house",
+    "handle": "@Oceangreen_ninye"
+   }
+  },
+  {
+   "id": 3,
+   "i": 3,
+   "j": 0,
+   "x": 52.5,
+   "z": 0,
+   "day": 1,
+   "seed": 72,
+   "type": "block",
+   "cap": 120
+  }
+ ],
+ "tiles": [
+  {
+   "k": "c0",
+   "x": 32.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1
+  },
+  {
+   "k": "c1",
+   "x": 17.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1
+  },
+  {
+   "k": "c2",
+   "x": 2.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1
+  },
+  {
+   "k": "c3",
+   "x": -12.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1
+  },
+  {
+   "k": "c4",
+   "x": -27.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1
+  },
+  {
+   "k": "c5",
+   "x": -42.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1
+  },
+  {
+   "k": "c6",
+   "x": -57.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1
+  },
+  {
+   "k": "c7",
+   "x": -72.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1
+  },
+  {
+   "k": "c8",
+   "x": 30,
+   "z": 7,
+   "w": 2.6,
+   "d": 4.4,
+   "cobble": true
+  },
+  {
+   "k": "c40",
+   "x": 47.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true
+  },
+  {
+   "k": "c55",
+   "x": 62.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true
+  }
+ ],
+ "citizens": {
+  "@ecaterinabadarau9859": {
+   "role": "resident",
+   "title": "Roommate",
+   "name": "Ecaterina",
+   "day": 1
+  },
+  "@ORBIT12367": {
+   "role": "resident",
+   "title": "Roommate",
+   "name": "Orbit",
+   "day": 1
+  },
+  "@Yasmin-h5o": {
+   "role": "resident",
+   "title": "Roommate",
+   "name": "Kalina",
+   "day": 1
+  },
+  "@Oceangreen_ninye": {
+   "role": "resident",
+   "title": "Home owner",
+   "name": "Joshua",
+   "day": 1
+  },
+  "@YoanKobler-z1k": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "Yoan",
+   "day": 1
+  },
+  "@doodleandarkeyeditzYT": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "Doodleandarkeyeditz",
+   "day": 1
+  },
+  "@Someromeroboboboi": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "Gabor",
+   "day": 1
+  },
+  "@EverlightEverligh": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "Everlight",
+   "day": 1
+  }
+ },
+ "queue": [],
+ "votes": {},
+ "goalsDone": 0,
+ "videos": {
+  "day-0": {
+   "likes": 30,
+   "comments": 21
+  }
+ },
+ "wishes": {
+  "school": {
+   "votes": 2,
+   "by": [
+    "@Pakin-Family",
+    "@manohartambe3528"
+   ],
+   "label": "School"
+  },
+  "police": {
+   "votes": 2,
+   "by": [
+    "@Pakin-Family",
+    "@manohartambe3528"
+   ],
+   "label": "Police Station"
+  },
+  "farm": {
+   "votes": 1,
+   "by": [
+    "@Pakin-Family"
+   ],
+   "label": "Farm"
+  },
+  "hospital": {
+   "votes": 1,
+   "by": [
+    "@Pakin-Family"
+   ],
+   "label": "Hospital"
+  },
+  "pool": {
+   "votes": 1,
+   "by": [
+    "@YoanKobler-z1k"
+   ],
+   "label": "pool"
+  },
+  "van": {
+   "votes": 1,
+   "by": [
+    "@YoanKobler-z1k"
+   ],
+   "label": "van"
+  },
+  "dock": {
+   "votes": 1,
+   "by": [
+    "@Monzamilano-e2h"
+   ],
+   "label": "dock"
+  },
+  "custom:banana store": {
+   "votes": 1,
+   "by": [
+    "@erikkeijser9035"
+   ],
+   "label": "Banana Store"
+  },
+  "robots": {
+   "votes": 1,
+   "by": [
+    "@matsdeclercq-m5c"
+   ],
+   "label": "robots"
+  },
+  "custom:anime art mascine": {
+   "votes": 1,
+   "by": [
+    "@Someromeroboboboi"
+   ],
+   "label": "Anime Art Mascine"
+  }
+ },
+ "goal": {
+  "key": "school",
+  "cost": 120000
+ },
+ "people": [
+  {
+   "id": "@ecaterinabadarau9859",
+   "name": "Ecaterina",
+   "handle": "@ecaterinabadarau9859",
+   "x": 28.8,
+   "z": 5.8999999999999995,
+   "ry": 0.102,
+   "colors": {
+    "hood": "#e2523a",
+    "hat": "#2f6fd6",
+    "pants": "#3a3f4d",
+    "skin": "#f1c6a0",
+    "hair": "#3b2a1e"
+   }
+  },
+  {
+   "id": "@ORBIT12367",
+   "name": "Orbit",
+   "handle": "@ORBIT12367",
+   "x": 32.2,
+   "z": 5.8999999999999995,
+   "ry": -0.102,
+   "colors": {
+    "hood": "#e2523a",
+    "hat": "#2f6fd6",
+    "pants": "#3a3f4d",
+    "skin": "#f1c6a0",
+    "hair": "#3b2a1e"
+   }
+  },
+  {
+   "id": "@Yasmin-h5o",
+   "name": "Kalina",
+   "handle": "@Yasmin-h5o",
+   "x": 27.1,
+   "z": 6.6,
+   "ry": 0.204,
+   "colors": {
+    "hood": "#3d9bd6",
+    "hat": "#f08a24",
+    "pants": "#2f3542",
+    "skin": "#f4d6b8",
+    "hair": "#b5672e"
+   }
+  },
+  {
+   "id": "@Oceangreen_ninye",
+   "name": "Joshua",
+   "handle": "@Oceangreen_ninye",
+   "x": 11.5,
+   "z": 7.2,
+   "ry": -0.25,
+   "colors": {
+    "hood": "#ef7fb0",
+    "hat": "#46a36a",
+    "pants": "#34405a",
+    "skin": "#7a4f33",
+    "hair": "#120c08"
+   }
+  },
+  {
+   "id": "@YoanKobler-z1k",
+   "name": "Yoan",
+   "handle": "@YoanKobler-z1k",
+   "x": 48.3,
+   "z": 7.4,
+   "ry": 0,
+   "colors": {
+    "hood": "#46a36a",
+    "hat": "#e85a8c",
+    "pants": "#4a3a2c",
+    "skin": "#a8744d",
+    "hair": "#120c08"
+   }
+  },
+  {
+   "id": "@doodleandarkeyeditzYT",
+   "name": "Doodleandarkeyeditz",
+   "handle": "@doodleandarkeyeditzYT",
+   "x": 51.099999999999994,
+   "z": 8,
+   "ry": 0,
+   "colors": {
+    "hood": "#46a36a",
+    "hat": "#e85a8c",
+    "pants": "#4a3a2c",
+    "skin": "#a8744d",
+    "hair": "#120c08"
+   }
+  },
+  {
+   "id": "@Someromeroboboboi",
+   "name": "Gabor",
+   "handle": "@Someromeroboboboi",
+   "x": 53.9,
+   "z": 7.4,
+   "ry": 0,
+   "colors": {
+    "hood": "#3d9bd6",
+    "hat": "#f08a24",
+    "pants": "#2f3542",
+    "skin": "#f4d6b8",
+    "hair": "#b5672e"
+   }
+  },
+  {
+   "id": "@EverlightEverligh",
+   "name": "Everlight",
+   "handle": "@EverlightEverligh",
+   "x": 56.699999999999996,
+   "z": 8,
+   "ry": 0,
+   "colors": {
+    "hood": "#f08a24",
+    "hat": "#8a6fb8",
+    "pants": "#3e5a8a",
+    "skin": "#f0c7a0",
+    "hair": "#e2c178"
+   }
+  }
+ ]
+}

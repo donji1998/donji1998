@@ -1,0 +1,116 @@
+{
+ "day": 0,
+ "cash": 50000,
+ "residents": 1,
+ "housing": 4,
+ "next": {
+  "res": 0,
+  "com": 0
+ },
+ "seq": 2,
+ "buildings": [
+  {
+   "id": 0,
+   "type": "cottage",
+   "x": 30,
+   "z": 0,
+   "day": 0
+  },
+  {
+   "id": 1,
+   "type": "sign",
+   "text": "Leoville",
+   "x": -84,
+   "z": 16.8,
+   "ry": -0.6,
+   "day": 0
+  }
+ ],
+ "tiles": [
+  {
+   "k": "c0",
+   "x": 32.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1
+  },
+  {
+   "k": "c1",
+   "x": 17.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1
+  },
+  {
+   "k": "c2",
+   "x": 2.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1
+  },
+  {
+   "k": "c3",
+   "x": -12.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1
+  },
+  {
+   "k": "c4",
+   "x": -27.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1
+  },
+  {
+   "k": "c5",
+   "x": -42.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1
+  },
+  {
+   "k": "c6",
+   "x": -57.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1
+  },
+  {
+   "k": "c7",
+   "x": -72.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1
+  },
+  {
+   "k": "c8",
+   "x": 30,
+   "z": 7,
+   "w": 2.6,
+   "d": 4.4,
+   "cobble": true
+  }
+ ],
+ "citizens": {},
+ "queue": [],
+ "votes": {},
+ "goalsDone": 0,
+ "videos": {}
+}
