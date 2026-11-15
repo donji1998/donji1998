@@ -57,13 +57,14 @@ if (still != null) {
   const out = path.resolve(opt('out', path.join(path.dirname(epAbs), '..', 'videos', path.basename(epAbs, '.json') + '.mp4')));
   fs.mkdirSync(path.dirname(out), { recursive: true });
   const ff = spawn('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-c:v', 'mjpeg', '-framerate', String(fps), '-i', '-',
-    ...(audioFile ? ['-i', audioFile] : ['-f', 'lavfi', '-i', 'anullsrc=r=44100:cl=stereo']), '-shortest',
+    ...(audioFile && !args.includes('--from') ? ['-i', audioFile] : ['-f', 'lavfi', '-i', 'anullsrc=r=44100:cl=stereo']), '-shortest',
     '-c:v', 'libx264', '-preset', 'medium', '-crf', '17', '-pix_fmt', 'yuv420p', '-vf', 'scale=1080:1920',
     '-c:a', 'aac', '-b:a', '192k', '-movflags', '+faststart', out], { stdio: ['pipe', 'inherit', 'inherit'] });
   const done = new Promise((ok, bad) => ff.on('close', c => c ? bad(new Error('ffmpeg exited ' + c)) : ok()));
   const cdp = await page.context().newCDPSession(page);
-  const frames = Math.round(duration * fps), started = Date.now();
-  for (let f = 0; f < frames; f++) {
+  // --from/--to (seconds) render only part of the episode, e.g. to patch a few seconds of a finished video
+  const f0 = Math.round(+opt('from', 0) * fps), frames = Math.min(Math.round(duration * fps), Math.round(+opt('to', duration) * fps)), started = Date.now();
+  for (let f = f0; f < frames; f++) {
     // draw, let the compositor present it, then grab the frame over DevTools
     // (far faster than page.screenshot, which re-lays-out for every call)
     await page.evaluate(t => new Promise(done => { window.renderAt(t); requestAnimationFrame(() => requestAnimationFrame(done)); }), f / fps);

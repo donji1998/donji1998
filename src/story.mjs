@@ -170,9 +170,18 @@ export function storyDay(prev, input, cfg) {
     for (let x = x0; x > b.x - 7.5; x -= 15) { const t = { k: 'c' + Math.round(x), x: x - 7.5, z: 12, w: 15, d: 6, cobble: true }; s.tiles.push(t); newTiles.push({ ...t, at: at - 0.3 }); }
     return b;
   };
+  // residents from earlier days; a newcomer never stands inside one of them
+  const oldPeople = (prev.people ?? []).map(p => ({ ...p }));
+  const taken = (x, z, skip) => [...oldPeople, ...people].some(o => o !== skip && Math.hypot(o.x - x, o.z - z) < 1.4);
   const person = (m, x, z, at, ry = 0, title = 'Resident') => {
     const name = nameOf(m);
     const p = { id: m.author, name, handle: m.author, x, z, ry, at, colors: COLORS[hash(m.author) % COLORS.length] };
+    // whoever already stands here steps back a row, next to the others
+    for (const o of oldPeople.filter(o => Math.hypot(o.x - x, o.z - z) < 1.4)) {
+      for (const dx of [1.15, -1.15, 3.45, -3.45, 0, 2.3, -2.3, 5.75, -5.75]) {
+        if (!taken(o.x + dx, z - 1.8, o) && Math.hypot(o.x + dx - x, z - 1.8 - z) >= 1.4) { o.x += dx; o.z = z - 1.8; break; }
+      }
+    }
     people.push(p);
     s.citizens[m.author] = { role: 'resident', title, name, day: s.day };
     return p;
@@ -381,7 +390,7 @@ export function storyDay(prev, input, cfg) {
     version: 1, day: s.day, city: town, lang: 'en', locale: 'en-US', mayor: who,
     hud: { cash: 'BUDGET', residents: 'RESIDENTS', day: 'DAY', housing: 'HOMES', full: 'full', tents: 'sleeping in tents', free: 'free' },
     duration: +now.toFixed(2), shots, tracks, tags, cars: false,
-    people: [...(prev.people ?? []).map(p => ({ ...p, at: null })), ...people],
+    people: [...oldPeople.map(p => ({ ...p, at: null })), ...people],
     buildings: s.buildings.map(({ _at, ...b }) => ({ ...b, at: _at ?? null })),
     tiles: prev.tiles.map(t => ({ ...t, at: null })).concat(newTiles),
     island: { R, pts: islandPts(R) }, river: riverPath(R), tentField: { x: -32, z: 30 }, townhall: H,
@@ -392,6 +401,6 @@ export function storyDay(prev, input, cfg) {
       roommates: mates.map(m => m.author), ownHouses: own.map(m => m.author), wishes: want.map(w => `${w.name} ${w.votes}`), jobs: jobs.map(j => `${j.author}:${j.role}`), election: s.election?.candidates.map(c => c.author) },
   };
   for (const b of s.buildings) delete b._at;
-  s.people = [...(prev.people ?? []), ...people.map(({ at, ...p }) => p)];
+  s.people = [...oldPeople, ...people.map(({ at, ...p }) => p)];
   return { state: s, episode: ep };
 }

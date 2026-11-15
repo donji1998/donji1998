@@ -532,8 +532,8 @@
    "id": "@YoanKobler-z1k",
    "name": "Yoan",
    "handle": "@YoanKobler-z1k",
-   "x": 50.2,
-   "z": 7.4,
+   "x": 51.35,
+   "z": 5.6000000000000005,
    "ry": 0,
    "colors": {
     "hood": "#46a36a",
@@ -547,8 +547,8 @@
    "id": "@Someromeroboboboi",
    "name": "Gabor",
    "handle": "@Someromeroboboboi",
-   "x": 52.5,
-   "z": 7.9,
+   "x": 53.65,
+   "z": 6.1000000000000005,
    "ry": 0,
    "colors": {
     "hood": "#3d9bd6",
@@ -562,8 +562,8 @@
    "id": "@EverlightEverligh",
    "name": "Everlight",
    "handle": "@EverlightEverligh",
-   "x": 54.800000000000004,
-   "z": 7.4,
+   "x": 55.95,
+   "z": 5.6000000000000005,
    "ry": 0,
    "colors": {
     "hood": "#f08a24",
