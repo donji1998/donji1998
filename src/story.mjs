@@ -191,7 +191,7 @@ export function storyDay(prev, input, cfg) {
     actor: { ...door, ry: 0, anim: 'wave' },
     panel: g.length ? { kind: 'greet', items: g.map(c => ({ author: c.author, text: cleanText(c.text, 64), hue: hash(c.author) % 360 })) } : null },
   firstDay ? [[[`Yesterday, ${who} was`, '*all alone…*'], 2.0], [['…and then *you*', 'showed up!'], 2.0]]
-    : [[[`*${fmt((input.comments ?? []).length)}* comments yesterday…`], 2.0], [['…and you have', '*big plans!*'], 2.0]]);
+    : [[[`*${fmt(nComments)}* comments yesterday…`], 2.0], [['…and you have', '*big plans!*'], 2.0]]);
 
   // 3. new residents
   const fol = shot({ type: 'followers', cam: { x: 18, z: 2, dist: 75, pitch: 36, yaw: -12 }, cam2: { x: 14, z: 4, dist: 68, pitch: 38, yaw: -6 },
