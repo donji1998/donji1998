@@ -296,6 +296,24 @@
    "title": "Resident",
    "name": "Not14redmi",
    "day": 2
+  },
+  "@tanja3349": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "Tanja",
+   "day": 2
+  },
+  "@JonahMayer-y9y": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "PWR_Jonah",
+   "day": 2
+  },
+  "@LouiePlayz235": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "LouiePlayz",
+   "day": 2
   }
  },
  "queue": [],
@@ -598,6 +616,36 @@
     "pants": "#2e4a6b",
     "skin": "#d9a878",
     "hair": "#1d1712"
+   }
+  },
+  {
+   "id": "@tanja3349",
+   "name": "Tanja",
+   "handle": "@tanja3349",
+   "x": 52.5,
+   "z": 7.9,
+   "ry": 0,
+   "colors": {
+    "hood": "#ef7fb0",
+    "hat": "#46a36a",
+    "pants": "#34405a",
+    "skin": "#7a4f33",
+    "hair": "#120c08"
+   }
+  },
+  {
+   "id": "@JonahMayer-y9y",
+   "name": "PWR_Jonah",
+   "handle": "@JonahMayer-y9y",
+   "x": 54.800000000000004,
+   "z": 7.4,
+   "ry": 0,
+   "colors": {
+    "hood": "#3d9bd6",
+    "hat": "#f08a24",
+    "pants": "#2f3542",
+    "skin": "#f4d6b8",
+    "hair": "#b5672e"
    }
   }
  ],

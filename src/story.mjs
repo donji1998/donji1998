@@ -277,7 +277,7 @@ export function storyDay(prev, input, cfg) {
     const short = shown.map(nameOf).filter(n => n.length <= 11).slice(0, 2), more = newcomers - short.length;
     const sh2 = shot({ type: 'movein', cam: { x: b.x, y: 2.4, z: b.z + 7, dist: 22, pitch: 13, yaw: -8 }, cam2: { x: b.x, y: 2.4, z: b.z + 7, dist: 20, pitch: 12, yaw: -2 } },
       [[[short.length ? names(more > 0 ? [...short, `${more} more`] : short) : `*${newcomers}* of you`, b.day === s.day ? 'move in!' : `move into the *${b.type === 'block' ? 'apartment block' : 'house'}!*`], 2.6],
-       welcome.length ? [['Welcome ' + names(welcome) + '!'], 2.6] : null], 0.3);
+       welcome.filter(n => !short.includes(n)).length ? [['Welcome ' + names(welcome.filter(n => !short.includes(n))) + '!'], 2.6] : null], 0.3);
     shown.forEach((m, k) => {
       const p = person(m, b.x - 2.3 + k * 2.3, b.z + 7.4 + (k % 2) * 0.5, sh2.t0 + 0.4 + k * 0.35, 0);
       tags.push({ x: p.x, y: 3.0, z: p.z, text: p.name.length <= 11 ? p.name : m.author, t0: sh2.t0 + 0.6 + k * 0.35, t1: sh2.t1 });
