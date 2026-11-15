@@ -52,7 +52,7 @@ The names come from `config.json` (`mayorName`, `cityName`); the money from
 `npm run render` gives every video a full soundtrack (made by `src/audio.py`):
 
 - **Narrator.** Every caption is spoken by a free, offline Piper voice
-  (`en-us-ryan-high`, downloaded once to `~/.cache/leoville`, ~100 MB). Comments
+  (`en-us-ryan-high`, downloaded once to `~/.cache/leoville`, ~100 MB), at a calm pace with real pauses between sentences. Comments
   are read out: "nordlicht jo asks: I want to be the police chief!". The
   episode is re-timed so each shot lasts as long as its narration, and the
   captions pop up word by word as they are spoken.

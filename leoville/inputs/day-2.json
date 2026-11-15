@@ -1,0 +1,62 @@
+{
+ "_note": "Day 2. Likes on the Day 1 video: 9. subscribers is a PLACEHOLDER until the real number is in.",
+ "subscribers": 70,
+ "video": {
+  "id": "day-1",
+  "title": "56 people moved to Leo's island! Day 1",
+  "likes": 9,
+  "commentCount": 12
+ },
+ "comments": [
+  {
+   "author": "@IMistakeX",
+   "text": "Make me a military base",
+   "likes": 1
+  },
+  {
+   "author": "@erikkeijser9035",
+   "text": "Please make me the principal and name me principal banana",
+   "likes": 1,
+   "name": "Erik"
+  },
+  {
+   "author": "@Alex-o7z6q",
+   "text": "When im Principal im Get everybody a House a Can i get plsssss",
+   "likes": 2
+  },
+  {
+   "author": "@Alex-o7z6q",
+   "text": "And i build a mall",
+   "likes": 2
+  },
+  {
+   "author": "@Not14Redmi-t5o",
+   "text": "Give me an apartment block"
+  },
+  {
+   "author": "@Ari_Steinberg",
+   "text": "Can you switch the currency to Dollars then add a shopping mall"
+  },
+  {
+   "author": "@JoeEdwards-t7c",
+   "text": "can I have a plane as my house"
+  },
+  {
+   "author": "@ecaterinabadarau9859",
+   "text": "Can you bring my sister to school",
+   "name": "Ecaterina"
+  },
+  {
+   "author": "@Iknowlightyagamiiskira",
+   "text": "Can I please be the president or have a big house?"
+  },
+  {
+   "author": "@Divish26",
+   "text": "CAN I BE THE GOVERNMENT"
+  },
+  {
+   "author": "@matsdeclercq-m5c",
+   "text": "Make a bank for money and jobs"
+  }
+ ]
+}

@@ -254,7 +254,8 @@
     "@Pakin-Family",
     "@manohartambe3528"
    ],
-   "label": "School"
+   "label": "School",
+   "first": 1003
   },
   "police": {
    "votes": 2,
@@ -262,65 +263,75 @@
     "@Pakin-Family",
     "@manohartambe3528"
    ],
-   "label": "Police Station"
+   "label": "Police Station",
+   "first": 1004
   },
   "farm": {
    "votes": 1,
    "by": [
     "@Pakin-Family"
    ],
-   "label": "Farm"
+   "label": "Farm",
+   "first": 1000
   },
   "hospital": {
    "votes": 1,
    "by": [
     "@Pakin-Family"
    ],
-   "label": "Hospital"
+   "label": "Hospital",
+   "first": 1002
   },
   "pool": {
    "votes": 1,
    "by": [
     "@YoanKobler-z1k"
    ],
-   "label": "pool"
+   "label": "pool",
+   "first": 1005
   },
   "van": {
    "votes": 1,
    "by": [
     "@YoanKobler-z1k"
    ],
-   "label": "van"
+   "label": "van",
+   "first": 1006
   },
   "dock": {
    "votes": 1,
    "by": [
     "@Monzamilano-e2h"
    ],
-   "label": "dock"
+   "label": "dock",
+   "first": 1007
   },
   "custom:banana store": {
    "votes": 1,
    "by": [
     "@erikkeijser9035"
    ],
-   "label": "Banana Store"
+   "label": "Banana Store",
+   "first": 1008
   },
   "robots": {
    "votes": 1,
    "by": [
     "@matsdeclercq-m5c"
    ],
-   "label": "robots"
+   "label": "robots",
+   "first": 1009
   },
   "custom:anime art mascine": {
    "votes": 1,
    "by": [
     "@Someromeroboboboi"
    ],
-   "label": "Anime Art Mascine"
+   "label": "Anime Art Mascine",
+   "first": 1010
   }
  },
+ "candidates": {},
  "goal": {
   "key": "school",
   "cost": 120000

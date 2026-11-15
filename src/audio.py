@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Sound for an episode: narrator voice, sound effects and an original music loop.
 
-    python3 src/audio.py city/episodes/day-0.json [--voice en-us-ryan-high] [--speed 0.92]
+    python3 src/audio.py city/episodes/day-0.json [--voice en-us-ryan-high] [--speed 1.1]
 
 1. Speaks every caption with a local Piper voice (downloaded once, ~100 MB).
 2. Re-times the episode so each shot lasts as long as its narration; every
@@ -64,11 +64,12 @@ class Narrator:
         from piper import PiperVoice, SynthesisConfig
         self.name, self.speed = name, speed
         self.voice = PiperVoice.load(str(voice_model(name)))
-        self.cfg = SynthesisConfig(length_scale=speed)
+        # lower noise = cleaner, steadier pronunciation; the same voice, just clearer
+        self.cfg = SynthesisConfig(length_scale=speed, noise_scale=0.5, noise_w_scale=0.55)
         self.dir = CACHE / 'tts'; self.dir.mkdir(parents=True, exist_ok=True)
 
     def __call__(self, text):
-        key = hashlib.sha1(f'{self.name}|{self.speed}|{text}'.encode()).hexdigest()[:16]
+        key = hashlib.sha1(f'{self.name}|{self.speed}|clear2|{text}'.encode()).hexdigest()[:16]
         f = self.dir / f'{key}.wav'
         if not f.exists():
             with wave.open(str(f), 'wb') as w:
@@ -79,7 +80,9 @@ class Narrator:
         # trim silence at both ends
         loud = np.flatnonzero(np.convolve(np.abs(x), np.ones(441) / 441, 'same') > 0.01)
         if len(loud): x = x[max(0, loud[0] - 400): loud[-1] + 1200]
-        return x
+        # every line at the same loudness, so no sentence drops away
+        rms = np.sqrt(np.mean(x ** 2)) + 1e-9
+        return (x * (0.11 / rms)).astype(np.float32)
 
 
 # ------------------------------------------------------------ re-timing ----
@@ -95,7 +98,10 @@ def retime(ep, narrate):
             pts.append((c['t0'], cur))
             clips.append((cur, clip))
             c['speech'] = round(dur, 3)
-            c['_n0'], cur = cur, cur + dur + 0.16
+            # breathe like a person: a real pause after a sentence, a short one mid-sentence
+            raw = (c.get('say') or ' '.join(c['lines'])).replace('*', '').strip()
+            gap = 0.55 if raw[-1:] in '.!?…' else 0.32 if raw[-1:] in ',:;' else 0.24
+            c['_n0'], cur = cur, cur + dur + gap
             c['_n1'] = cur
             pts.append((min(c['t1'], sh['t1'] - 0.02), cur))
         hold = 1.3 if k == len(ep['shots']) - 1 else 0.22
@@ -371,15 +377,26 @@ def mix_episode(ep, clips):
     mus = np.tile(loop, int(n / len(loop)) + 1)[:n]
     gate = (np.convolve(np.abs(voice), np.ones(2205) / 2205, 'same') > 0.015).astype(np.float32)
     gate = np.convolve(gate, np.hanning(int(0.35 * SR)) / np.hanning(int(0.35 * SR)).sum(), 'same')
-    mus *= (0.85 - 0.55 * np.clip(gate, 0, 1))
+    mus *= (0.85 - 0.62 * np.clip(gate, 0, 1))
     tt = np.arange(n) / SR
     mus *= np.clip(tt / 0.4, 0, 1) * np.clip((D + 0.3 - tt) / 1.5, 0, 1)
 
-    v = voice / (np.max(np.abs(voice)) + 1e-9) * 0.92
+    v = clarity(voice)
+    v = v / (np.max(np.abs(v)) + 1e-9) * 0.92
     out = v + fx * 0.9 + amb + mus * 0.42
     out = np.tanh(out * 1.15) / np.tanh(1.15)          # gentle limiter
     out = out / (np.max(np.abs(out)) + 1e-9) * 0.95
     return out[:int(D * SR)]
+
+
+def clarity(x):
+    """Speech EQ: cut rumble below ~90 Hz, lift the 2-5 kHz range where consonants live."""
+    n = 1 << int(np.ceil(np.log2(len(x) + 1)))
+    X = np.fft.rfft(x, n); f = np.fft.rfftfreq(n, 1 / SR)
+    g = np.ones_like(f)
+    g *= 1 / np.sqrt(1 + (90 / np.maximum(f, 1)) ** 4)                       # high-pass
+    g *= 1 + 0.45 * np.exp(-((np.log2(np.maximum(f, 1) / 3200)) ** 2) / 0.5)  # presence
+    return np.fft.irfft(X * g, n)[:len(x)]
 
 
 def write_wav(path, x):
@@ -408,7 +425,7 @@ def main():
     ep = json.loads(base.read_text())
     lang = ep.get('lang', 'en')
     default_voice = 'en-us-ryan-high' if lang == 'en' else 'de-thorsten-low'
-    narrate = Narrator(opt('--voice', default_voice), float(opt('--speed', '0.92')))
+    narrate = Narrator(opt('--voice', default_voice), float(opt('--speed', '1.1')))
     clips = retime(ep, narrate)
     audio = mix_episode(ep, clips)
     wav = path.with_suffix('.wav')

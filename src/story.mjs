@@ -22,10 +22,20 @@ const WISHES = {
   dock: { kw: /\bdocks?\b|\bpier\b|jetty|\bboats?\b/i, icon: '⚓', name: 'dock', cost: 15000 },
   van: { kw: /\bvan\b|\bcar\b|\bbus\b/i, icon: '🚐', name: 'van', cost: 8000 },
   robots: { kw: /robot/i, icon: '🤖', name: 'robots', cost: 50000 },
+  mall: { kw: /\bmall\b|shopping (center|centre)|einkaufszentrum/i, icon: '🛍️', name: 'shopping mall', cost: 150000 },
+  military: { kw: /military|army|soldier/i, icon: '🪖', name: 'military base', cost: 250000 },
+  bank: { kw: /\bbanks?\b/i, role: 'bank' },
 };
 for (const [k, r] of Object.entries(ROLES)) if (r.kind === 'shop' && !WISHES[k]) WISHES[k] = { kw: new RegExp(r.kw, 'i'), role: k };
 
-const MOVE = /add me|at me in|move in|moving in|in your house|in the room|live (with|here)|my name is|call me|i sub|subscribed|i am subscribe|go on the island|let me (live|stay)/i;
+const MOVE = /add me|at me in|move in|moving in|in your house|in the room|live (with|here)|my name is|call me|i sub|subscribed|i am subscribe|go on the island|let me (live|stay)|give me an? (apartment|house|home|flat)|(can|could) i (please )?have an? .{0,20}(house|home)|big house/i;
+// "make me the principal", "can I be the president", "when im principal"
+const JOB = /(?:make me|can i|could i|may i|i want to|i wanna|when i'?m|let me|i'?ll|i will)\s+(?:please\s+)?(?:be\s+)?(?:the\s+|a\s+|an\s+)?(principal|headmaster|teacher|police ?chief|sheriff|police|cop|doctor|nurse|president|mayor|government|king|queen|leader|boss|banker|farmer|firefighter|fire chief|judge)/i;
+const LEADER = /president|mayor|government|king|queen|leader|boss/i;
+const JOB_ROLE = { principal: 'school', headmaster: 'school', teacher: 'school', 'police chief': 'police', policechief: 'police', sheriff: 'police', police: 'police', cop: 'police', doctor: 'hospital', nurse: 'hospital', banker: 'bank', farmer: 'farm', firefighter: 'fire', 'fire chief': 'fire', judge: 'court' };
+const NICK = /name me ([\p{L} ]{3,30}?)[.!]*$/iu;
+const PLANE = /(air)?plane|\bjet\b/i, BIG = /big house|mansion|villa/i, DOLLAR = /dollar|\$|\busd\b/i;
+const FAMILY = /\b(my )?(sister|brother|son|daughter|kids?|child|children|cousin)\b/i;
 const WITH_LEO = /(add|at) me in (the|your) (room|house)|in your house|in the room|with (you|leo)/i;
 const OWN = /separate house|own house|my own (house|home)|own home/i;
 const GREET = /^(hi|hai|hey|hello|hallo|yo)\b|welcome|^[\p{Extended_Pictographic}\s‍️]+$/iu;
@@ -52,7 +62,7 @@ const COLORS = [
 /** Read the comments: who moves in, who says hi, what people want built. */
 export function readComments(comments, subscribed, blocklist = []) {
   const subs = subscribed ? new Set(subscribed.map(h => cleanHandle(h).toLowerCase())) : null;
-  const movers = [], greets = [], wishes = {}, order = [];
+  const movers = [], greets = [], wishes = {}, order = [], jobs = [], replies = [], family = [];
   for (const raw of comments) {
     const c = { author: cleanHandle(raw.author), text: cleanText(raw.text, 200), likes: raw.likes ?? 0, name: raw.name };
     if (!c.text || isBlocked(c, blocklist)) continue;
@@ -60,9 +70,20 @@ export function readComments(comments, subscribed, blocklist = []) {
     if (MOVE.test(c.text) && isSub) {
       const name = c.name ?? (c.text.match(NAME)?.[1] ? cap(c.text.match(NAME)[1].toLowerCase()) : null);
       const old = movers.find(m => m.author === c.author);
-      if (old) { old.withLeo ||= WITH_LEO.test(c.text); old.own ||= OWN.test(c.text); old.name ??= name; }
-      else movers.push({ ...c, name, withLeo: WITH_LEO.test(c.text), own: OWN.test(c.text) });
+      const special = PLANE.test(c.text) ? 'plane' : BIG.test(c.text) ? 'big' : null;
+      const own = OWN.test(c.text) || !!special;
+      if (old) { old.withLeo ||= WITH_LEO.test(c.text); old.own ||= own; old.special ??= special; old.name ??= name; }
+      else movers.push({ ...c, name, withLeo: WITH_LEO.test(c.text), own, special });
     }
+    const j = c.text.match(JOB);
+    if (j) {
+      const word = j[1].toLowerCase().replace(/\s+/g, ' ');
+      const role = LEADER.test(word) ? 'leader' : JOB_ROLE[word] ?? JOB_ROLE[word.replace(' ', '')];
+      if (role && !jobs.some(x => x.author === c.author && x.role === role))
+        jobs.push({ ...c, role, word, nick: c.text.match(NICK)?.[1] ? cap(c.text.match(NICK)[1].toLowerCase()) : null });
+    }
+    if (DOLLAR.test(c.text)) replies.push({ ...c, kind: 'dollar' });
+    if (FAMILY.test(c.text)) family.push({ ...c, who: c.text.match(FAMILY)[2].toLowerCase() });
     if (GREET.test(c.text) && c.text.length < 40) greets.push(c);
     let found = false;
     const hits = Object.entries(WISHES).map(([k, w]) => [k, c.text.search(w.kw)]).filter(([, i]) => i >= 0).sort((a, b) => a[1] - b[1]);
@@ -82,7 +103,7 @@ export function readComments(comments, subscribed, blocklist = []) {
     }
   }
   const ranked = Object.values(wishes).sort((a, b) => b.votes - a.votes || order.indexOf(a.key) - order.indexOf(b.key));
-  return { movers, greets, ranked };
+  return { movers, greets, ranked, jobs, replies, family, order };
 }
 
 function wishInfo(w) {
@@ -104,7 +125,16 @@ export function storyDay(prev, input, cfg) {
   // so commenters who say they subscribed are believed unless input.onlySubscribers is set.
   const pub = (input.publicSubscribers ?? []).map(p => ({ handle: cleanHandle(p.handle ?? p), name: p.name ?? null }));
   const pubName = new Map(pub.map(p => [p.handle.toLowerCase(), p.name]));
-  const { movers, greets, ranked } = readComments(input.comments ?? [], input.onlySubscribers ? pub.map(p => p.handle) : null, cfg.blocklist);
+  const { movers, greets, ranked: today, jobs, replies, family, order: wishOrder } = readComments(input.comments ?? [], input.onlySubscribers ? pub.map(p => p.handle) : null, cfg.blocklist);
+  // wishes add up over the days: yesterday's votes still count
+  const merged = new Map();
+  for (const [k, e] of Object.entries(s.wishes)) merged.set(k, { key: k, votes: e.votes, by: [...e.by], label: e.label, first: e.first ?? 0 });
+  today.forEach((w, i) => {
+    const e = merged.get(w.key) ?? { key: w.key, votes: 0, by: [], label: w.label, first: 1000 + wishOrder.indexOf(w.key) };
+    for (const h of w.by) if (!e.by.includes(h)) { e.by.push(h); e.votes++; }
+    merged.set(w.key, e);
+  });
+  const ranked = [...merged.values()].sort((a, b) => b.votes - a.votes || a.first - b.first);
   for (const m of movers) { m.said = !!m.name; m.name ??= pubName.get(m.author.toLowerCase()) ?? null; }
   const nameOf = m => m.name ?? pubName.get(m.author.toLowerCase()) ?? pretty(m.author);
 
@@ -154,11 +184,14 @@ export function storyDay(prev, input, cfg) {
   shot({ type: 'intro', cam: overview, cam2: { ...overview, dist: R * 3.45 }, ring: { x: 5, z: 6, r: 62 } }, [[[`Day *${s.day}* in`, `*${town}!*`], 2.2]]);
 
   // 2. greetings
-  const g = greets.slice(0, 4);
+  const firstDay = (prev.people ?? []).length === 0;
+  const loud = [...jobs, ...movers.filter(m => m.special), ...replies].filter((c, i, a) => a.findIndex(x => x.author === c.author) === i);
+  const g = (firstDay ? greets : [...loud, ...greets]).slice(0, 4);
   shot({ type: 'greet', cam: { x: door.x, y: 1.7, z: door.z, dist: 11, pitch: 7, yaw: -8 }, cam2: { x: door.x, y: 1.7, z: door.z, dist: 9.5, pitch: 6, yaw: 4 },
     actor: { ...door, ry: 0, anim: 'wave' },
-    panel: g.length ? { kind: 'greet', items: g.map(c => ({ author: c.author, text: c.text, hue: hash(c.author) % 360 })) } : null },
-  [[[`Yesterday, ${who} was`, '*all alone…*'], 2.0], [['…and then *you*', 'showed up!'], 2.0]]);
+    panel: g.length ? { kind: 'greet', items: g.map(c => ({ author: c.author, text: cleanText(c.text, 64), hue: hash(c.author) % 360 })) } : null },
+  firstDay ? [[[`Yesterday, ${who} was`, '*all alone…*'], 2.0], [['…and then *you*', 'showed up!'], 2.0]]
+    : [[[`*${fmt((input.comments ?? []).length)}* comments yesterday…`], 2.0], [['…and you have', '*big plans!*'], 2.0]]);
 
   // 3. new residents
   const fol = shot({ type: 'followers', cam: { x: 18, z: 2, dist: 75, pitch: 36, yaw: -12 }, cam2: { x: 14, z: 4, dist: 68, pitch: 38, yaw: -6 },
@@ -173,8 +206,9 @@ export function storyDay(prev, input, cfg) {
   s.cash += income; move('cash', inc.t0 + 1.4, s.cash, 1.3);
 
   // 5. roommates: people who asked to live with Leo first, then other named movers
-  const free = Math.max(0, s.housing - before);
-  const order = [...movers.filter(m => m.withLeo), ...movers.filter(m => !m.withLeo && !m.own && m.said), ...movers.filter(m => !m.withLeo && !m.own && !m.said)];
+  // room left in Leo's own house (4 beds: Leo + 3)
+  const free = Math.max(0, 3 - Object.values(s.citizens).filter(c => c.title === 'Roommate').length);
+  const order = [...movers.filter(m => m.withLeo && !m.own), ...movers.filter(m => !m.withLeo && !m.own && m.said), ...movers.filter(m => !m.withLeo && !m.own && !m.said)];
   const mates = order.slice(0, free);
   let at;
   if (mates.length) {
@@ -192,91 +226,155 @@ export function storyDay(prev, input, cfg) {
   }
 
   // 6. own houses
-  const own = movers.filter(m => m.own && !mates.includes(m)).slice(0, 2);
+  const own = movers.filter(m => m.own && !mates.includes(m) && !s.citizens[m.author]).slice(0, 2);
   for (const m of own) {
     if (s.cash < HOUSE.cost) break;
     const name = nameOf(m);
     const t0 = now;
-    const b = place({ type: 'house', cap: HOUSE.cap, owner: m.author, sign: { icon: '🏠', name: `${name}'s house`, handle: m.author } }, t0 + 1.2);
-    const sh = shot({ type: 'build', cam: { x: b.x + 1.8, y: 3.6, z: b.z + 4, dist: 36, pitch: 16, yaw: -12 }, cam2: { x: b.x + 1.8, y: 3.6, z: b.z + 4, dist: 33, pitch: 15, yaw: -5 },
-      panel: { kind: 'price', amount: '−' + money(HOUSE.cost), label: `${name}'s house`, at: 1.25 } },
-    [[[`*${name}* asked for`, 'a *separate house…*'], 2.2], [['Here it is!'], 1.6]], 0.3);
-    const p = person(m, b.x + 4.0, b.z + 7.2, t0 + 1.9, -0.25, 'Home owner');
+    const kind = m.special === 'plane' ? { type: 'planehouse', cost: 12000, label: `${name}'s plane house`, ask: ['a *plane* as a house…'], done: 'Cleared for landing!' }
+      : m.special === 'big' ? { type: 'villa', cost: 9000, label: `${name}'s big house`, ask: ['a *big house…*'], done: 'Here it is!' }
+      : { type: 'house', cost: HOUSE.cost, label: `${name}'s house`, ask: ['a *separate house…*'], done: 'Here it is!' };
+    if (s.cash < kind.cost) continue;
+    const b = place({ type: kind.type, cap: HOUSE.cap, owner: m.author, sign: { icon: kind.type === 'planehouse' ? '✈️' : '🏠', name: kind.label, handle: m.author } }, t0 + 1.2);
+    const wide = kind.type === 'planehouse' ? 1.35 : 1;
+    const sh = shot({ type: 'build', cam: { x: b.x + 1.8, y: 3.6, z: b.z + 4, dist: 36 * wide, pitch: 16, yaw: -12 }, cam2: { x: b.x + 1.8, y: 3.6, z: b.z + 4, dist: 33 * wide, pitch: 15, yaw: -5 },
+      panel: { kind: 'price', amount: '−' + money(kind.cost), label: kind.label, at: 1.25 } },
+    [[[`*${name}* asked for`, ...kind.ask], 2.2], [[kind.done], 1.6]], 0.3);
+    const p = person(m, b.x + 4.0, b.z + (kind.type === 'planehouse' ? 8.6 : 7.2), t0 + 1.9, -0.25, 'Home owner');
     tags.push({ x: p.x, y: 3.0, z: p.z, text: p.name, sub: m.author, t0: t0 + 2.1, t1: sh.t1 });
-    s.cash -= HOUSE.cost; s.housing += HOUSE.cap;
+    s.cash -= kind.cost; s.housing += HOUSE.cap;
     move('cash', t0 + 1.25, s.cash, 0.7); move('housing', t0 + 1.2, s.housing, 0.6);
   }
 
-  // 7. wishes: build the most wanted thing we can afford, then show the vote and the goal
+  // 7. housing for everyone without a bed, then the most wanted building if we can pay for it
   const built = [];
-  let homeless = Math.max(0, s.residents - s.housing);
   const want = ranked.map(w => ({ ...w, ...wishInfo(w) }));
-  const buildable = want.filter(w => w.build && !(w.role && s.buildings.some(b => b.role === w.role)));
-  const pick = homeless > 0 ? buildable.find(w => w.key === 'apartment' && w.cost <= s.cash) ?? buildable.find(w => w.cost <= s.cash) : buildable.find(w => w.cost <= s.cash);
-  if (homeless > 0) {
-    shot({ type: 'tents', cam: { x: -32, z: 30, dist: 60, pitch: 40, yaw: 10 }, tentsAt: { x: -32, z: 30 } },
-      [[[`But *${fmt(homeless)}* of you`, 'still sleep in *tents!*'], 2.4]]);
-  }
-  for (const w of [pick].filter(Boolean)) {
+  const rest = [...movers.filter(m => !mates.includes(m) && !own.includes(m) && !s.citizens[m.author]),
+    ...pub.filter(p => !movers.some(m => m.author.toLowerCase() === p.handle.toLowerCase()) && !s.citizens[p.handle]).map(p => ({ author: p.handle, name: p.name }))];
+  let newcomers = Math.max(rest.length, gained - mates.length - own.length);
+  const buildWish = w => {
     const t0 = now, credit = w.by[0];
     const rec = w.build.type === 'block' ? { type: 'block', cap: w.build.cap }
       : w.build.type === 'shop' ? { type: 'shop', role: 'custom', name: w.name, owner: credit, style: { color: ['#d6584a', '#3f8fd0', '#46a36a', '#c9589f', '#e09a2e'][hash(w.name) % 5] }, sign: { icon: w.icon, name: w.name, handle: credit } }
-      : { type: w.build.type, role: w.role, name: w.name, style: { color: ROLES[w.role].color, feature: ROLES[w.role].feature ?? null }, sign: { icon: w.icon, name: w.name, handle: 'idea: ' + credit } };
+      : { type: w.build.type, role: w.role, name: w.name, style: { color: ROLES[w.role].color, feature: ROLES[w.role].feature ?? null }, sign: { icon: w.icon, name: w.name, handle: credit ? 'idea: ' + credit : town } };
     const b = place(rec, t0 + 1.4);
     const tall = w.build.type === 'block';
     const sh = shot({ type: 'build', cam: { x: b.x, y: tall ? 5 : 3, z: b.z + 2, dist: tall ? 52 : 40, pitch: 22, yaw: 16 }, cam2: { x: b.x, y: tall ? 5 : 3, z: b.z + 2, dist: tall ? 46 : 36, pitch: 20, yaw: 8 },
       panel: { kind: 'price', amount: '−' + money(w.cost), label: cap(w.name), at: 1.45 } },
-    [[[w.votes > 1 ? `*${w.votes}* of you wanted` : `*${pretty(credit)}* wanted`, `a${/^[aeiou]/i.test(w.name) ? 'n' : ''} *${lc(w)}…*`], 2.4],
+    [[!credit ? ['So we build', `a${/^[aeiou]/i.test(w.name) ? 'n' : ''} *${lc(w)}!*`] : [w.votes > 1 ? `*${w.votes}* of you wanted` : `*${pretty(credit)}* wanted`, `a${/^[aeiou]/i.test(w.name) ? 'n' : ''} *${lc(w)}…*`], 2.4],
      [[tall ? `Room for *${fmt(w.build.cap)}* more!` : 'Here it is!'], 1.8]], 0.3);
-    if (w.build.cap) {
-      // everyone who asked to move in and has no bed yet moves in here
-      // commenters without a bed yet, then public subscribers who did not comment
-      const rest = [...movers.filter(m => !mates.includes(m) && !own.includes(m)),
-        ...pub.filter(p => !movers.some(m => m.author.toLowerCase() === p.handle.toLowerCase()) && !s.citizens[p.handle]).map(p => ({ author: p.handle, name: p.name }))];
-      const total = Math.max(rest.length, s.residents - s.housing);   // s.housing does not include the new block yet
-      if (rest.length) {
-        const shown = [...rest].sort((a, b) => (nameOf(a).length <= 11 ? 0 : 1) - (nameOf(b).length <= 11 ? 0 : 1)).slice(0, 3), t1 = now;
-        const welcome = pub.filter(p => p.name && !(input.comments ?? []).some(c => cleanHandle(c.author).toLowerCase() === p.handle.toLowerCase()))
-          .map(p => p.name.split(' ')[0]).filter(n => n.length <= 11).slice(0, 5);
-        const nm = shown.map(nameOf), short = nm.filter(n => n.length <= 11).slice(0, 2);
-        const more = total - short.length;
-        const sh2 = shot({ type: 'movein', cam: { x: b.x, y: 2.4, z: b.z + 7, dist: 22, pitch: 13, yaw: -8 }, cam2: { x: b.x, y: 2.4, z: b.z + 7, dist: 20, pitch: 12, yaw: -2 } },
-          [[[short.length ? names(more ? [...short, `${more} more`] : short) : `*${total}* of you`, 'move in!'], 2.6],
-           welcome.length ? [['Welcome ' + names(welcome) + '!'], 2.6] : null], 0.3);
-        shown.forEach((m, k) => {
-          const p = person(m, b.x - 2.3 + k * 2.3, b.z + 7.4 + (k % 2) * 0.5, sh2.t0 + 0.4 + k * 0.35, 0);
-          tags.push({ x: p.x, y: 3.0, z: p.z, text: p.name.length <= 11 ? p.name : m.author, t0: sh2.t0 + 0.6 + k * 0.35, t1: sh2.t1 });
-        });
-        for (const m of rest.filter(m => !shown.includes(m))) s.citizens[m.author] = { role: 'resident', title: 'Resident', name: m.name ?? pretty(m.author), day: s.day };
-      }
-    }
-    tags.push({ x: b.x, y: tall ? 7.5 : 6, z: b.z + 6, text: 'Idea: ' + credit, t0: t0 + 2.0, t1: sh.t1 });
+    if (credit) tags.push({ x: b.x, y: tall ? 7.5 : 6, z: b.z + 6, text: 'Idea: ' + credit, t0: t0 + 2.0, t1: sh.t1 });
     s.cash -= w.cost; move('cash', t0 + 1.45, s.cash, 0.7);
     if (w.build.cap) { s.housing += w.build.cap; move('housing', t0 + 1.4, s.housing, 0.6); }
     built.push(w.key);
+    return b;
+  };
+  const moveIn = b => {
+    if (!rest.length && newcomers <= 0) return;
+    const shown = [...rest].sort((a, b) => (nameOf(a).length <= 11 ? 0 : 1) - (nameOf(b).length <= 11 ? 0 : 1)).slice(0, 3);
+    const welcome = pub.filter(p => p.name && !s.citizens[p.handle] && !(input.comments ?? []).some(c => cleanHandle(c.author).toLowerCase() === p.handle.toLowerCase()))
+      .map(p => p.name.split(' ')[0]).filter(n => n.length <= 11).slice(0, 5);
+    const short = shown.map(nameOf).filter(n => n.length <= 11).slice(0, 2), more = newcomers - short.length;
+    const sh2 = shot({ type: 'movein', cam: { x: b.x, y: 2.4, z: b.z + 7, dist: 22, pitch: 13, yaw: -8 }, cam2: { x: b.x, y: 2.4, z: b.z + 7, dist: 20, pitch: 12, yaw: -2 } },
+      [[[short.length ? names(more > 0 ? [...short, `${more} more`] : short) : `*${newcomers}* of you`, b.day === s.day ? 'move in!' : `move into the *${b.type === 'block' ? 'apartment block' : 'house'}!*`], 2.6],
+       welcome.length ? [['Welcome ' + names(welcome) + '!'], 2.6] : null], 0.3);
+    shown.forEach((m, k) => {
+      const p = person(m, b.x - 2.3 + k * 2.3, b.z + 7.4 + (k % 2) * 0.5, sh2.t0 + 0.4 + k * 0.35, 0);
+      tags.push({ x: p.x, y: 3.0, z: p.z, text: p.name.length <= 11 ? p.name : m.author, t0: sh2.t0 + 0.6 + k * 0.35, t1: sh2.t1 });
+    });
+    for (const m of rest.filter(m => !shown.includes(m))) s.citizens[m.author] = { role: 'resident', title: 'Resident', name: nameOf(m), day: s.day };
+  };
+  let homeless = Math.max(0, s.residents - s.housing);
+  if (homeless > 0) {
+    shot({ type: 'tents', cam: { x: -32, z: 30, dist: 60, pitch: 40, yaw: 10 }, tentsAt: { x: -32, z: 30 } },
+      [[[`But *${fmt(homeless)}* of you`, 'still sleep in *tents!*'], 2.4]]);
+    newcomers = Math.max(rest.length, homeless);
+    const apt = want.find(w => w.key === 'apartment') ?? { key: 'apartment', votes: 0, by: [], ...wishInfo({ key: 'apartment' }) };
+    if (apt.cost <= s.cash) moveIn(buildWish(apt));
+  } else if (newcomers > 0) {
+    const home = [...s.buildings].reverse().find(b => b.type === 'block') ?? s.buildings.find(b => b.type === 'cottage');
+    moveIn(home);
   }
-  for (const w of want) { const e = s.wishes[w.key] ??= { votes: 0, by: [], label: w.name }; e.votes += w.votes; e.by.push(...w.by.filter(h => !e.by.includes(h))); }
-  for (const k of built) delete s.wishes[k];
+  // the most wanted building: built when we can pay for it, otherwise we save up for it
+  const top = want.find(w => !built.includes(w.key) && !(w.role && s.buildings.some(b => b.role === w.role)));
+  if (top?.build && top.cost <= s.cash) buildWish(top);
 
-  const open = want.filter(w => !built.includes(w.key));
+  // 8. jobs: whoever asks first gets the job once the building exists
+  s.candidates ??= {};
+  for (const jb of jobs.filter(x => x.role !== 'leader')) {
+    const list = s.candidates[jb.role] ??= [];
+    if (!list.some(c => c.author === jb.author)) list.push({ author: jb.author, name: nameOf(jb), nick: jb.nick, day: s.day });
+  }
+  const jobRoles = [...new Set(jobs.filter(x => x.role !== 'leader').map(x => x.role))];
+  for (const role of jobRoles) {
+    const r = ROLES[role], list = s.candidates[role], bld = s.buildings.find(b => b.role === role);
+    const title = r.chief.en.toLowerCase();
+    if (bld && !Object.values(s.citizens).some(c => c.role === role && c.chief)) {
+      const c = list[0];
+      s.citizens[c.author] = { ...(s.citizens[c.author] ?? {}), role, title: r.chief.en, chief: true, name: c.nick ?? c.name, day: s.day };
+      const sh = shot({ type: 'job', cam: { x: bld.x, y: 3, z: bld.z + 4, dist: 40, pitch: 16, yaw: 10 } },
+        [[[`*${c.name}* asked first…`], 2.0], [[`…and is our first *${title}!*`], 2.2]], 0.3);
+      const p = person({ author: c.author, name: c.name }, bld.x + 3, bld.z + 8, sh.t0 + 1.2, -0.2, r.chief.en);
+      tags.push({ x: p.x, y: 3.0, z: p.z, text: c.name, sub: r.chief.en, t0: sh.t0 + 1.4, t1: sh.t1 });
+    } else {
+      const wishB = want.find(w => w.role === role);
+      const nick = list.find(c => c.nick);
+      shot({ type: 'job', cam: { x: 8, z: 4, dist: 95, pitch: 40, yaw: 10 }, cam2: { x: 8, z: 4, dist: 88, pitch: 40, yaw: 4 },
+        panel: { kind: 'hires', icon: r.icon, title: `WANTS TO BE ${r.chief.en.toUpperCase()}`, rows: list.slice(0, 4).map((c, k) => ({ handle: c.nick ?? c.name, title: k ? 'next in line' : 'asked first', hue: hash(c.author) % 360 })),
+          more: Math.max(0, list.length - 4), note: `First the ${r.name.en.toLowerCase()} needs ${money(r.cost)}!` } },
+      [[list.length > 1 ? [names(list.slice(0, 2).map(c => c.name)), `both want to be *${title}!*`] : [`*${list[0].name}* wants to be`, `our *${title}!*`], 2.6],
+       nick ? [[`${nick.name} even has a title:`, `*${nick.nick}!*`], 2.2] : null,
+       [[`Whoever asked first`, `gets the job!`], 2.2]], 0.3);
+      void wishB;
+    }
+  }
+
+  // 9. an election when people want to lead the town
+  const leaders = jobs.filter(x => x.role === 'leader');
+  if (leaders.length) {
+    s.election ??= { office: 'mayor', candidates: [], votes: {} };
+    for (const l of leaders) if (!s.election.candidates.some(c => c.author === l.author)) s.election.candidates.push({ author: l.author, name: nameOf(l), word: l.word });
+    const cands = s.election.candidates;
+    shot({ type: 'election', cam: { x: door.x, y: 3, z: door.z, dist: 30, pitch: 14, yaw: -10 }, cam2: { x: door.x, y: 3, z: door.z, dist: 27, pitch: 13, yaw: -4 },
+      actor: { ...door, ry: 0, anim: 'look' },
+      panel: { kind: 'hires', icon: '🗳️', title: 'ELECTION: WHO LEADS LEOVILLE?', rows: cands.slice(0, 4).map(c => ({ handle: pretty(c.author), title: `wants to be ${c.word}`, hue: hash(c.author) % 360 })), note: 'Vote in the comments!' } },
+    [[cands.length > 1 ? [`*${pretty(cands[0].author)}* wants to be *${cands[0].word}…*`] : [`*${pretty(cands[0].author)}* wants to be`, `*${cands[0].word}!*`], 2.4],
+     cands.length > 1 ? [[`…and *${pretty(cands[1].author)}* wants to be`, `*the ${cands[1].word}!*`], 2.4] : null,
+     [['So we hold an', '*election!*'], 2.0]], 0.3);
+  }
+
+  // 10. answers to single comments
+  for (const r of replies.slice(0, 1)) {
+    shot({ type: 'reply', cam: { x: door.x, y: 1.7, z: door.z, dist: 11, pitch: 7, yaw: 8 }, actor: { ...door, ry: 0, anim: 'look' },
+      panel: { kind: 'greet', items: [{ author: r.author, text: cleanText(r.text, 64), hue: hash(r.author) % 360 }] } },
+    [[[`Dollars, *${pretty(r.author)}?*`], 1.6], [['Sorry, Leoville pays', 'in *euros!*'], 2.2]], 0.3);
+  }
+
+  for (const k of built) merged.delete(k);
+  s.wishes = Object.fromEntries([...merged.entries()].map(([k, e]) => [k, { votes: e.votes, by: e.by, label: e.label ?? want.find(w => w.key === k)?.name, first: e.first }]));
+  const open = want.filter(w => !built.includes(w.key) && !(w.role && s.buildings.some(b => b.role === w.role)));
   if (open.length) {
     const top = open.slice(0, 6);
     shot({ type: 'votes', cam: { x: 8, z: 0, dist: 150, pitch: 52, yaw: -8 }, cam2: { x: 8, z: 0, dist: 138, pitch: 54, yaw: -2 },
       panel: { kind: 'votes', title: 'YOUR WISHES', rows: top.map(w => ({ icon: w.icon, name: cap(w.name), votes: w.votes })) } },
     [[['And what do you', 'want *next?*'], 2.0],
-     [top[1] && top[1].votes === top[0].votes ? [`*${cap(lc(top[0]))}* and *${lc(top[1])}*`, 'are *tied!*'] : [`*${cap(lc(top[0]))}* is in the lead!`], 2.4]]);
+     [top[1] && top[1].votes === top[0].votes ? [`*${cap(lc(top[0]))}* and *${lc(top[1])}*`, 'are *tied!*'] : [`The *${lc(top[0])}* is in the lead!`], 2.4]]);
     const goal = open.find(w => w.cost > s.cash && w.build) ?? open[0];
+    const fam = family.find(f => WISHES[goal.key]?.kw.test(f.text));
     shot({ type: 'goal', cam: { x: 0, z: 10, dist: 260, pitch: 58, yaw: 0 }, cam2: { x: 0, z: 10, dist: 240, pitch: 58, yaw: 0 },
       panel: { kind: 'goal', title: `NEXT: ${goal.name.toUpperCase()}`, cur: s.cash, target: goal.cost, money: true, unit: '' } },
-    [[[`The ${lc(goal)} costs`, `*${money(goal.cost)}.*`], 2.4], [['Keep subscribing,', 'and we can *build it!*'], 2.4]]);
+    [[[`The ${lc(goal)} costs`, `*${money(goal.cost)}.*`], 2.4],
+     fam ? [[`*${nameOf(fam)}*'s ${fam.who}`, 'is waiting for it!'], 2.2] : null,
+     [['Keep subscribing,', 'and we can *build it!*'], 2.4]]);
     s.goal = { key: goal.key, cost: goal.cost };
   }
 
-  // 8. outro: Leo and his roommates wave
+  // 11. outro: Leo and his roommates wave
   const role = s.goal?.key && WISHES[s.goal.key]?.role ? ROLES[WISHES[s.goal.key].role].chief.en.toLowerCase() : null;
+  const ask = leaders.length ? ['Who should lead', `*${town}?*`] : role && !(s.candidates?.[WISHES[s.goal.key].role]?.length) ? ['Who wants to be', `the first *${role}?*`] : ['What should we', '*build next?*'];
   shot({ type: 'outro', cam: { x: door.x - 0.9, y: 2.2, z: door.z + 0.8, dist: 25, pitch: 10, yaw: 6 }, cam2: { x: door.x - 0.9, y: 2.2, z: door.z + 0.8, dist: 23, pitch: 9, yaw: 0 },
     actor: { ...door, ry: 0, anim: 'wave' } },
-  [[role ? ['Who wants to be', `the first *${role}?*`] : ['What should we', '*build next?*'], 2.4], [['Tell me in the', '*comments!*'], 2.4]], 0.6);
+  [[ask, 2.4], [[leaders.length ? 'Vote in the' : 'Tell me in the', '*comments!*'], 2.4]], 0.6);
 
   // unnamed newcomers: everyone without a bed waits in the tent camp for now
   const ep = {
@@ -291,7 +389,7 @@ export function storyDay(prev, input, cfg) {
     cityBox: { x0: -88, x1: 75, z0: -16, z1: 24 },
     residentsHome: Object.values(s.citizens).filter(c => c.day <= s.day).length,
     summary: { before, after, gained, income, cash: s.cash, housing: s.housing, built: s.buildings.filter(b => b.day === s.day).length, queue: 0,
-      roommates: mates.map(m => m.author), ownHouses: own.map(m => m.author), wishes: want.map(w => `${w.name} ${w.votes}`) },
+      roommates: mates.map(m => m.author), ownHouses: own.map(m => m.author), wishes: want.map(w => `${w.name} ${w.votes}`), jobs: jobs.map(j => `${j.author}:${j.role}`), election: s.election?.candidates.map(c => c.author) },
   };
   for (const b of s.buildings) delete b._at;
   s.people = [...(prev.people ?? []), ...people.map(({ at, ...p }) => p)];

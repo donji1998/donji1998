@@ -206,10 +206,41 @@ function airport(p) {
   plane(-18, -6, Math.PI / 2, '#e2523a'); plane(2, -6, Math.PI / 2, '#3d6fd6'); plane(-30, 16, 0, '#46a36a');
 }
 
+// a retired airliner on stilts, turned into a home (door + stairs on the street side)
+function planeHouse(p, b) {
+  const body = '#f4f6f8', stripe = '#e2523a', tail = '#3d6fd6';
+  for (const x of [-4.5, 0, 4.5]) for (const z of [-1, 1]) p.cyl(0.28, 0.32, 2.6, '#8b93a1', x, 0, z, 8);
+  p.add(new THREE.CapsuleGeometry(1.9, 13, 6, 16).rotateZ(Math.PI / 2), body, 0, 2.6 + 1.9, 0);
+  p.box(15.2, 0.5, 3.9, stripe, 0, 3.7, 0);                                   // cheat line
+  for (let k = 0; k < 9; k++) p.box(0.55, 0.5, 0.12, '#2f4a6b', -5.6 + k * 1.35, 4.8, 1.88);
+  p.box(1.5, 0.55, 3.2, '#2a3040', 8.1, 5.0, 0);                              // cockpit glass
+  p.box(1.1, 2.0, 0.14, '#3d6fd6', -2.2, 3.3, 1.9);                           // door
+  for (let k = 0; k < 6; k++) p.box(1.4, 0.18, 0.55, '#c9c6bd', -2.2, 0.1 + k * 0.52, 2.2 + (5 - k) * 0.5);   // stairs
+  p.box(1.5, 0.8, 0.08, '#c9c6bd', -2.95, 0.1, 3.5).box(0.08, 3.4, 0.08, '#8b93a1', -1.45, 0.1, 2.3);
+  p.box(3.6, 0.3, 15, body, 0.6, 3.6, 0).box(3.7, 0.32, 1.4, stripe, 0.6, 3.61, 7.3).box(3.7, 0.32, 1.4, stripe, 0.6, 3.61, -7.3);   // wings
+  for (const z of [-3.6, 3.6]) p.add(new THREE.CylinderGeometry(0.75, 0.75, 2.6, 12).rotateZ(Math.PI / 2), '#c9c6bd', 1.4, 2.65, z);  // engines
+  p.box(2.4, 3.6, 0.3, tail, -7.4, 4.8, 0).box(2.2, 0.25, 5.6, tail, -7.6, 5.2, 0);   // tail
+  p.box(14, 0.12, 9, '#d6d0c2', 0, 0, 1.5);                                    // yard
+  p.ball(0.8, '#5aa856', 6.2, 0, 4.2).ball(0.6, '#6dbb5f', -6.4, 0, 4.6);
+}
+// a two-storey family house, bigger than the starter homes
+function villa(p, r) {
+  const wall = ['#f4e3c1', '#dfe9ef', '#f3d9cf'][r() * 3 | 0], roof = ['#5d7d9a', '#8f4a3a', '#7a8b52'][r() * 3 | 0];
+  p.box(12, 6.4, 8.5, wall, 0, 0, 0).gable(12.8, 3.6, 9.4, roof, 0, 6.4, 0);
+  p.box(5, 3, 3.6, wall, 3.6, 0, 4.4).gable(5.4, 1.6, 4, roof, 3.6, 3, 4.4, Math.PI / 2);   // porch wing
+  p.box(1.5, 2.4, 0.2, shade(roof, 0.7), 3.6, 0, 6.25);
+  for (const x of [-4, -1.2]) p.box(1.7, 1.4, 0.2, GLASS, x, 1.3, 4.3).box(1.7, 1.4, 0.2, GLASS, x, 4.3, 4.3);
+  p.box(1.7, 1.4, 0.2, GLASS, 3.6, 4.3, 4.3);
+  p.box(1, 2.8, 1, shade(wall, 0.8), -3.5, 7.2, -1.5);
+  p.box(15, 0.15, 4, '#d8cdb4', 0, 0, 7.5);
+  p.ball(1.0, '#4f9a4c', -6.4, 0, 6.4).ball(0.8, '#5fae58', 6.6, 0, 7).box(4, 0.7, 0.3, '#f3efe6', -3.5, 0, 9.3);
+}
+
 const BUILD = {
   house: (p, b, r) => house(p, r), block: (p, b, r) => block(p, r), tower: (p, b, r) => tower(p, r),
   mega: (p, b, r) => mega(p, r, 1), arco: (p, b, r) => mega(p, r, 1.9),
   shop: (p, b) => shop(p, b), civic: (p, b) => civic(p, b), townhall: p => townhall(p), cottage: p => cottage(p), sign: () => {},
+  planehouse: (p, b) => planeHouse(p, b), villa: (p, b, r) => villa(p, r),
   stadium: p => stadium(p), funfair: p => funfair(p), harbor: p => harbor(p), airport: p => airport(p),
 };
 
@@ -224,6 +255,8 @@ export function buildingMesh(b) {
     const s = b.type === 'shop' ? signMesh(b.sign, 9.6, 1.75) : signMesh(b.sign, 9.6, 1.9);
     if (b.type === 'shop') s.position.set(0, 4.65, 4.2);
     else if (b.type === 'house') { s.scale.setScalar(0.5); s.position.set(0, 2.75, 3.45); }
+    else if (b.type === 'planehouse') { s.scale.setScalar(0.62); s.position.set(1.6, 1.6, 2.0); }
+    else if (b.type === 'villa') { s.scale.setScalar(0.6); s.position.set(-2.6, 3.2, 4.45); }
     else if (b.style?.feature === 'columns') s.position.set(0, 4.3, 6.5);
     else s.position.set(0, 6.35, 4.62);
     s.position.z += back;
