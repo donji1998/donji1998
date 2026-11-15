@@ -205,7 +205,7 @@ export function storyDay(prev, input, cfg) {
   // 3. new residents
   const fol = shot({ type: 'followers', cam: { x: 18, z: 2, dist: 75, pitch: 36, yaw: -12 }, cam2: { x: 14, z: 4, dist: 68, pitch: 38, yaw: -6 },
     panel: { kind: 'followers', title: 'RESIDENTS', y: 'YESTERDAY', t: 'TODAY', from: before, to: after, c0: 2.1, c1: 3.1 } },
-  [[[`Yesterday: *${fmt(before)}* resident${before === 1 ? '' : 's'}.`], 2.0], [[`Today? *${fmt(after)}!*`], 2.0]]);
+  [[[`Yesterday: *${fmt(before)}* resident${before === 1 ? '' : 's'}.`], 2.0], [[`Today, we are *${fmt(after)}!*`], 2.2]]);
   move('residents', fol.t0 + 2.1, after, 1.0);
   s.residents = after;
 
