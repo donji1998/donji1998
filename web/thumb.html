@@ -81,7 +81,8 @@ Object.assign(sun.shadow.camera, { left: -30, right: 30, top: 30, bottom: -30, n
 sun.shadow.bias = -0.0005; sun.shadow.normalBias = 0.4; scene.add(sun);
 
 // a small island in a big sea, with Leo's tiny house in the middle: "alone" at a glance
-const IC = { x: 0, z: -60 }, IR = 42;
+const IC = { x: 0, z: -60 };
+const IR = Math.max(42, ...extra.map(b => Math.abs(b.x - 30) * 1.25 + 22));
 const sea = new THREE.Mesh(new THREE.PlaneGeometry(3000, 3000).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: '#3fa2c6' }));
 sea.position.y = -1.2; scene.add(sea);
 const blob = (sc, col, y) => {
@@ -102,6 +103,7 @@ const r = rng(13);
   for (let k = 0; k < 260; k++) {
     const a = r() * Math.PI * 2, d = 8 + Math.sqrt(r()) * (IR - 12), x = IC.x + Math.cos(a) * d, z = IC.z + Math.sin(a) * d;
     if (Math.hypot(x - IC.x, z - IC.z) < 9 + (extra.length ? 24 : 0)) continue;
+    if (extra.some(b => Math.hypot(x - (IC.x + (b.x - 30) * 1.25), z - (IC.z + b.z * 1.25)) < 18) || (extra.length && Math.abs(z - (IC.z + 15)) < 6)) continue;
     trees.push([x, z, 0.7 + r() * 0.8, r()]);
   }
   const trunk = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.35, 0.45, 2.4, 5).translate(0, 1.2, 0), new THREE.MeshLambertMaterial({ color: '#7a5a3c' }), trees.length);
@@ -136,7 +138,12 @@ scene.children.filter(o => o.isInstancedMesh && o.count > 1000 || (o.isInstanced
 
 // aerial view of the island
 const camera = new THREE.PerspectiveCamera(horiz ? 32 : 46, W / H, 1, 3000);
-if (horiz) { camera.position.set(IC.x - 14, 125, IC.z + 100); camera.lookAt(IC.x - 14, 0, IC.z + 8); }
+const focus = q.has('focus') ? extra.find(b => b.type === q.get('focus')) : null;
+if (focus) {   // aim at one building (e.g. ?focus=planehouse)
+  const fx = IC.x + (focus.x - 30) * 1.25, fz = IC.z + focus.z * 1.25;
+  if (horiz) { camera.position.set(fx - 3, 58, fz + 50); camera.lookAt(fx - 3, 0, fz + 6); }
+  else { camera.position.set(fx + 2, 70, fz + 70); camera.lookAt(fx + 2, 0, fz + 16); }
+} else if (horiz) { camera.position.set(IC.x - 14, 125, IC.z + 100); camera.lookAt(IC.x - 14, 0, IC.z + 8); }
 else { camera.position.set(IC.x, 160, IC.z + 150); camera.lookAt(IC.x, 0, IC.z + 58); }
 renderer.render(scene, camera);
 
@@ -147,7 +154,8 @@ const fs = new THREE.Scene();
 fs.add(new THREE.HemisphereLight('#fff7e6', '#9fb08a', 1.7));
 const key = new THREE.DirectionalLight('#fff1d6', 2.0); key.position.set(-3, 5, 6); fs.add(key);
 const leo = characterFigure(); leo.rotation.y = horiz ? -0.35 : 0.12;
-const friends = (ep?.people ?? []).slice(0, 3);
+const pick = q.get('who')?.split(',').map(h => h.trim().toLowerCase());
+const friends = (ep?.people ?? []).filter(p => !pick || pick.includes(p.handle.toLowerCase())).slice(0, 3);
 leo.pose(0.17, friends.length ? 'cheer' : 'wave', { suitcase: !friends.length }); fs.add(leo);
 // roommates around Leo, a step behind him
 const spots = [[-1.25, -0.9], [1.25, -0.9], [0, -1.8]];
