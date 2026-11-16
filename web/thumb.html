@@ -21,11 +21,12 @@
   .day { position: absolute; background: #3ddbb4; color: #06352a; border: 4px solid #0b0e1c; border-radius: 20px; font-weight: 800; text-align: center; box-shadow: 0 6px 0 #0b0e1c66; }
   /* vertical 540x960 (x2) */
   .v #wrap { width: 540px; height: 960px; }
-  .v #top { top: 36px; font-size: 62px; right: 120px; }
-  .v #bottom { bottom: 46px; font-size: 56px; }
+  /* texts sit in the middle 60%: YouTube crops Shorts thumbnails top and bottom and puts its own UI there */
+  .v #top { top: 205px; font-size: 62px; right: 120px; }
+  .v #bottom { top: 618px; bottom: auto; font-size: 54px; }
   .v .pill { right: 18px; top: 560px; }
-  .v.group .pill { right: auto; left: 50%; translate: -50% 0; top: 392px; } .v .pill b { font-size: 46px; }
-  .v .day { right: 26px; top: 40px; padding: 4px 16px 0; font-size: 22px; } .v .day b { display: block; font-size: 44px; line-height: 0.9; }
+  .v .pill, .v.group .pill { right: auto; left: 50%; translate: -50% 0; top: 548px; } .v .pill b { font-size: 46px; }
+  .v .day { right: 26px; top: 212px; padding: 4px 16px 0; font-size: 22px; } .v .day b { display: block; font-size: 44px; line-height: 0.9; }
   /* horizontal 640x360 (x2) */
   .h #wrap { width: 640px; height: 360px; }
   .h #top { top: 26px; left: 18px; right: auto; width: 330px; font-size: 54px; text-align: left; -webkit-text-stroke-width: 11px; }
@@ -142,10 +143,12 @@ const focus = q.has('focus') ? extra.find(b => b.type === q.get('focus')) : null
 if (focus) {   // aim at one building (e.g. ?focus=planehouse)
   const fx = IC.x + (focus.x - 30) * 1.25, fz = IC.z + focus.z * 1.25;
   if (horiz) { camera.position.set(fx - 3, 58, fz + 50); camera.lookAt(fx - 3, 0, fz + 6); }
-  else if (focus.type === 'robothouse') { camera.position.set(fx + 3, 30, fz + 62); camera.lookAt(fx + 3, 9, fz); }
+  else if (focus.type === 'robothouse') { camera.position.set(fx + 3, 30, fz + 70); camera.lookAt(fx + 3, -1, fz); }
   else { camera.position.set(fx + 2, 70, fz + 70); camera.lookAt(fx + 2, 0, fz + 16); }
 } else if (horiz) { camera.position.set(IC.x - 14, 125, IC.z + 100); camera.lookAt(IC.x - 14, 0, IC.z + 8); }
 else { camera.position.set(IC.x, 160, IC.z + 150); camera.lookAt(IC.x, 0, IC.z + 58); }
+// vertical: shift the picture down so the subject sits under the title, in the part YouTube always shows
+if (!horiz) camera.setViewOffset(W, H, 0, -190, W, H);
 renderer.render(scene, camera);
 
 // Leo as a cut-out in front, on a transparent canvas with a white outline (CSS)
@@ -168,7 +171,9 @@ const fc = new THREE.PerspectiveCamera(30, W / H, 0.1, 100);
 const wide = friends.length ? 1.35 : 1;
 if (horiz) { fc.position.set(-2.55 * wide, 1.5, 9.4 * wide); fc.lookAt(-2.55 * wide, 1.5, 0); }
 else if (friends.length) { fc.position.set(0, 3.0, 19); fc.lookAt(0, 3.0, 0); document.body.classList.add('group'); }
-else { fc.position.set(0.3, 2.35, 12.5); fc.lookAt(0.3, 2.35, 0); }
+else { fc.position.set(0.3, 2.6, 15.5); fc.lookAt(0.3, 2.6, 0); }
+// vertical: people stand at the bottom, faces still inside the part YouTube shows
+if (!horiz) fc.setViewOffset(W, H, 0, -250, W, H);
 fr.render(fs, fc);
 
 window.READY = true;
