@@ -221,8 +221,9 @@ export function storyDay(prev, input, cfg) {
     actor: { ...door, ry: 0, anim: 'wave' },
     panel: g.length ? { kind: 'greet', items: g.map(c => ({ author: c.author, text: cleanText(c.text, 64), hue: hash(c.author) % 360 })) } : null },
   firstDay ? [[[`Yesterday, ${who} was`, '*all alone…*'], 2.0], [['…and then *you*', 'showed up!'], 2.0]]
-    : spam ? [[[`*${fmt(nComments)}* comments yesterday…`], 2.0], [[`…*${spam.n}* of them just say`, `*"${spam.text}"!*`], 2.2],
-        [[`Thanks *${s.citizens[spam.author]?.name ?? all.find(c => c.author === spam.author && c.name)?.name ?? pretty(spam.author)}*,`, `that's still *${money(spam.n * eco.perComment)}!*`], 2.4]]
+    : spam ? [[[`*${fmt(nComments)}* comments yesterday…`], 2.0],
+        [[`…and *${spam.n}* of them are from *${s.citizens[spam.author]?.name ?? all.find(c => c.author === spam.author && c.name)?.name ?? pretty(spam.author)}*,`, `who just typed *"${spam.text}"!*`], 2.8],
+        [['Still, that\'s', `*${money(spam.n * eco.perComment)}* for the town!`], 2.2]]
     : [[[`*${fmt(nComments)}* comments yesterday…`], 2.0], [['…and you have', '*big plans!*'], 2.0]]);
 
   // 3. new residents
