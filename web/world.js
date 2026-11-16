@@ -236,11 +236,77 @@ function villa(p, r) {
   p.ball(1.0, '#4f9a4c', -6.4, 0, 6.4).ball(0.8, '#5fae58', 6.6, 0, 7).box(4, 0.7, 0.3, '#f3efe6', -3.5, 0, 9.3);
 }
 
+// a long, low single-storey house
+function bungalow(p, r) {
+  const wall = ['#f4e3c1', '#e9d3b4', '#dfe9ef'][r() * 3 | 0], roof = ['#8f4a3a', '#5d7d9a', '#a8623a'][r() * 3 | 0];
+  p.box(12, 3.2, 7, wall, 0, 0, 0).gable(12.8, 2.2, 7.8, roof, 0, 3.2, 0);
+  p.box(1.3, 2.3, 0.2, shade(roof, 0.7), -1, 0, 3.55);
+  for (const x of [-4.2, 1.6, 4.4]) p.box(1.8, 1.2, 0.2, GLASS, x, 1.2, 3.55);
+  p.box(5, 0.25, 2.4, '#b9a27e', 2.5, 0, 4.8).box(14, 0.12, 3.5, '#d8cdb4', 0, 0, 5.6);
+  p.ball(0.9, '#4f9a4c', -6, 0, 5.2).ball(0.7, '#5fae58', 6.2, 0, 5.6);
+}
+// a big white house with columns and two wings
+function mansion(p) {
+  const wall = '#f6f1e6', roof = '#3f4a5a';
+  p.box(10, 7.4, 8, wall, 0, 0, 0).gable(10.6, 3, 8.8, roof, 0, 7.4, 0);
+  for (const x of [-7.4, 7.4]) p.box(4.8, 5.2, 7, wall, x, 0, -0.5).box(5.2, 0.5, 7.4, roof, x, 5.2, -0.5);
+  for (const x of [-3.6, -1.2, 1.2, 3.6]) p.cyl(0.38, 0.42, 6.6, WHITE, x, 0.4, 4.9, 10);
+  p.box(10.4, 0.4, 2.2, WHITE, 0, 0, 4.9).box(10.4, 0.6, 2.2, WHITE, 0, 7.0, 4.9);
+  p.box(1.8, 2.8, 0.2, '#5b3a26', 0, 0.4, 4.05);
+  for (const x of [-3.2, 3.2]) for (const y of [1.3, 4.4]) p.box(1.4, 1.5, 0.2, GLASS_D, x, y, 4.05);
+  for (const x of [-7.4, 7.4]) p.box(2.4, 1.6, 0.2, GLASS_D, x, 1.6, 3.05);
+  p.box(18, 0.12, 4.5, '#d8cdb4', 0, 0, 6.8).cyl(1.5, 1.6, 0.5, '#b8b2a4', 0, 0.1, 8.2, 14).cyl(0.9, 0.9, 0.12, '#6cc3e0', 0, 0.6, 8.2, 14);
+  for (const x of [-9, 9]) p.ball(1.1, '#4f9a4c', x, 0, 6.4);
+}
+// a grassy mound with a concrete entrance, blast door and air vents
+function bunker(p) {
+  p.add(new THREE.SphereGeometry(7.5, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2).scale(1, 0.45, 0.85), '#6aa84f', 0, 0, -1);
+  p.box(6, 3.6, 3, '#9aa0a6', 0, 0, 3.6).box(6.4, 0.5, 3.4, '#7d838a', 0, 3.6, 3.6);
+  p.cyl(1.35, 1.35, 0.35, '#5c636b', 0, 0, 0, 20); p.g.pop();
+  p.add(new THREE.CylinderGeometry(1.35, 1.35, 0.3, 24).rotateX(Math.PI / 2), '#5c636b', 0, 1.6, 5.15);
+  p.add(new THREE.TorusGeometry(0.5, 0.08, 6, 16), '#c9ced3', 0, 1.6, 5.35).box(0.12, 1, 0.08, '#c9ced3', 0, 1.1, 5.35).box(1, 0.12, 0.08, '#c9ced3', 0, 1.55, 5.35);
+  p.box(1.6, 1.6, 0.1, '#ffd24a', 2.1, 2.2, 5.15);   // warning plate
+  for (const [x, z] of [[-3.5, -2], [3, -3]]) p.cyl(0.3, 0.3, 2.2, '#8b93a1', x, 2.2, z, 8).add(new THREE.CylinderGeometry(0.55, 0.3, 0.6, 8), '#8b93a1', x, 4.4, z);
+  p.box(9, 0.12, 4, '#b9b3a6', 0, 0, 6.5);
+  for (let k = 0; k < 4; k++) p.box(1.1, 0.7, 0.8, '#d8c79a', -4 + k * 0.4, 0.1 + k * 0.7, 5.6);   // sandbags
+}
+// a giant friendly robot you can live in
+function robotHouse(p) {
+  const body = '#c9d3dd', dark = '#3a4250', acc = '#3d9bd6';
+  for (const x of [-2.2, 2.2]) p.box(2.2, 3, 2.6, dark, x, 0, 0).box(2.6, 0.8, 3.4, body, x, 0, 0.3);   // legs + feet
+  p.box(9, 6.5, 6, body, 0, 3, 0).box(9.2, 0.5, 6.2, acc, 0, 6.3, 0);                                 // body
+  p.box(1.8, 2.6, 0.2, acc, 0, 3, 3.05).box(4.8, 1.6, 0.2, GLASS_D, 0, 6.8 - 1.6 - 0.6, 3.05);
+  for (const x of [-3.2, 3.2]) p.box(1.4, 1.4, 0.2, GLASS, x, 4.3, 3.05);
+  for (const s of [-1, 1]) p.box(1.6, 5, 1.6, body, s * 5.3, 4, 0).box(2, 1.2, 2, dark, s * 5.3, 2.8, 0);   // arms
+  p.box(6, 4, 5, body, 0, 9.5, 0);                                                                           // head
+  for (const x of [-1.5, 1.5]) p.cyl(0.8, 0.8, 0.3, '#ffd24a', x, 0, 0, 16); p.g.pop(); p.g.pop();
+  for (const x of [-1.5, 1.5]) p.add(new THREE.CylinderGeometry(0.85, 0.85, 0.3, 16).rotateX(Math.PI / 2), '#ffd24a', x, 11.6, 2.55);
+  p.box(3, 0.4, 0.2, dark, 0, 10.3, 2.55);
+  p.cyl(0.12, 0.12, 2.2, dark, 0, 13.5, 0, 6).ball(0.4, '#ff5a4d', 0, 15.6, 0);
+  p.box(12, 0.12, 4, '#d6d0c2', 0, 0, 5);
+}
+// a normal house with a fast blue sports car in the driveway
+function carHouse(p, r) {
+  house(p, r);
+  const blue = '#2a5bd7';
+  p.box(4.4, 0.8, 2, blue, 3.2, 0.3, 7.6).box(2.2, 0.6, 1.8, '#1d2233', 2.9, 1.1, 7.6).box(4.5, 0.15, 2.1, '#1d2233', 3.2, 0.25, 7.6);
+  for (const [x, z] of [[1.8, 6.6], [4.6, 6.6], [1.8, 8.6], [4.6, 8.6]]) p.add(new THREE.CylinderGeometry(0.42, 0.42, 0.3, 12).rotateX(Math.PI / 2), '#111', x, 0.42, z);
+  p.box(5.2, 0.1, 2.8, '#8a8f99', 3.2, 0.02, 7.6);
+}
+// a small brick pump house by the stream, with a pipe and a tap
+function pumpHouse(p) {
+  p.box(3.6, 2.6, 3, '#b5654a', 0, 0, 0).gable(4, 1.4, 3.4, '#5d6670', 0, 2.6, 0);
+  p.box(1, 1.8, 0.15, '#4a3a2c', 0, 0, 1.55).cyl(0.18, 0.18, 6, '#7c95ad', -2.2, 0.4, 0, 8);
+  p.add(new THREE.CylinderGeometry(0.18, 0.18, 6, 8).rotateZ(Math.PI / 2), '#7c95ad', -5, 0.4, 0);
+  p.box(0.7, 1.2, 0.7, '#7c95ad', 2.2, 0, 1.2).box(0.9, 0.2, 0.3, '#7c95ad', 2.2, 1.1, 1.5).cyl(0.6, 0.6, 0.3, '#5cb3d8', 2.2, 0, 2, 14);
+}
+
 const BUILD = {
   house: (p, b, r) => house(p, r), block: (p, b, r) => block(p, r), tower: (p, b, r) => tower(p, r),
   mega: (p, b, r) => mega(p, r, 1), arco: (p, b, r) => mega(p, r, 1.9),
   shop: (p, b) => shop(p, b), civic: (p, b) => civic(p, b), townhall: p => townhall(p), cottage: p => cottage(p), sign: () => {},
   planehouse: (p, b) => planeHouse(p, b), villa: (p, b, r) => villa(p, r),
+  bungalow: (p, b, r) => bungalow(p, r), mansion: p => mansion(p), bunker: p => bunker(p), robothouse: p => robotHouse(p), carhouse: (p, b, r) => carHouse(p, r), pump: p => pumpHouse(p),
   stadium: p => stadium(p), funfair: p => funfair(p), harbor: p => harbor(p), airport: p => airport(p),
 };
 
@@ -257,6 +323,11 @@ export function buildingMesh(b) {
     else if (b.type === 'house') { s.scale.setScalar(0.5); s.position.set(0, 2.75, 3.45); }
     else if (b.type === 'planehouse') { s.scale.setScalar(0.62); s.position.set(1.6, 1.6, 2.0); }
     else if (b.type === 'villa') { s.scale.setScalar(0.6); s.position.set(-2.6, 3.2, 4.45); }
+    else if (b.type === 'bungalow' || b.type === 'carhouse') { s.scale.setScalar(0.5); s.position.set(b.type === 'bungalow' ? -3 : 0, 2.75, b.type === 'bungalow' ? 3.7 : 3.45); }
+    else if (b.type === 'mansion') { s.scale.setScalar(0.62); s.position.set(0, 7.4, 6.0); }
+    else if (b.type === 'bunker') { s.scale.setScalar(0.55); s.position.set(0, 4.5, 5.2); }
+    else if (b.type === 'robothouse') { s.scale.setScalar(0.62); s.position.set(0, 1.6, 3.6); }
+    else if (b.type === 'pump') { s.scale.setScalar(0.4); s.position.set(0, 3.6, 1.8); }
     else if (b.style?.feature === 'columns') s.position.set(0, 4.3, 6.5);
     else s.position.set(0, 6.35, 4.62);
     s.position.z += back;

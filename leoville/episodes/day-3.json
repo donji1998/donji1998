@@ -1,0 +1,2338 @@
+{
+ "version": 1,
+ "day": 3,
+ "city": "Leoville",
+ "lang": "en",
+ "locale": "en-US",
+ "mayor": "Leo",
+ "hud": {
+  "cash": "BUDGET",
+  "residents": "RESIDENTS",
+  "day": "DAY",
+  "housing": "HOMES",
+  "full": "full",
+  "tents": "sleeping in tents",
+  "free": "free"
+ },
+ "duration": 89.34,
+ "shots": [
+  {
+   "t0": 0.0,
+   "t1": 2.498,
+   "type": "intro",
+   "cam": {
+    "x": 0,
+    "z": 17.4,
+    "dist": 1073,
+    "pitch": 62,
+    "yaw": 0
+   },
+   "cam2": {
+    "x": 0,
+    "z": 17.4,
+    "dist": 1000.5,
+    "pitch": 62,
+    "yaw": 0
+   },
+   "ring": {
+    "x": 5,
+    "z": 6,
+    "r": 62
+   },
+   "captions": [
+    {
+     "lines": [
+      "Day *3* in",
+      "*Leoville!*"
+     ],
+     "t0": 0.3,
+     "t1": 2.278,
+     "speech": 1.428
+    }
+   ]
+  },
+  {
+   "t0": 2.498,
+   "t1": 9.76,
+   "type": "greet",
+   "cam": {
+    "x": 30.5,
+    "y": 1.7,
+    "z": 5.3,
+    "dist": 11,
+    "pitch": 7,
+    "yaw": -8
+   },
+   "cam2": {
+    "x": 30.5,
+    "y": 1.7,
+    "z": 5.3,
+    "dist": 9.5,
+    "pitch": 6,
+    "yaw": 4
+   },
+   "actor": {
+    "x": 30.5,
+    "z": 5.3,
+    "ry": 0,
+    "anim": "wave"
+   },
+   "panel": {
+    "kind": "greet",
+    "items": [
+     {
+      "author": "@matsdeclercq-m5c",
+      "text": "The",
+      "hue": 209
+     },
+     {
+      "author": "@matsdeclercq-m5c",
+      "text": "The",
+      "hue": 209
+     },
+     {
+      "author": "@matsdeclercq-m5c",
+      "text": "The",
+      "hue": 209
+     },
+     {
+      "author": "@illegal_football_player",
+      "text": "May I b the military president",
+      "hue": 151
+     }
+    ]
+   },
+   "captions": [
+    {
+     "lines": [
+      "*31* comments yesterday…"
+     ],
+     "t0": 2.618,
+     "t1": 4.595,
+     "speech": 1.427
+    },
+    {
+     "lines": [
+      "…*11* of them just say",
+      "*\"The\"!*"
+     ],
+     "t0": 4.595,
+     "t1": 6.492,
+     "speech": 1.347
+    },
+    {
+     "lines": [
+      "Thanks *Mats*,",
+      "that's still *€22!*"
+     ],
+     "t0": 6.492,
+     "t1": 9.54,
+     "speech": 2.498
+    }
+   ]
+  },
+  {
+   "t0": 9.76,
+   "t1": 14.927,
+   "type": "followers",
+   "cam": {
+    "x": 18,
+    "z": 2,
+    "dist": 75,
+    "pitch": 36,
+    "yaw": -12
+   },
+   "cam2": {
+    "x": 14,
+    "z": 4,
+    "dist": 68,
+    "pitch": 38,
+    "yaw": -6
+   },
+   "panel": {
+    "kind": "followers",
+    "title": "RESIDENTS",
+    "y": "YESTERDAY",
+    "t": "TODAY",
+    "from": 66,
+    "to": 89,
+    "c0": 2.98,
+    "c1": 3.882
+   },
+   "captions": [
+    {
+     "lines": [
+      "Yesterday: *66* residents."
+     ],
+     "t0": 9.88,
+     "t1": 12.741,
+     "speech": 2.31
+    },
+    {
+     "lines": [
+      "Today, we are *89!*"
+     ],
+     "t0": 12.741,
+     "t1": 14.707,
+     "speech": 1.416
+    }
+   ]
+  },
+  {
+   "t0": 14.927,
+   "t1": 19.126,
+   "type": "income",
+   "cam": {
+    "x": 6,
+    "z": 8,
+    "dist": 62,
+    "pitch": 46,
+    "yaw": 10
+   },
+   "cam2": {
+    "x": 2,
+    "z": 8,
+    "dist": 58,
+    "pitch": 46,
+    "yaw": 14
+   },
+   "panel": {
+    "kind": "income",
+    "rows": [
+     {
+      "icon": "👤",
+      "label": "23 new subscribers",
+      "amount": "+€23,000"
+     },
+     {
+      "icon": "❤️",
+      "label": "17 likes",
+      "amount": "+€17"
+     },
+     {
+      "icon": "💬",
+      "label": "31 comments",
+      "amount": "+€62"
+     }
+    ]
+   },
+   "captions": [
+    {
+     "lines": [
+      "That brings",
+      "*€23,079* into the budget!"
+     ],
+     "t0": 15.047,
+     "t1": 18.906,
+     "speech": 3.309
+    }
+   ]
+  },
+  {
+   "t0": 19.126,
+   "t1": 21.885,
+   "type": "build",
+   "cam": {
+    "x": -29.7,
+    "y": 3.6,
+    "z": 4,
+    "dist": 36,
+    "pitch": 16,
+    "yaw": -12
+   },
+   "cam2": {
+    "x": -29.7,
+    "y": 3.6,
+    "z": 4,
+    "dist": 33,
+    "pitch": 15,
+    "yaw": -5
+   },
+   "panel": {
+    "kind": "price",
+    "amount": "−€3,000",
+    "label": "MegaYanti's house",
+    "at": 0.664
+   },
+   "captions": [
+    {
+     "lines": [
+      "*MegaYanti* gets",
+      "a *house!*"
+     ],
+     "t0": 19.246,
+     "t1": 21.665,
+     "speech": 1.869
+    }
+   ]
+  },
+  {
+   "t0": 21.885,
+   "t1": 24.185,
+   "type": "build",
+   "cam": {
+    "x": 93.3,
+    "y": 3.6,
+    "z": 4,
+    "dist": 36,
+    "pitch": 16,
+    "yaw": -12
+   },
+   "cam2": {
+    "x": 93.3,
+    "y": 3.6,
+    "z": 4,
+    "dist": 33,
+    "pitch": 15,
+    "yaw": -5
+   },
+   "panel": {
+    "kind": "price",
+    "amount": "−€4,000",
+    "label": "Thomas's bungalow",
+    "at": 0.557
+   },
+   "captions": [
+    {
+     "lines": [
+      "*Thomas* gets",
+      "a *bungalow!*"
+     ],
+     "t0": 22.005,
+     "t1": 23.948,
+     "speech": 1.393
+    }
+   ]
+  },
+  {
+   "t0": 24.185,
+   "t1": 26.485,
+   "type": "build",
+   "cam": {
+    "x": -44.7,
+    "y": 4.5,
+    "z": 4,
+    "dist": 45,
+    "pitch": 16,
+    "yaw": -12
+   },
+   "cam2": {
+    "x": -44.7,
+    "y": 4.5,
+    "z": 4,
+    "dist": 41.25,
+    "pitch": 15,
+    "yaw": -5
+   },
+   "panel": {
+    "kind": "price",
+    "amount": "−€12,000",
+    "label": "Niky's mansion",
+    "at": 0.51
+   },
+   "captions": [
+    {
+     "lines": [
+      "*Niky* gets",
+      "a *mansion!*"
+     ],
+     "t0": 24.305,
+     "t1": 26.039,
+     "speech": 1.184
+    }
+   ]
+  },
+  {
+   "t0": 26.485,
+   "t1": 31.722,
+   "type": "build",
+   "cam": {
+    "x": 108.3,
+    "y": 7.5,
+    "z": 4,
+    "dist": 63,
+    "pitch": 16,
+    "yaw": -12
+   },
+   "cam2": {
+    "x": 108.3,
+    "y": 7.5,
+    "z": 4,
+    "dist": 57.75,
+    "pitch": 15,
+    "yaw": -5
+   },
+   "panel": {
+    "kind": "price",
+    "amount": "−€12,000",
+    "label": "Mats's robot house",
+    "at": 1.585
+   },
+   "captions": [
+    {
+     "lines": [
+      "*Mats* asked for",
+      "a *robot* as a house…"
+     ],
+     "t0": 26.605,
+     "t1": 29.408,
+     "speech": 2.252
+    },
+    {
+     "lines": [
+      "Beep boop, welcome home!"
+     ],
+     "t0": 29.408,
+     "t1": 31.502,
+     "speech": 1.544
+    }
+   ]
+  },
+  {
+   "t0": 31.722,
+   "t1": 35.771,
+   "type": "build",
+   "cam": {
+    "x": -59.7,
+    "y": 3.6,
+    "z": 4,
+    "dist": 36,
+    "pitch": 16,
+    "yaw": -12
+   },
+   "cam2": {
+    "x": -59.7,
+    "y": 3.6,
+    "z": 4,
+    "dist": 33,
+    "pitch": 15,
+    "yaw": -5
+   },
+   "panel": {
+    "kind": "price",
+    "amount": "−€10,000",
+    "label": "Bread's bunker",
+    "at": 1.312
+   },
+   "captions": [
+    {
+     "lines": [
+      "*Bread* asked for",
+      "a *nuclear bunker…*"
+     ],
+     "t0": 31.842,
+     "t1": 34.122,
+     "speech": 1.73
+    },
+    {
+     "lines": [
+      "Built to last!"
+     ],
+     "t0": 34.122,
+     "t1": 35.551,
+     "speech": 0.879
+    }
+   ]
+  },
+  {
+   "t0": 35.771,
+   "t1": 40.781,
+   "type": "queue",
+   "cam": {
+    "x": 8,
+    "z": 0,
+    "dist": 120,
+    "pitch": 46,
+    "yaw": -6
+   },
+   "cam2": {
+    "x": 8,
+    "z": 0,
+    "dist": 112,
+    "pitch": 46,
+    "yaw": 0
+   },
+   "panel": {
+    "kind": "hires",
+    "icon": "🏗️",
+    "title": "YOUR HOME COMES NEXT",
+    "rows": [
+     {
+      "handle": "UserFromRO",
+      "title": "M5 house",
+      "hue": 255
+     },
+     {
+      "handle": "Salih",
+      "title": "villa",
+      "hue": 98
+     },
+     {
+      "handle": "cnaaitsirh",
+      "title": "mansion",
+      "hue": 239
+     }
+    ],
+    "more": 0,
+    "note": "Built first next time!"
+   },
+   "captions": [
+    {
+     "lines": [
+      "*UserFromRO*, *Salih* and *cnaaitsirh*:",
+      "your homes come *next!*"
+     ],
+     "t0": 35.891,
+     "t1": 40.561,
+     "speech": 4.121
+    }
+   ]
+  },
+  {
+   "t0": 40.781,
+   "t1": 45.495,
+   "type": "join",
+   "cam": {
+    "x": -14.5,
+    "y": 3,
+    "z": 6,
+    "dist": 34,
+    "pitch": 14,
+    "yaw": 10
+   },
+   "cam2": {
+    "x": -14.5,
+    "y": 3,
+    "z": 6,
+    "dist": 31,
+    "pitch": 13,
+    "yaw": 4
+   },
+   "panel": {
+    "kind": "greet",
+    "items": [
+     {
+      "author": "@TJ-HAM",
+      "text": "Can I live in the plane house with the person (btw I'm a rat) I…",
+      "hue": 350
+     }
+    ]
+   },
+   "captions": [
+    {
+     "lines": [
+      "*TJ* moves in",
+      "with *Joe!*"
+     ],
+     "t0": 40.901,
+     "t1": 43.019,
+     "speech": 1.567
+    },
+    {
+     "lines": [
+      "By the way, TJ",
+      "is a *rat!*"
+     ],
+     "t0": 43.019,
+     "t1": 45.275,
+     "speech": 1.707
+    }
+   ]
+  },
+  {
+   "t0": 45.495,
+   "t1": 50.029,
+   "type": "movein",
+   "cam": {
+    "x": 52.5,
+    "y": 2.4,
+    "z": 7,
+    "dist": 22,
+    "pitch": 13,
+    "yaw": -8
+   },
+   "cam2": {
+    "x": 52.5,
+    "y": 2.4,
+    "z": 7,
+    "dist": 20,
+    "pitch": 12,
+    "yaw": -2
+   },
+   "captions": [
+    {
+     "lines": [
+      "*UserFromRO*, *Salih* and *15 more*",
+      "move into the *apartment block!*"
+     ],
+     "t0": 45.615,
+     "t1": 49.809,
+     "speech": 3.644
+    }
+   ]
+  },
+  {
+   "t0": 50.029,
+   "t1": 55.172,
+   "type": "build",
+   "cam": {
+    "x": -88.5,
+    "y": 2,
+    "z": 48,
+    "dist": 26,
+    "pitch": 18,
+    "yaw": -14
+   },
+   "cam2": {
+    "x": -88.5,
+    "y": 2,
+    "z": 48,
+    "dist": 23,
+    "pitch": 16,
+    "yaw": -6
+   },
+   "actor": {
+    "x": -85.3,
+    "z": 49.4,
+    "ry": -0.6,
+    "anim": "cheer",
+    "bucket": true
+   },
+   "panel": {
+    "kind": "price",
+    "amount": "−€5,000",
+    "label": "Water Pump",
+    "at": 1.732
+   },
+   "captions": [
+    {
+     "lines": [
+      "*Not14redmi* wished for",
+      "a *water pump…*"
+     ],
+     "t0": 50.149,
+     "t1": 52.986,
+     "speech": 2.287
+    },
+    {
+     "lines": [
+      "No more buckets for *Leo!*"
+     ],
+     "t0": 52.986,
+     "t1": 54.952,
+     "speech": 1.416
+    }
+   ]
+  },
+  {
+   "t0": 55.172,
+   "t1": 62.561,
+   "type": "promise",
+   "cam": {
+    "x": 30.5,
+    "y": 1.7,
+    "z": 5.3,
+    "dist": 11,
+    "pitch": 7,
+    "yaw": -8
+   },
+   "actor": {
+    "x": 30.5,
+    "z": 5.3,
+    "ry": 0,
+    "anim": "look"
+   },
+   "panel": {
+    "kind": "greet",
+    "items": [
+     {
+      "author": "@erikkeijser9035",
+      "text": "I will also install water fountains which is cleaned daily 🎉",
+      "hue": 206
+     },
+     {
+      "author": "@erikkeijser9035",
+      "text": "If i become the principal i will give free food every day (bananas)",
+      "hue": 206
+     }
+    ]
+   },
+   "captions": [
+    {
+     "lines": [
+      "*Principal Banana* makes promises!"
+     ],
+     "t0": 55.292,
+     "t1": 57.642,
+     "speech": 1.8
+    },
+    {
+     "lines": [
+      "Install *water fountains!*"
+     ],
+     "t0": 57.642,
+     "t1": 59.736,
+     "speech": 1.544
+    },
+    {
+     "lines": [
+      "…and *give free food every day (bananas)!*"
+     ],
+     "t0": 59.736,
+     "t1": 62.341,
+     "speech": 2.055
+    }
+   ]
+  },
+  {
+   "t0": 62.561,
+   "t1": 72.341,
+   "type": "election",
+   "cam": {
+    "x": 30.5,
+    "y": 3,
+    "z": 5.3,
+    "dist": 30,
+    "pitch": 14,
+    "yaw": -10
+   },
+   "cam2": {
+    "x": 30.5,
+    "y": 3,
+    "z": 5.3,
+    "dist": 27,
+    "pitch": 13,
+    "yaw": -4
+   },
+   "actor": {
+    "x": 30.5,
+    "z": 5.3,
+    "ry": 0,
+    "anim": "look"
+   },
+   "panel": {
+    "kind": "hires",
+    "icon": "🗳️",
+    "title": "ELECTION: WHO LEADS LEOVILLE?",
+    "rows": [
+     {
+      "handle": "Iknowlightyagamiiskira",
+      "title": "0 votes · president",
+      "hue": 214
+     },
+     {
+      "handle": "Divish",
+      "title": "0 votes · government",
+      "hue": 330
+     },
+     {
+      "handle": "illegal football player",
+      "title": "0 votes · military president",
+      "hue": 151
+     },
+     {
+      "handle": "Alex",
+      "title": "0 votes · president",
+      "hue": 239
+     }
+    ],
+    "note": "Reply with a name to vote!"
+   },
+   "captions": [
+    {
+     "lines": [
+      "*illegal football player* and *Alex*",
+      "want to be *president* too!"
+     ],
+     "t0": 62.681,
+     "t1": 66.563,
+     "speech": 3.332
+    },
+    {
+     "lines": [
+      "The election has",
+      "*4* candidates now!"
+     ],
+     "t0": 66.563,
+     "t1": 69.029,
+     "speech": 1.916
+    },
+    {
+     "lines": [
+      "No votes yet:",
+      "reply with a *name* to vote!"
+     ],
+     "t0": 69.029,
+     "t1": 72.121,
+     "speech": 2.543
+    }
+   ]
+  },
+  {
+   "t0": 72.341,
+   "t1": 76.05,
+   "type": "votes",
+   "cam": {
+    "x": 8,
+    "z": 0,
+    "dist": 150,
+    "pitch": 52,
+    "yaw": -8
+   },
+   "cam2": {
+    "x": 8,
+    "z": 0,
+    "dist": 138,
+    "pitch": 54,
+    "yaw": -2
+   },
+   "panel": {
+    "kind": "votes",
+    "title": "YOUR WISHES",
+    "rows": [
+     {
+      "icon": "🏫",
+      "name": "School",
+      "votes": 3
+     },
+     {
+      "icon": "🪖",
+      "name": "Military Base",
+      "votes": 2
+     },
+     {
+      "icon": "🛍️",
+      "name": "Shopping Mall",
+      "votes": 2
+     },
+     {
+      "icon": "🚓",
+      "name": "Police Station",
+      "votes": 2
+     },
+     {
+      "icon": "🚜",
+      "name": "Farm",
+      "votes": 1
+     },
+     {
+      "icon": "🏭",
+      "name": "Factory",
+      "votes": 1
+     }
+    ]
+   },
+   "captions": [
+    {
+     "lines": [
+      "And what do you",
+      "want *next?*"
+     ],
+     "t0": 72.461,
+     "t1": 74.003,
+     "speech": 0.991
+    },
+    {
+     "lines": [
+      "The *school* is in the lead!"
+     ],
+     "t0": 74.003,
+     "t1": 75.83,
+     "speech": 1.277
+    }
+   ]
+  },
+  {
+   "t0": 76.05,
+   "t1": 84.482,
+   "type": "goal",
+   "cam": {
+    "x": 0,
+    "z": 10,
+    "dist": 260,
+    "pitch": 58,
+    "yaw": 0
+   },
+   "cam2": {
+    "x": 0,
+    "z": 10,
+    "dist": 240,
+    "pitch": 58,
+    "yaw": 0
+   },
+   "panel": {
+    "kind": "goal",
+    "title": "NEXT: SCHOOL",
+    "cur": 23200,
+    "target": 120000,
+    "money": true,
+    "unit": ""
+   },
+   "captions": [
+    {
+     "lines": [
+      "The school costs",
+      "*€120,000.*"
+     ],
+     "t0": 76.17,
+     "t1": 79.47,
+     "speech": 2.75
+    },
+    {
+     "lines": [
+      "Today we spent a lot",
+      "on *your homes…*"
+     ],
+     "t0": 79.47,
+     "t1": 81.785,
+     "speech": 1.765
+    },
+    {
+     "lines": [
+      "Keep subscribing,",
+      "and we can *build it!*"
+     ],
+     "t0": 81.785,
+     "t1": 84.262,
+     "speech": 1.927
+    }
+   ]
+  },
+  {
+   "t0": 84.482,
+   "t1": 89.343,
+   "type": "outro",
+   "cam": {
+    "x": 29.6,
+    "y": 2.2,
+    "z": 6.1,
+    "dist": 25,
+    "pitch": 10,
+    "yaw": 6
+   },
+   "cam2": {
+    "x": 29.6,
+    "y": 2.2,
+    "z": 6.1,
+    "dist": 23,
+    "pitch": 9,
+    "yaw": 0
+   },
+   "actor": {
+    "x": 30.5,
+    "z": 5.3,
+    "ry": 0,
+    "anim": "wave"
+   },
+   "captions": [
+    {
+     "lines": [
+      "Who should lead",
+      "*Leoville?*"
+     ],
+     "t0": 84.602,
+     "t1": 86.263,
+     "speech": 1.111
+    },
+    {
+     "lines": [
+      "Vote in the",
+      "*comments!*"
+     ],
+     "t0": 86.263,
+     "t1": 88.043,
+     "speech": 1.231
+    }
+   ]
+  }
+ ],
+ "tracks": {
+  "cash": [
+   [
+    0.0,
+    46121
+   ],
+   [
+    16.731,
+    46121
+   ],
+   [
+    18.414,
+    69200
+   ],
+   [
+    19.79,
+    69200
+   ],
+   [
+    20.516,
+    66200
+   ],
+   [
+    22.442,
+    66200
+   ],
+   [
+    23.025,
+    62200
+   ],
+   [
+    24.695,
+    62200
+   ],
+   [
+    25.216,
+    50200
+   ],
+   [
+    28.07,
+    50200
+   ],
+   [
+    28.834,
+    38200
+   ],
+   [
+    33.033,
+    38200
+   ],
+   [
+    33.655,
+    28200
+   ],
+   [
+    51.761,
+    28200
+   ],
+   [
+    52.535,
+    23200
+   ]
+  ],
+  "residents": [
+   [
+    0.0,
+    66
+   ],
+   [
+    12.741,
+    66
+   ],
+   [
+    13.643,
+    89
+   ]
+  ],
+  "housing": [
+   [
+    0.0,
+    142
+   ],
+   [
+    19.73,
+    142
+   ],
+   [
+    20.335,
+    148
+   ],
+   [
+    22.394,
+    148
+   ],
+   [
+    22.88,
+    154
+   ],
+   [
+    24.652,
+    154
+   ],
+   [
+    25.086,
+    160
+   ],
+   [
+    28.006,
+    160
+   ],
+   [
+    28.643,
+    166
+   ],
+   [
+    32.982,
+    166
+   ],
+   [
+    33.5,
+    172
+   ]
+  ]
+ },
+ "tags": [
+  {
+   "x": -27.5,
+   "y": 3,
+   "z": 7.2,
+   "text": "MegaYanti",
+   "sub": "@MegaYanti-x2v",
+   "t0": 20.335,
+   "t1": 21.885
+  },
+  {
+   "x": 95.5,
+   "y": 3,
+   "z": 7.2,
+   "text": "Thomas",
+   "sub": "@thomasrichardson8510",
+   "t0": 22.88,
+   "t1": 24.185
+  },
+  {
+   "x": -42.5,
+   "y": 3,
+   "z": 9.6,
+   "text": "Niky",
+   "sub": "@Niky-v21",
+   "t0": 25.086,
+   "t1": 26.485
+  },
+  {
+   "x": 110.5,
+   "y": 3,
+   "z": 7.2,
+   "text": "Mats",
+   "sub": "@matsdeclercq-m5c",
+   "t0": 29.153,
+   "t1": 31.722
+  },
+  {
+   "x": -57.5,
+   "y": 3,
+   "z": 7.2,
+   "text": "Bread",
+   "sub": "@Bread-y89",
+   "t0": 33.914,
+   "t1": 35.771
+  },
+  {
+   "x": -10.3,
+   "y": 3,
+   "z": 8.4,
+   "text": "TJ",
+   "sub": "the rat",
+   "t0": 41.695,
+   "t1": 45.495
+  },
+  {
+   "x": 50.2,
+   "y": 3,
+   "z": 7.4,
+   "text": "UserFromRO",
+   "t0": 46.422,
+   "t1": 50.029
+  },
+  {
+   "x": 52.5,
+   "y": 3,
+   "z": 7.9,
+   "text": "Salih",
+   "t0": 46.986,
+   "t1": 50.029
+  },
+  {
+   "x": 54.800000000000004,
+   "y": 3,
+   "z": 7.4,
+   "text": "cnaaitsirh",
+   "t0": 47.551,
+   "t1": 50.029
+  },
+  {
+   "x": -88.5,
+   "y": 4.5,
+   "z": 48,
+   "text": "Idea: @Not14Redmi-t5o",
+   "t0": 52.47,
+   "t1": 55.172
+  }
+ ],
+ "cars": false,
+ "people": [
+  {
+   "id": "@ecaterinabadarau9859",
+   "name": "Ecaterina",
+   "handle": "@ecaterinabadarau9859",
+   "x": 28.8,
+   "z": 5.8999999999999995,
+   "ry": 0.102,
+   "colors": {
+    "hood": "#e2523a",
+    "hat": "#2f6fd6",
+    "pants": "#3a3f4d",
+    "skin": "#f1c6a0",
+    "hair": "#3b2a1e"
+   },
+   "at": null
+  },
+  {
+   "id": "@ORBIT12367",
+   "name": "ExtTalCat",
+   "handle": "@ORBIT12367",
+   "x": 32.2,
+   "z": 5.8999999999999995,
+   "ry": -0.102,
+   "colors": {
+    "hood": "#e2523a",
+    "hat": "#2f6fd6",
+    "pants": "#3a3f4d",
+    "skin": "#f1c6a0",
+    "hair": "#3b2a1e"
+   },
+   "at": null
+  },
+  {
+   "id": "@Yasmin-h5o",
+   "name": "Kalina",
+   "handle": "@Yasmin-h5o",
+   "x": 27.1,
+   "z": 6.6,
+   "ry": 0.204,
+   "colors": {
+    "hood": "#3d9bd6",
+    "hat": "#f08a24",
+    "pants": "#2f3542",
+    "skin": "#f4d6b8",
+    "hair": "#b5672e"
+   },
+   "at": null
+  },
+  {
+   "id": "@Oceangreen_ninye",
+   "name": "Joshua",
+   "handle": "@Oceangreen_ninye",
+   "x": 11.5,
+   "z": 7.2,
+   "ry": -0.25,
+   "colors": {
+    "hood": "#ef7fb0",
+    "hat": "#46a36a",
+    "pants": "#34405a",
+    "skin": "#7a4f33",
+    "hair": "#120c08"
+   },
+   "at": null
+  },
+  {
+   "id": "@YoanKobler-z1k",
+   "name": "Yoan",
+   "handle": "@YoanKobler-z1k",
+   "x": 51.35,
+   "z": 5.6000000000000005,
+   "ry": 0,
+   "colors": {
+    "hood": "#46a36a",
+    "hat": "#e85a8c",
+    "pants": "#4a3a2c",
+    "skin": "#a8744d",
+    "hair": "#120c08"
+   },
+   "at": null
+  },
+  {
+   "id": "@Someromeroboboboi",
+   "name": "Gabor",
+   "handle": "@Someromeroboboboi",
+   "x": 53.65,
+   "z": 6.1000000000000005,
+   "ry": 0,
+   "colors": {
+    "hood": "#3d9bd6",
+    "hat": "#f08a24",
+    "pants": "#2f3542",
+    "skin": "#f4d6b8",
+    "hair": "#b5672e"
+   },
+   "at": null
+  },
+  {
+   "id": "@EverlightEverligh",
+   "name": "Everlight",
+   "handle": "@EverlightEverligh",
+   "x": 55.95,
+   "z": 5.6000000000000005,
+   "ry": 0,
+   "colors": {
+    "hood": "#f08a24",
+    "hat": "#8a6fb8",
+    "pants": "#3e5a8a",
+    "skin": "#f0c7a0",
+    "hair": "#e2c178"
+   },
+   "at": null
+  },
+  {
+   "id": "@JoeEdwards-t7c",
+   "name": "Joe",
+   "handle": "@JoeEdwards-t7c",
+   "x": -12.5,
+   "z": 8.6,
+   "ry": -0.25,
+   "colors": {
+    "hood": "#46a36a",
+    "hat": "#e85a8c",
+    "pants": "#4a3a2c",
+    "skin": "#a8744d",
+    "hair": "#120c08"
+   },
+   "at": null
+  },
+  {
+   "id": "@Iknowlightyagamiiskira",
+   "name": "Iknowlightyagamiiskira",
+   "handle": "@Iknowlightyagamiiskira",
+   "x": 80.5,
+   "z": 7.2,
+   "ry": -0.25,
+   "colors": {
+    "hood": "#ef7fb0",
+    "hat": "#46a36a",
+    "pants": "#34405a",
+    "skin": "#7a4f33",
+    "hair": "#120c08"
+   },
+   "at": null
+  },
+  {
+   "id": "@Not14Redmi-t5o",
+   "name": "Not14redmi",
+   "handle": "@Not14Redmi-t5o",
+   "x": 49.050000000000004,
+   "z": 5.6000000000000005,
+   "ry": 0,
+   "colors": {
+    "hood": "#8a6fb8",
+    "hat": "#ffd24a",
+    "pants": "#2e4a6b",
+    "skin": "#d9a878",
+    "hair": "#1d1712"
+   },
+   "at": null
+  },
+  {
+   "id": "@tanja3349",
+   "name": "Tanja",
+   "handle": "@tanja3349",
+   "x": 58.25,
+   "z": 6.1000000000000005,
+   "ry": 0,
+   "colors": {
+    "hood": "#ef7fb0",
+    "hat": "#46a36a",
+    "pants": "#34405a",
+    "skin": "#7a4f33",
+    "hair": "#120c08"
+   },
+   "at": null
+  },
+  {
+   "id": "@JonahMayer-y9y",
+   "name": "PWR_Jonah",
+   "handle": "@JonahMayer-y9y",
+   "x": 60.550000000000004,
+   "z": 5.6000000000000005,
+   "ry": 0,
+   "colors": {
+    "hood": "#3d9bd6",
+    "hat": "#f08a24",
+    "pants": "#2f3542",
+    "skin": "#f4d6b8",
+    "hair": "#b5672e"
+   },
+   "at": null
+  },
+  {
+   "id": "@MegaYanti-x2v",
+   "name": "MegaYanti",
+   "handle": "@MegaYanti-x2v",
+   "x": -27.5,
+   "z": 7.2,
+   "ry": -0.25,
+   "at": 20.214,
+   "colors": {
+    "hood": "#f08a24",
+    "hat": "#8a6fb8",
+    "pants": "#3e5a8a",
+    "skin": "#f0c7a0",
+    "hair": "#e2c178"
+   }
+  },
+  {
+   "id": "@thomasrichardson8510",
+   "name": "Thomas",
+   "handle": "@thomasrichardson8510",
+   "x": 95.5,
+   "z": 7.2,
+   "ry": -0.25,
+   "at": 22.782,
+   "colors": {
+    "hood": "#ef7fb0",
+    "hat": "#46a36a",
+    "pants": "#34405a",
+    "skin": "#7a4f33",
+    "hair": "#120c08"
+   }
+  },
+  {
+   "id": "@Niky-v21",
+   "name": "Niky",
+   "handle": "@Niky-v21",
+   "x": -42.5,
+   "z": 9.6,
+   "ry": -0.25,
+   "at": 24.999,
+   "colors": {
+    "hood": "#ef7fb0",
+    "hat": "#46a36a",
+    "pants": "#34405a",
+    "skin": "#7a4f33",
+    "hair": "#120c08"
+   }
+  },
+  {
+   "id": "@matsdeclercq-m5c",
+   "name": "Mats",
+   "handle": "@matsdeclercq-m5c",
+   "x": 110.5,
+   "z": 7.2,
+   "ry": -0.25,
+   "at": 28.898,
+   "colors": {
+    "hood": "#f08a24",
+    "hat": "#8a6fb8",
+    "pants": "#3e5a8a",
+    "skin": "#f0c7a0",
+    "hair": "#e2c178"
+   }
+  },
+  {
+   "id": "@Bread-y89",
+   "name": "Bread",
+   "handle": "@Bread-y89",
+   "x": -57.5,
+   "z": 7.2,
+   "ry": -0.25,
+   "at": 33.707,
+   "colors": {
+    "hood": "#46a36a",
+    "hat": "#e85a8c",
+    "pants": "#4a3a2c",
+    "skin": "#a8744d",
+    "hair": "#120c08"
+   }
+  },
+  {
+   "id": "@TJ-HAM",
+   "name": "TJ",
+   "handle": "@TJ-HAM",
+   "x": -10.3,
+   "z": 8.4,
+   "ry": -0.3,
+   "at": 41.519,
+   "colors": {
+    "hood": "#46a36a",
+    "hat": "#e85a8c",
+    "pants": "#4a3a2c",
+    "skin": "#a8744d",
+    "hair": "#120c08"
+   }
+  },
+  {
+   "id": "@UserFromRO",
+   "name": "UserFromRO",
+   "handle": "@UserFromRO",
+   "x": 50.2,
+   "z": 7.4,
+   "ry": 0,
+   "at": 46.099,
+   "colors": {
+    "hood": "#3d9bd6",
+    "hat": "#f08a24",
+    "pants": "#2f3542",
+    "skin": "#f4d6b8",
+    "hair": "#b5672e"
+   }
+  },
+  {
+   "id": "@salihkeremince1475",
+   "name": "Salih",
+   "handle": "@salihkeremince1475",
+   "x": 52.5,
+   "z": 7.9,
+   "ry": 0,
+   "at": 46.664,
+   "colors": {
+    "hood": "#46a36a",
+    "hat": "#e85a8c",
+    "pants": "#4a3a2c",
+    "skin": "#a8744d",
+    "hair": "#120c08"
+   }
+  },
+  {
+   "id": "@cnaaitsirh",
+   "name": "cnaaitsirh",
+   "handle": "@cnaaitsirh",
+   "x": 54.800000000000004,
+   "z": 7.4,
+   "ry": 0,
+   "at": 47.228,
+   "colors": {
+    "hood": "#f08a24",
+    "hat": "#8a6fb8",
+    "pants": "#3e5a8a",
+    "skin": "#f0c7a0",
+    "hair": "#e2c178"
+   }
+  }
+ ],
+ "buildings": [
+  {
+   "id": 0,
+   "type": "cottage",
+   "x": 30,
+   "z": 0,
+   "day": 0,
+   "at": null
+  },
+  {
+   "id": 1,
+   "type": "sign",
+   "text": "Leoville",
+   "x": -84,
+   "z": 16.8,
+   "ry": -0.6,
+   "day": 0,
+   "at": null
+  },
+  {
+   "id": 2,
+   "i": 0,
+   "j": 0,
+   "x": 7.5,
+   "z": 0,
+   "day": 1,
+   "seed": 208,
+   "type": "house",
+   "cap": 6,
+   "owner": "@Oceangreen_ninye",
+   "sign": {
+    "icon": "🏠",
+    "name": "Joshua's house",
+    "handle": "@Oceangreen_ninye"
+   },
+   "at": null
+  },
+  {
+   "id": 3,
+   "i": 3,
+   "j": 0,
+   "x": 52.5,
+   "z": 0,
+   "day": 1,
+   "seed": 72,
+   "type": "block",
+   "cap": 120,
+   "at": null
+  },
+  {
+   "id": 4,
+   "i": -1,
+   "j": 0,
+   "x": -16.5,
+   "z": 0,
+   "day": 2,
+   "seed": 280,
+   "type": "planehouse",
+   "cap": 6,
+   "owner": "@JoeEdwards-t7c",
+   "sign": {
+    "icon": "✈️",
+    "name": "Joe's plane house",
+    "handle": "@JoeEdwards-t7c"
+   },
+   "at": null
+  },
+  {
+   "id": 5,
+   "i": 4,
+   "j": 0,
+   "x": 76.5,
+   "z": 0,
+   "day": 2,
+   "seed": 775,
+   "type": "villa",
+   "cap": 6,
+   "owner": "@Iknowlightyagamiiskira",
+   "sign": {
+    "icon": "🏡",
+    "name": "Iknowlightyagamiiskira's big house",
+    "handle": "@Iknowlightyagamiiskira"
+   },
+   "at": null
+  },
+  {
+   "id": 6,
+   "i": -2,
+   "j": 0,
+   "x": -31.5,
+   "z": 0,
+   "day": 3,
+   "seed": 723,
+   "type": "house",
+   "cap": 6,
+   "owner": "@MegaYanti-x2v",
+   "sign": {
+    "icon": "🏠",
+    "name": "MegaYanti's house",
+    "handle": "@MegaYanti-x2v"
+   },
+   "at": 19.73
+  },
+  {
+   "id": 7,
+   "i": 5,
+   "j": 0,
+   "x": 91.5,
+   "z": 0,
+   "day": 3,
+   "seed": 134,
+   "type": "bungalow",
+   "cap": 6,
+   "owner": "@thomasrichardson8510",
+   "sign": {
+    "icon": "🏠",
+    "name": "Thomas's bungalow",
+    "handle": "@thomasrichardson8510"
+   },
+   "at": 22.394
+  },
+  {
+   "id": 8,
+   "i": -3,
+   "j": 0,
+   "x": -46.5,
+   "z": 0,
+   "day": 3,
+   "seed": 658,
+   "type": "mansion",
+   "cap": 6,
+   "owner": "@Niky-v21",
+   "sign": {
+    "icon": "🏛️",
+    "name": "Niky's mansion",
+    "handle": "@Niky-v21"
+   },
+   "at": 24.652
+  },
+  {
+   "id": 9,
+   "i": 6,
+   "j": 0,
+   "x": 106.5,
+   "z": 0,
+   "day": 3,
+   "seed": 300,
+   "type": "robothouse",
+   "cap": 6,
+   "owner": "@matsdeclercq-m5c",
+   "sign": {
+    "icon": "🤖",
+    "name": "Mats's robot house",
+    "handle": "@matsdeclercq-m5c"
+   },
+   "at": 28.006
+  },
+  {
+   "id": 10,
+   "i": -4,
+   "j": 0,
+   "x": -61.5,
+   "z": 0,
+   "day": 3,
+   "seed": 830,
+   "type": "bunker",
+   "cap": 6,
+   "owner": "@Bread-y89",
+   "sign": {
+    "icon": "☢️",
+    "name": "Bread's bunker",
+    "handle": "@Bread-y89"
+   },
+   "at": 32.982
+  },
+  {
+   "id": 11,
+   "type": "pump",
+   "x": -88.5,
+   "z": 46,
+   "ry": -0.4,
+   "day": 3,
+   "sign": {
+    "icon": "🚰",
+    "name": "Water Pump",
+    "handle": "idea: @Not14Redmi-t5o"
+   },
+   "at": 51.696
+  }
+ ],
+ "tiles": [
+  {
+   "k": "c0",
+   "x": 32.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1,
+   "at": null
+  },
+  {
+   "k": "c1",
+   "x": 17.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1,
+   "at": null
+  },
+  {
+   "k": "c2",
+   "x": 2.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1,
+   "at": null
+  },
+  {
+   "k": "c3",
+   "x": -12.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1,
+   "at": null
+  },
+  {
+   "k": "c4",
+   "x": -27.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1,
+   "at": null
+  },
+  {
+   "k": "c5",
+   "x": -42.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1,
+   "at": null
+  },
+  {
+   "k": "c6",
+   "x": -57.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1,
+   "at": null
+  },
+  {
+   "k": "c7",
+   "x": -72.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1,
+   "at": null
+  },
+  {
+   "k": "c8",
+   "x": 30,
+   "z": 7,
+   "w": 2.6,
+   "d": 4.4,
+   "cobble": true,
+   "at": null
+  },
+  {
+   "k": "c40",
+   "x": 47.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "at": null
+  },
+  {
+   "k": "c55",
+   "x": 62.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "at": null
+  },
+  {
+   "k": "c70",
+   "x": 77.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "at": null
+  },
+  {
+   "k": "c85",
+   "x": 92.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "at": 22.102
+  },
+  {
+   "k": "c100",
+   "x": 107.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "at": 27.624
+  }
+ ],
+ "island": {
+  "R": 290,
+  "pts": [
+   [
+    318.9,
+    0
+   ],
+   [
+    317.7,
+    20.8
+   ],
+   [
+    313.4,
+    41.3
+   ],
+   [
+    306.4,
+    60.9
+   ],
+   [
+    297.2,
+    79.6
+   ],
+   [
+    286.4,
+    97.2
+   ],
+   [
+    274.5,
+    113.7
+   ],
+   [
+    262.1,
+    129.2
+   ],
+   [
+    249.4,
+    144
+   ],
+   [
+    236.7,
+    158.2
+   ],
+   [
+    224.2,
+    172
+   ],
+   [
+    211.6,
+    185.5
+   ],
+   [
+    198.8,
+    198.8
+   ],
+   [
+    185.6,
+    211.7
+   ],
+   [
+    171.8,
+    223.9
+   ],
+   [
+    157.2,
+    235.3
+   ],
+   [
+    141.8,
+    245.6
+   ],
+   [
+    125.4,
+    254.4
+   ],
+   [
+    108.3,
+    261.5
+   ],
+   [
+    90.6,
+    266.9
+   ],
+   [
+    72.5,
+    270.7
+   ],
+   [
+    54.3,
+    272.9
+   ],
+   [
+    36.1,
+    273.9
+   ],
+   [
+    18,
+    274
+   ],
+   [
+    0,
+    273.6
+   ],
+   [
+    -17.9,
+    273
+   ],
+   [
+    -35.9,
+    272.5
+   ],
+   [
+    -54.1,
+    272.2
+   ],
+   [
+    -72.8,
+    271.9
+   ],
+   [
+    -92.1,
+    271.4
+   ],
+   [
+    -112,
+    270.4
+   ],
+   [
+    -132.4,
+    268.4
+   ],
+   [
+    -152.9,
+    264.9
+   ],
+   [
+    -173.3,
+    259.3
+   ],
+   [
+    -192.9,
+    251.4
+   ],
+   [
+    -211.3,
+    240.9
+   ],
+   [
+    -227.7,
+    227.7
+   ],
+   [
+    -241.8,
+    212.1
+   ],
+   [
+    -253.2,
+    194.3
+   ],
+   [
+    -261.6,
+    174.8
+   ],
+   [
+    -267.2,
+    154.3
+   ],
+   [
+    -270.1,
+    133.2
+   ],
+   [
+    -270.8,
+    112.2
+   ],
+   [
+    -269.9,
+    91.6
+   ],
+   [
+    -267.9,
+    71.8
+   ],
+   [
+    -265.6,
+    52.8
+   ],
+   [
+    -263.4,
+    34.7
+   ],
+   [
+    -261.8,
+    17.2
+   ],
+   [
+    -261.1,
+    0
+   ],
+   [
+    -261.1,
+    -17.1
+   ],
+   [
+    -261.7,
+    -34.4
+   ],
+   [
+    -262.5,
+    -52.2
+   ],
+   [
+    -263.1,
+    -70.5
+   ],
+   [
+    -262.9,
+    -89.2
+   ],
+   [
+    -261.4,
+    -108.3
+   ],
+   [
+    -258.1,
+    -127.3
+   ],
+   [
+    -252.9,
+    -146
+   ],
+   [
+    -245.5,
+    -164
+   ],
+   [
+    -236,
+    -181.1
+   ],
+   [
+    -224.5,
+    -196.9
+   ],
+   [
+    -211.3,
+    -211.3
+   ],
+   [
+    -196.8,
+    -224.4
+   ],
+   [
+    -181.3,
+    -236.2
+   ],
+   [
+    -165,
+    -246.9
+   ],
+   [
+    -148.2,
+    -256.7
+   ],
+   [
+    -131.1,
+    -265.8
+   ],
+   [
+    -113.6,
+    -274.3
+   ],
+   [
+    -95.8,
+    -282.3
+   ],
+   [
+    -77.6,
+    -289.6
+   ],
+   [
+    -58.9,
+    -296
+   ],
+   [
+    -39.6,
+    -301.2
+   ],
+   [
+    -20,
+    -304.8
+   ],
+   [
+    0,
+    -306.4
+   ],
+   [
+    20,
+    -305.7
+   ],
+   [
+    39.8,
+    -302.5
+   ],
+   [
+    59,
+    -296.7
+   ],
+   [
+    77.3,
+    -288.4
+   ],
+   [
+    94.3,
+    -277.8
+   ],
+   [
+    109.9,
+    -265.4
+   ],
+   [
+    124.2,
+    -251.8
+   ],
+   [
+    137.1,
+    -237.4
+   ],
+   [
+    148.9,
+    -222.9
+   ],
+   [
+    160.2,
+    -208.7
+   ],
+   [
+    171.2,
+    -195.2
+   ],
+   [
+    182.4,
+    -182.4
+   ],
+   [
+    194.2,
+    -170.3
+   ],
+   [
+    207,
+    -158.8
+   ],
+   [
+    220.6,
+    -147.4
+   ],
+   [
+    235.1,
+    -135.7
+   ],
+   [
+    250.1,
+    -123.3
+   ],
+   [
+    265,
+    -109.8
+   ],
+   [
+    279.4,
+    -94.8
+   ],
+   [
+    292.3,
+    -78.3
+   ],
+   [
+    303.3,
+    -60.3
+   ],
+   [
+    311.6,
+    -41
+   ],
+   [
+    316.9,
+    -20.8
+   ]
+  ]
+ },
+ "river": [
+  [
+   -107.30000000000001,
+   -92.80000000000001
+  ],
+  [
+   -101,
+   -55
+  ],
+  [
+   -95,
+   -15
+  ],
+  [
+   -96,
+   25
+  ],
+  [
+   -103,
+   70
+  ],
+  [
+   -99,
+   120
+  ],
+  [
+   -100.6,
+   170
+  ],
+  [
+   -99.8,
+   220
+  ],
+  [
+   -94.7,
+   268.5
+  ]
+ ],
+ "tentField": {
+  "x": -32,
+  "z": 30
+ },
+ "townhall": {
+  "x": 30,
+  "z": 0
+ },
+ "clear": [
+  {
+   "x": -32,
+   "z": 30,
+   "r": 26
+  },
+  {
+   "x": 15,
+   "z": 6,
+   "r": 80
+  },
+  {
+   "x": -88.5,
+   "z": 46,
+   "r": 13
+  }
+ ],
+ "cityBox": {
+  "x0": -88,
+  "x1": 124.5,
+  "z0": -16,
+  "z1": 24
+ },
+ "residentsHome": 29,
+ "summary": {
+  "before": 66,
+  "after": 89,
+  "gained": 23,
+  "income": 23079,
+  "cash": 23200,
+  "housing": 172,
+  "built": 6,
+  "queue": 0,
+  "roommates": [],
+  "ownHouses": [
+   "@MegaYanti-x2v",
+   "@thomasrichardson8510",
+   "@Niky-v21",
+   "@matsdeclercq-m5c",
+   "@Bread-y89",
+   "@TJ-HAM"
+  ],
+  "wishes": [
+   "School 3",
+   "military base 2",
+   "shopping mall 2",
+   "Police Station 2",
+   "Farm 1",
+   "factory 1",
+   "Hospital 1",
+   "apartment block 1",
+   "water pump 1",
+   "airport 1",
+   "Bank 1",
+   "pool 1",
+   "restaurant 1",
+   "van 1",
+   "Amazon center 1",
+   "dock 1",
+   "water fountains 1",
+   "Banana Store 1",
+   "robots 1",
+   "Kebab Shop 1",
+   "Anime Art Mascine 1"
+  ],
+  "jobs": [
+   "@illegal_football_player:leader",
+   "@Alex-o7z6q:leader"
+  ],
+  "election": [
+   "@Iknowlightyagamiiskira",
+   "@Divish26",
+   "@illegal_football_player",
+   "@Alex-o7z6q"
+  ]
+ },
+ "audio": "day-3.wav"
+}

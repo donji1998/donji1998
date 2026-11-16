@@ -82,7 +82,7 @@
    "cap": 6,
    "owner": "@Iknowlightyagamiiskira",
    "sign": {
-    "icon": "🏠",
+    "icon": "🏡",
     "name": "Iknowlightyagamiiskira's big house",
     "handle": "@Iknowlightyagamiiskira"
    }
@@ -447,6 +447,7 @@
    "first": 1004
   }
  },
+ "homeQueue": [],
  "candidates": {
   "school": [
    {

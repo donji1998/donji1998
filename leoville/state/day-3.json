@@ -1,0 +1,1058 @@
+{
+ "day": 3,
+ "cash": 23200,
+ "residents": 89,
+ "housing": 172,
+ "next": {
+  "res": 0,
+  "com": 9
+ },
+ "seq": 12,
+ "buildings": [
+  {
+   "id": 0,
+   "type": "cottage",
+   "x": 30,
+   "z": 0,
+   "day": 0
+  },
+  {
+   "id": 1,
+   "type": "sign",
+   "text": "Leoville",
+   "x": -84,
+   "z": 16.8,
+   "ry": -0.6,
+   "day": 0
+  },
+  {
+   "id": 2,
+   "i": 0,
+   "j": 0,
+   "x": 7.5,
+   "z": 0,
+   "day": 1,
+   "seed": 208,
+   "type": "house",
+   "cap": 6,
+   "owner": "@Oceangreen_ninye",
+   "sign": {
+    "icon": "🏠",
+    "name": "Joshua's house",
+    "handle": "@Oceangreen_ninye"
+   }
+  },
+  {
+   "id": 3,
+   "i": 3,
+   "j": 0,
+   "x": 52.5,
+   "z": 0,
+   "day": 1,
+   "seed": 72,
+   "type": "block",
+   "cap": 120
+  },
+  {
+   "id": 4,
+   "i": -1,
+   "j": 0,
+   "x": -16.5,
+   "z": 0,
+   "day": 2,
+   "seed": 280,
+   "type": "planehouse",
+   "cap": 6,
+   "owner": "@JoeEdwards-t7c",
+   "sign": {
+    "icon": "✈️",
+    "name": "Joe's plane house",
+    "handle": "@JoeEdwards-t7c"
+   }
+  },
+  {
+   "id": 5,
+   "i": 4,
+   "j": 0,
+   "x": 76.5,
+   "z": 0,
+   "day": 2,
+   "seed": 775,
+   "type": "villa",
+   "cap": 6,
+   "owner": "@Iknowlightyagamiiskira",
+   "sign": {
+    "icon": "🏡",
+    "name": "Iknowlightyagamiiskira's big house",
+    "handle": "@Iknowlightyagamiiskira"
+   }
+  },
+  {
+   "id": 6,
+   "i": -2,
+   "j": 0,
+   "x": -31.5,
+   "z": 0,
+   "day": 3,
+   "seed": 723,
+   "type": "house",
+   "cap": 6,
+   "owner": "@MegaYanti-x2v",
+   "sign": {
+    "icon": "🏠",
+    "name": "MegaYanti's house",
+    "handle": "@MegaYanti-x2v"
+   }
+  },
+  {
+   "id": 7,
+   "i": 5,
+   "j": 0,
+   "x": 91.5,
+   "z": 0,
+   "day": 3,
+   "seed": 134,
+   "type": "bungalow",
+   "cap": 6,
+   "owner": "@thomasrichardson8510",
+   "sign": {
+    "icon": "🏠",
+    "name": "Thomas's bungalow",
+    "handle": "@thomasrichardson8510"
+   }
+  },
+  {
+   "id": 8,
+   "i": -3,
+   "j": 0,
+   "x": -46.5,
+   "z": 0,
+   "day": 3,
+   "seed": 658,
+   "type": "mansion",
+   "cap": 6,
+   "owner": "@Niky-v21",
+   "sign": {
+    "icon": "🏛️",
+    "name": "Niky's mansion",
+    "handle": "@Niky-v21"
+   }
+  },
+  {
+   "id": 9,
+   "i": 6,
+   "j": 0,
+   "x": 106.5,
+   "z": 0,
+   "day": 3,
+   "seed": 300,
+   "type": "robothouse",
+   "cap": 6,
+   "owner": "@matsdeclercq-m5c",
+   "sign": {
+    "icon": "🤖",
+    "name": "Mats's robot house",
+    "handle": "@matsdeclercq-m5c"
+   }
+  },
+  {
+   "id": 10,
+   "i": -4,
+   "j": 0,
+   "x": -61.5,
+   "z": 0,
+   "day": 3,
+   "seed": 830,
+   "type": "bunker",
+   "cap": 6,
+   "owner": "@Bread-y89",
+   "sign": {
+    "icon": "☢️",
+    "name": "Bread's bunker",
+    "handle": "@Bread-y89"
+   }
+  },
+  {
+   "id": 11,
+   "type": "pump",
+   "x": -88.5,
+   "z": 46,
+   "ry": -0.4,
+   "day": 3,
+   "sign": {
+    "icon": "🚰",
+    "name": "Water Pump",
+    "handle": "idea: @Not14Redmi-t5o"
+   }
+  }
+ ],
+ "tiles": [
+  {
+   "k": "c0",
+   "x": 32.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1
+  },
+  {
+   "k": "c1",
+   "x": 17.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1
+  },
+  {
+   "k": "c2",
+   "x": 2.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1
+  },
+  {
+   "k": "c3",
+   "x": -12.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1
+  },
+  {
+   "k": "c4",
+   "x": -27.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1
+  },
+  {
+   "k": "c5",
+   "x": -42.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1
+  },
+  {
+   "k": "c6",
+   "x": -57.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1
+  },
+  {
+   "k": "c7",
+   "x": -72.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true,
+   "grow": -1
+  },
+  {
+   "k": "c8",
+   "x": 30,
+   "z": 7,
+   "w": 2.6,
+   "d": 4.4,
+   "cobble": true
+  },
+  {
+   "k": "c40",
+   "x": 47.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true
+  },
+  {
+   "k": "c55",
+   "x": 62.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true
+  },
+  {
+   "k": "c70",
+   "x": 77.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true
+  },
+  {
+   "k": "c85",
+   "x": 92.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true
+  },
+  {
+   "k": "c100",
+   "x": 107.5,
+   "z": 12,
+   "w": 15,
+   "d": 6,
+   "cobble": true
+  }
+ ],
+ "citizens": {
+  "@ecaterinabadarau9859": {
+   "role": "resident",
+   "title": "Roommate",
+   "name": "Ecaterina",
+   "day": 1
+  },
+  "@ORBIT12367": {
+   "role": "resident",
+   "title": "Roommate",
+   "name": "ExtTalCat",
+   "day": 1
+  },
+  "@Yasmin-h5o": {
+   "role": "resident",
+   "title": "Roommate",
+   "name": "Kalina",
+   "day": 1
+  },
+  "@Oceangreen_ninye": {
+   "role": "resident",
+   "title": "Home owner",
+   "name": "Joshua",
+   "day": 1
+  },
+  "@YoanKobler-z1k": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "Yoan",
+   "day": 1
+  },
+  "@Someromeroboboboi": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "Gabor",
+   "day": 1
+  },
+  "@EverlightEverligh": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "Everlight",
+   "day": 1
+  },
+  "@doodleandarkeyeditzYT": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "doodle and arkey editz",
+   "day": 1
+  },
+  "@AmboAmarD": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "Ambo",
+   "day": 1
+  },
+  "@kratos-t2e": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "kratos",
+   "day": 1
+  },
+  "@Arvinteeluck": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "Minijr",
+   "day": 1
+  },
+  "@thiktaphonbonrak9860": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "Thiktaphon Bonrak",
+   "day": 1
+  },
+  "@jemsherlock": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "James Sherlock",
+   "day": 1
+  },
+  "@RaydeBruijn": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "Ray de Bruijn",
+   "day": 1
+  },
+  "@JoeEdwards-t7c": {
+   "role": "resident",
+   "title": "Home owner",
+   "name": "Joe",
+   "day": 2
+  },
+  "@Iknowlightyagamiiskira": {
+   "role": "resident",
+   "title": "Home owner",
+   "name": "Iknowlightyagamiiskira",
+   "day": 2
+  },
+  "@Not14Redmi-t5o": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "Not14redmi",
+   "day": 2
+  },
+  "@tanja3349": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "Tanja",
+   "day": 2
+  },
+  "@JonahMayer-y9y": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "PWR_Jonah",
+   "day": 2
+  },
+  "@LouiePlayz235": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "LouiePlayz",
+   "day": 2
+  },
+  "@MegaYanti-x2v": {
+   "role": "resident",
+   "title": "Home owner",
+   "name": "MegaYanti",
+   "day": 3
+  },
+  "@thomasrichardson8510": {
+   "role": "resident",
+   "title": "Home owner",
+   "name": "Thomas",
+   "day": 3
+  },
+  "@Niky-v21": {
+   "role": "resident",
+   "title": "Home owner",
+   "name": "Niky",
+   "day": 3
+  },
+  "@matsdeclercq-m5c": {
+   "role": "resident",
+   "title": "Home owner",
+   "name": "Mats",
+   "day": 3
+  },
+  "@Bread-y89": {
+   "role": "resident",
+   "title": "Home owner",
+   "name": "Bread",
+   "day": 3
+  },
+  "@TJ-HAM": {
+   "role": "resident",
+   "title": "Roommate of Joe",
+   "name": "TJ",
+   "day": 3
+  },
+  "@UserFromRO": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "UserFromRO",
+   "day": 3
+  },
+  "@salihkeremince1475": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "Salih",
+   "day": 3
+  },
+  "@cnaaitsirh": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "cnaaitsirh",
+   "day": 3
+  }
+ },
+ "queue": [],
+ "votes": {},
+ "goalsDone": 0,
+ "videos": {
+  "day-0": {
+   "likes": 46,
+   "comments": 21
+  },
+  "day-1": {
+   "likes": 9,
+   "comments": 12
+  },
+  "day-2": {
+   "likes": 17,
+   "comments": 31
+  }
+ },
+ "wishes": {
+  "school": {
+   "votes": 3,
+   "by": [
+    "@Pakin-Family",
+    "@manohartambe3528",
+    "@ecaterinabadarau9859"
+   ],
+   "label": "School",
+   "first": 1003
+  },
+  "police": {
+   "votes": 2,
+   "by": [
+    "@Pakin-Family",
+    "@manohartambe3528"
+   ],
+   "label": "Police Station",
+   "first": 1004
+  },
+  "farm": {
+   "votes": 1,
+   "by": [
+    "@Pakin-Family"
+   ],
+   "label": "Farm",
+   "first": 1000
+  },
+  "hospital": {
+   "votes": 1,
+   "by": [
+    "@Pakin-Family"
+   ],
+   "label": "Hospital",
+   "first": 1002
+  },
+  "pool": {
+   "votes": 1,
+   "by": [
+    "@YoanKobler-z1k"
+   ],
+   "label": "pool",
+   "first": 1005
+  },
+  "van": {
+   "votes": 1,
+   "by": [
+    "@YoanKobler-z1k"
+   ],
+   "label": "van",
+   "first": 1006
+  },
+  "dock": {
+   "votes": 1,
+   "by": [
+    "@Monzamilano-e2h"
+   ],
+   "label": "dock",
+   "first": 1007
+  },
+  "custom:banana store": {
+   "votes": 1,
+   "by": [
+    "@erikkeijser9035"
+   ],
+   "label": "Banana Store",
+   "first": 1008
+  },
+  "robots": {
+   "votes": 1,
+   "by": [
+    "@matsdeclercq-m5c"
+   ],
+   "label": "robots",
+   "first": 1009
+  },
+  "custom:anime art mascine": {
+   "votes": 1,
+   "by": [
+    "@Someromeroboboboi"
+   ],
+   "label": "Anime Art Mascine",
+   "first": 1010
+  },
+  "mall": {
+   "votes": 2,
+   "by": [
+    "@Alex-o7z6q",
+    "@Ari_Steinberg"
+   ],
+   "label": "shopping mall",
+   "first": 1001
+  },
+  "military": {
+   "votes": 2,
+   "by": [
+    "@IMistakeX",
+    "@illegal_football_player"
+   ],
+   "label": "military base",
+   "first": 1000
+  },
+  "apartment": {
+   "votes": 1,
+   "by": [
+    "@Not14Redmi-t5o"
+   ],
+   "label": "apartment block",
+   "first": 1002
+  },
+  "bank": {
+   "votes": 1,
+   "by": [
+    "@matsdeclercq-m5c"
+   ],
+   "label": "Bank",
+   "first": 1004
+  },
+  "factory": {
+   "votes": 1,
+   "by": [
+    "@MegaYanti-x2v"
+   ],
+   "label": "factory",
+   "first": 1001
+  },
+  "airport": {
+   "votes": 1,
+   "by": [
+    "@Niky-v21"
+   ],
+   "label": "airport",
+   "first": 1003
+  },
+  "restaurant": {
+   "votes": 1,
+   "by": [
+    "@cnaaitsirh"
+   ],
+   "label": "restaurant",
+   "first": 1005
+  },
+  "amazon": {
+   "votes": 1,
+   "by": [
+    "@YoanKobler-z1k"
+   ],
+   "label": "Amazon center",
+   "first": 1006
+  },
+  "fountain": {
+   "votes": 1,
+   "by": [
+    "@erikkeijser9035"
+   ],
+   "label": "water fountains",
+   "first": 1007
+  },
+  "kebab": {
+   "votes": 1,
+   "by": [
+    "@Alex-o7z6q"
+   ],
+   "label": "Kebab Shop",
+   "first": 1009
+  }
+ },
+ "homeQueue": [
+  {
+   "author": "@UserFromRO",
+   "text": "Give me an m5 f90 house. I subed and liked",
+   "name": "UserFromRO",
+   "special": "carhouse",
+   "own": true
+  },
+  {
+   "author": "@salihkeremince1475",
+   "text": "I would lika villa pls",
+   "name": "Salih",
+   "special": "villa",
+   "own": true
+  },
+  {
+   "author": "@cnaaitsirh",
+   "text": "Can i get a mansion for 50 people and a restuarant where i will be the owner",
+   "name": "cnaaitsirh",
+   "special": "mansion",
+   "own": true
+  }
+ ],
+ "candidates": {
+  "school": [
+   {
+    "author": "@erikkeijser9035",
+    "name": "Erik",
+    "nick": "Principal Banana",
+    "day": 2
+   },
+   {
+    "author": "@Alex-o7z6q",
+    "name": "Alex",
+    "nick": null,
+    "day": 2
+   }
+  ]
+ },
+ "goal": {
+  "key": "school",
+  "cost": 120000
+ },
+ "people": [
+  {
+   "id": "@ecaterinabadarau9859",
+   "name": "Ecaterina",
+   "handle": "@ecaterinabadarau9859",
+   "x": 28.8,
+   "z": 5.8999999999999995,
+   "ry": 0.102,
+   "colors": {
+    "hood": "#e2523a",
+    "hat": "#2f6fd6",
+    "pants": "#3a3f4d",
+    "skin": "#f1c6a0",
+    "hair": "#3b2a1e"
+   }
+  },
+  {
+   "id": "@ORBIT12367",
+   "name": "ExtTalCat",
+   "handle": "@ORBIT12367",
+   "x": 32.2,
+   "z": 5.8999999999999995,
+   "ry": -0.102,
+   "colors": {
+    "hood": "#e2523a",
+    "hat": "#2f6fd6",
+    "pants": "#3a3f4d",
+    "skin": "#f1c6a0",
+    "hair": "#3b2a1e"
+   }
+  },
+  {
+   "id": "@Yasmin-h5o",
+   "name": "Kalina",
+   "handle": "@Yasmin-h5o",
+   "x": 27.1,
+   "z": 6.6,
+   "ry": 0.204,
+   "colors": {
+    "hood": "#3d9bd6",
+    "hat": "#f08a24",
+    "pants": "#2f3542",
+    "skin": "#f4d6b8",
+    "hair": "#b5672e"
+   }
+  },
+  {
+   "id": "@Oceangreen_ninye",
+   "name": "Joshua",
+   "handle": "@Oceangreen_ninye",
+   "x": 11.5,
+   "z": 7.2,
+   "ry": -0.25,
+   "colors": {
+    "hood": "#ef7fb0",
+    "hat": "#46a36a",
+    "pants": "#34405a",
+    "skin": "#7a4f33",
+    "hair": "#120c08"
+   }
+  },
+  {
+   "id": "@YoanKobler-z1k",
+   "name": "Yoan",
+   "handle": "@YoanKobler-z1k",
+   "x": 51.35,
+   "z": 5.6000000000000005,
+   "ry": 0,
+   "colors": {
+    "hood": "#46a36a",
+    "hat": "#e85a8c",
+    "pants": "#4a3a2c",
+    "skin": "#a8744d",
+    "hair": "#120c08"
+   }
+  },
+  {
+   "id": "@Someromeroboboboi",
+   "name": "Gabor",
+   "handle": "@Someromeroboboboi",
+   "x": 53.65,
+   "z": 6.1000000000000005,
+   "ry": 0,
+   "colors": {
+    "hood": "#3d9bd6",
+    "hat": "#f08a24",
+    "pants": "#2f3542",
+    "skin": "#f4d6b8",
+    "hair": "#b5672e"
+   }
+  },
+  {
+   "id": "@EverlightEverligh",
+   "name": "Everlight",
+   "handle": "@EverlightEverligh",
+   "x": 55.95,
+   "z": 5.6000000000000005,
+   "ry": 0,
+   "colors": {
+    "hood": "#f08a24",
+    "hat": "#8a6fb8",
+    "pants": "#3e5a8a",
+    "skin": "#f0c7a0",
+    "hair": "#e2c178"
+   }
+  },
+  {
+   "id": "@JoeEdwards-t7c",
+   "name": "Joe",
+   "handle": "@JoeEdwards-t7c",
+   "x": -12.5,
+   "z": 8.6,
+   "ry": -0.25,
+   "colors": {
+    "hood": "#46a36a",
+    "hat": "#e85a8c",
+    "pants": "#4a3a2c",
+    "skin": "#a8744d",
+    "hair": "#120c08"
+   }
+  },
+  {
+   "id": "@Iknowlightyagamiiskira",
+   "name": "Iknowlightyagamiiskira",
+   "handle": "@Iknowlightyagamiiskira",
+   "x": 80.5,
+   "z": 7.2,
+   "ry": -0.25,
+   "colors": {
+    "hood": "#ef7fb0",
+    "hat": "#46a36a",
+    "pants": "#34405a",
+    "skin": "#7a4f33",
+    "hair": "#120c08"
+   }
+  },
+  {
+   "id": "@Not14Redmi-t5o",
+   "name": "Not14redmi",
+   "handle": "@Not14Redmi-t5o",
+   "x": 49.050000000000004,
+   "z": 5.6000000000000005,
+   "ry": 0,
+   "colors": {
+    "hood": "#8a6fb8",
+    "hat": "#ffd24a",
+    "pants": "#2e4a6b",
+    "skin": "#d9a878",
+    "hair": "#1d1712"
+   }
+  },
+  {
+   "id": "@tanja3349",
+   "name": "Tanja",
+   "handle": "@tanja3349",
+   "x": 58.25,
+   "z": 6.1000000000000005,
+   "ry": 0,
+   "colors": {
+    "hood": "#ef7fb0",
+    "hat": "#46a36a",
+    "pants": "#34405a",
+    "skin": "#7a4f33",
+    "hair": "#120c08"
+   }
+  },
+  {
+   "id": "@JonahMayer-y9y",
+   "name": "PWR_Jonah",
+   "handle": "@JonahMayer-y9y",
+   "x": 60.550000000000004,
+   "z": 5.6000000000000005,
+   "ry": 0,
+   "colors": {
+    "hood": "#3d9bd6",
+    "hat": "#f08a24",
+    "pants": "#2f3542",
+    "skin": "#f4d6b8",
+    "hair": "#b5672e"
+   }
+  },
+  {
+   "id": "@MegaYanti-x2v",
+   "name": "MegaYanti",
+   "handle": "@MegaYanti-x2v",
+   "x": -27.5,
+   "z": 7.2,
+   "ry": -0.25,
+   "colors": {
+    "hood": "#f08a24",
+    "hat": "#8a6fb8",
+    "pants": "#3e5a8a",
+    "skin": "#f0c7a0",
+    "hair": "#e2c178"
+   }
+  },
+  {
+   "id": "@thomasrichardson8510",
+   "name": "Thomas",
+   "handle": "@thomasrichardson8510",
+   "x": 95.5,
+   "z": 7.2,
+   "ry": -0.25,
+   "colors": {
+    "hood": "#ef7fb0",
+    "hat": "#46a36a",
+    "pants": "#34405a",
+    "skin": "#7a4f33",
+    "hair": "#120c08"
+   }
+  },
+  {
+   "id": "@Niky-v21",
+   "name": "Niky",
+   "handle": "@Niky-v21",
+   "x": -42.5,
+   "z": 9.6,
+   "ry": -0.25,
+   "colors": {
+    "hood": "#ef7fb0",
+    "hat": "#46a36a",
+    "pants": "#34405a",
+    "skin": "#7a4f33",
+    "hair": "#120c08"
+   }
+  },
+  {
+   "id": "@matsdeclercq-m5c",
+   "name": "Mats",
+   "handle": "@matsdeclercq-m5c",
+   "x": 110.5,
+   "z": 7.2,
+   "ry": -0.25,
+   "colors": {
+    "hood": "#f08a24",
+    "hat": "#8a6fb8",
+    "pants": "#3e5a8a",
+    "skin": "#f0c7a0",
+    "hair": "#e2c178"
+   }
+  },
+  {
+   "id": "@Bread-y89",
+   "name": "Bread",
+   "handle": "@Bread-y89",
+   "x": -57.5,
+   "z": 7.2,
+   "ry": -0.25,
+   "colors": {
+    "hood": "#46a36a",
+    "hat": "#e85a8c",
+    "pants": "#4a3a2c",
+    "skin": "#a8744d",
+    "hair": "#120c08"
+   }
+  },
+  {
+   "id": "@TJ-HAM",
+   "name": "TJ",
+   "handle": "@TJ-HAM",
+   "x": -10.3,
+   "z": 8.4,
+   "ry": -0.3,
+   "colors": {
+    "hood": "#46a36a",
+    "hat": "#e85a8c",
+    "pants": "#4a3a2c",
+    "skin": "#a8744d",
+    "hair": "#120c08"
+   }
+  },
+  {
+   "id": "@UserFromRO",
+   "name": "UserFromRO",
+   "handle": "@UserFromRO",
+   "x": 50.2,
+   "z": 7.4,
+   "ry": 0,
+   "colors": {
+    "hood": "#3d9bd6",
+    "hat": "#f08a24",
+    "pants": "#2f3542",
+    "skin": "#f4d6b8",
+    "hair": "#b5672e"
+   }
+  },
+  {
+   "id": "@salihkeremince1475",
+   "name": "Salih",
+   "handle": "@salihkeremince1475",
+   "x": 52.5,
+   "z": 7.9,
+   "ry": 0,
+   "colors": {
+    "hood": "#46a36a",
+    "hat": "#e85a8c",
+    "pants": "#4a3a2c",
+    "skin": "#a8744d",
+    "hair": "#120c08"
+   }
+  },
+  {
+   "id": "@cnaaitsirh",
+   "name": "cnaaitsirh",
+   "handle": "@cnaaitsirh",
+   "x": 54.800000000000004,
+   "z": 7.4,
+   "ry": 0,
+   "colors": {
+    "hood": "#f08a24",
+    "hat": "#8a6fb8",
+    "pants": "#3e5a8a",
+    "skin": "#f0c7a0",
+    "hair": "#e2c178"
+   }
+  }
+ ],
+ "election": {
+  "office": "mayor",
+  "candidates": [
+   {
+    "author": "@Iknowlightyagamiiskira",
+    "name": "Iknowlightyagamiiskira",
+    "word": "president"
+   },
+   {
+    "author": "@Divish26",
+    "name": "Divish",
+    "word": "government"
+   },
+   {
+    "author": "@illegal_football_player",
+    "name": "illegal football player",
+    "word": "military president"
+   },
+   {
+    "author": "@Alex-o7z6q",
+    "name": "Alex",
+    "word": "president"
+   }
+  ],
+  "votes": {},
+  "voters": {}
+ }
+}
