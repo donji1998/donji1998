@@ -91,12 +91,12 @@
      },
      {
       "author": "@matsdeclercq-m5c",
-      "text": "A metal detector pls",
+      "text": "Pls move in with me I am lonely",
       "hue": 209
      },
      {
       "author": "@matsdeclercq-m5c",
-      "text": "Plssss a metal detector",
+      "text": "I am money spammer",
       "hue": 209
      }
     ]
@@ -425,20 +425,20 @@
    "t1": 38.4,
    "type": "build",
    "cam": {
-    "x": 92.5,
-    "y": 2.5,
-    "z": 2,
-    "dist": 34,
-    "pitch": 30,
-    "yaw": -16
+    "x": 90.5,
+    "y": 0,
+    "z": 3,
+    "dist": 66,
+    "pitch": 46,
+    "yaw": -10
    },
    "cam2": {
-    "x": 92.5,
-    "y": 2.5,
-    "z": 2,
-    "dist": 31,
-    "pitch": 28,
-    "yaw": -6
+    "x": 90.5,
+    "y": 0,
+    "z": 3,
+    "dist": 60,
+    "pitch": 44,
+    "yaw": -2
    },
    "panel": {
     "kind": "price",

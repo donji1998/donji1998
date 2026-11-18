@@ -228,7 +228,7 @@ export function storyDay(prev, input, cfg) {
   // 2. greetings
   const firstDay = (prev.people ?? []).length === 0;
   const loud = [...jobs, ...movers.filter(m => m.special), ...replies].filter((c, i, a) => a.findIndex(x => x.author === c.author) === i);
-  const spamItems = flood ? all.filter(c => c.author === flood.author && /spammer|spam contest|metal detector|lonely/i.test(c.text)).filter((c, i, a) => a.findIndex(x => x.text.toLowerCase() === c.text.toLowerCase()) === i).slice(0, 4)
+  const spamItems = flood ? all.filter(c => c.author === flood.author && /spammer|spam contest|metal detector|lonely/i.test(c.text)).filter((c, i, a) => a.findIndex(x => (x.text.match(/spammer|contest|detector|lonely/i)?.[0] ?? x.text).toLowerCase() === (c.text.match(/spammer|contest|detector|lonely/i)?.[0] ?? c.text).toLowerCase()) === i).slice(0, 4)
     : spam ? Array.from({ length: 3 }, () => ({ author: spam.author, text: spam.text })) : [];
   const g = (firstDay ? greets : [...spamItems, ...loud, ...greets]).slice(0, 4);
   shot({ type: 'greet', cam: { x: door.x, y: 1.7, z: door.z, dist: 11, pitch: 7, yaw: -8 }, cam2: { x: door.x, y: 1.7, z: door.z, dist: 9.5, pitch: 6, yaw: 4 },
@@ -345,7 +345,7 @@ export function storyDay(prev, input, cfg) {
     const t0 = now, name = s.citizens[u.author]?.name ?? nameOf(u), cost = 1500 * u.extras.length;
     s.buildings.push({ id: s.seq++, type: 'yard', x: home.x, z: home.z, day: s.day, extras: u.extras, _at: t0 + 1.2 });
     const what = u.extras.map(e => ({ fence: 'a *fence*', court: 'a *basketball court*' })[e]);
-    const sh = shot({ type: 'build', cam: { x: home.x + 1, y: 2.5, z: home.z + 2, dist: 34, pitch: 30, yaw: -16 }, cam2: { x: home.x + 1, y: 2.5, z: home.z + 2, dist: 31, pitch: 28, yaw: -6 },
+    const sh = shot({ type: 'build', cam: { x: home.x - 1, y: 0, z: home.z + 3, dist: 66, pitch: 46, yaw: -10 }, cam2: { x: home.x - 1, y: 0, z: home.z + 3, dist: 60, pitch: 44, yaw: -2 },
       panel: { kind: 'price', amount: '−' + money(cost), label: `${name}'s garden`, at: 1.25 } },
     [[[`*${name}* wanted`, what.join(' and ') + '…'], 2.4], [['Done!'], 1.4]], 0.3);
     s.cash -= cost; move('cash', t0 + 1.25, s.cash, 0.5);

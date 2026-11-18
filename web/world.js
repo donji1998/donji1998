@@ -327,9 +327,11 @@ function yard(p, b) {
     for (const x of [-5.25, 5.25]) p.box(4.5, 1.1, 0.15, '#f3efe6', x, 0, 9.5);
   }
   if (ex.includes('court')) {
-    p.box(6.4, 0.1, 4.4, '#c8643c', 5.6, 0.02, -3.4).box(6.4, 0.11, 0.12, '#f6f3ea', 5.6, 0.02, -3.4).box(0.12, 0.11, 4.4, '#f6f3ea', 5.6, 0.02, -3.4);
-    p.cyl(0.08, 0.08, 3, '#8b93a1', 8.6, 0, -3.4, 6).box(0.1, 1, 1.4, '#f6f3ea', 8.5, 2.6, -3.4).add(new THREE.TorusGeometry(0.35, 0.04, 4, 12).rotateX(Math.PI / 2), '#e2523a', 8.15, 2.6, -3.4);
-    p.ball(0.25, '#e2803a', 4.6, 0, -2.6);
+    // in the front garden, where you can see it from the street
+    const cx = -3.4, cz = 7.3;
+    p.box(6, 0.1, 3.6, '#c8643c', cx, 0.03, cz).box(6, 0.11, 0.1, '#f6f3ea', cx, 0.03, cz).box(0.1, 0.11, 3.6, '#f6f3ea', cx, 0.03, cz);
+    p.cyl(0.08, 0.08, 3, '#8b93a1', cx - 3.2, 0, cz, 6).box(0.1, 1, 1.4, '#f6f3ea', cx - 3.1, 2.6, cz).add(new THREE.TorusGeometry(0.35, 0.04, 4, 12).rotateX(Math.PI / 2), '#e2523a', cx - 2.75, 2.6, cz);
+    p.ball(0.25, '#e2803a', cx + 1, 0, cz + 0.6);
   }
 }
 
