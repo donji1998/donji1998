@@ -1,11 +1,11 @@
 {
  "day": 4,
- "cash": 9376,
- "residents": 101,
+ "cash": 11376,
+ "residents": 98,
  "housing": 190,
  "next": {
   "res": 0,
-  "com": 11
+  "com": 12
  },
  "seq": 16,
  "buildings": [
@@ -221,18 +221,19 @@
   },
   {
    "id": 14,
-   "x": -84,
-   "z": -100,
-   "ry": 0.5,
+   "i": 2,
+   "j": 1,
+   "x": 37.5,
+   "z": 24,
    "day": 4,
-   "seed": 418,
-   "type": "cabin",
+   "seed": 147,
+   "type": "house",
    "cap": 6,
-   "owner": "@bobduur",
+   "owner": "@sanulatesade",
    "sign": {
-    "icon": "⛰️",
-    "name": "Bob's mountain cabin",
-    "handle": "@bobduur"
+    "icon": "🏠",
+    "name": "Sanulatesade's house",
+    "handle": "@sanulatesade"
    }
   },
   {
@@ -552,10 +553,10 @@
    "name": "cnaaitsirh",
    "day": 3
   },
-  "@bobduur": {
+  "@sanulatesade": {
    "role": "resident",
    "title": "Home owner",
-   "name": "Bob",
+   "name": "Sanulatesade",
    "day": 4
   },
   "@Kalilay77Yt": {
@@ -576,16 +577,28 @@
    "name": "Iain",
    "day": 4
   },
-  "@sanulatesade": {
-   "role": "resident",
-   "title": "Resident",
-   "name": "Sanulatesade",
-   "day": 4
-  },
   "@tamineeshinasharkey7057": {
    "role": "resident",
    "title": "Resident",
-   "name": "Tamineeshinasharkey",
+   "name": "Taminee Shinasharkey",
+   "day": 4
+  },
+  "@bobduur": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "Bob",
+   "day": 4
+  },
+  "@ayalnehmulatu4937": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "Ayalneh Mulatu",
+   "day": 4
+  },
+  "@leratomokoena8615": {
+   "role": "resident",
+   "title": "Resident",
+   "name": "Lerato Mokoena",
    "day": 4
   }
  },
@@ -814,13 +827,6 @@
  },
  "homeQueue": [
   {
-   "author": "@iainmcdowall7943",
-   "text": "give me a really big house which is bigger than the shard",
-   "name": "Iain",
-   "special": "tower",
-   "own": true
-  },
-  {
    "author": "@cnaaitsirh",
    "text": "Can i get a mansion for 50 people and a restuarant where i will be the owner",
    "name": "cnaaitsirh",
@@ -828,10 +834,17 @@
    "own": true
   },
   {
-   "author": "@sanulatesade",
-   "text": "I can a home",
-   "name": null,
-   "special": null,
+   "author": "@iainmcdowall7943",
+   "text": "give me a really big house which is bigger than the shard",
+   "name": "Iain",
+   "special": "tower",
+   "own": true
+  },
+  {
+   "author": "@bobduur",
+   "text": "Can I live in the mountain?",
+   "name": "Bob",
+   "special": "mountain",
    "own": true
   },
   {
@@ -851,7 +864,7 @@
   {
    "author": "@tamineeshinasharkey7057",
    "text": "A average house",
-   "name": null,
+   "name": "Taminee Shinasharkey",
    "special": null,
    "own": true
   },
@@ -1230,18 +1243,18 @@
    }
   },
   {
-   "id": "@bobduur",
-   "name": "Bob",
-   "handle": "@bobduur",
-   "x": -80,
-   "z": -92.8,
+   "id": "@sanulatesade",
+   "name": "Sanulatesade",
+   "handle": "@sanulatesade",
+   "x": 41.5,
+   "z": 31.2,
    "ry": -0.25,
    "colors": {
-    "hood": "#ef7fb0",
-    "hat": "#46a36a",
-    "pants": "#34405a",
-    "skin": "#7a4f33",
-    "hair": "#120c08"
+    "hood": "#3d9bd6",
+    "hat": "#f08a24",
+    "pants": "#2f3542",
+    "skin": "#f4d6b8",
+    "hair": "#b5672e"
    }
   },
   {

@@ -304,7 +304,9 @@ export function storyDay(prev, input, cfg) {
   const reserve = today.filter(w => WISHES[w.key]?.build?.utility).reduce((a, w) => a + WISHES[w.key].cost, 0);
   let homeBudget = montage ? Math.max(0, income + Math.floor((s.cash - income) * 0.5) - reserve) : s.cash;
   const plan = [], later = [];
-  for (const m of montage ? [...ownAll.filter(m => HOMES[m.special ?? 'house'].big), ...ownAll.filter(m => !HOMES[m.special ?? 'house'].big)] : ownAll.slice(0, 2)) {
+  const isWaiting = m => waiting.some(q => q.author === m.author), fresh = ownAll.filter(m => !isWaiting(m));
+  // people from the waiting list always go first
+  for (const m of montage ? [...ownAll.filter(isWaiting), ...fresh.filter(m => HOMES[m.special ?? 'house'].big), ...fresh.filter(m => !HOMES[m.special ?? 'house'].big)] : ownAll.slice(0, 2)) {
     const h = HOMES[m.special ?? 'house'];
     if (h.cost <= homeBudget && h.cost <= s.cash && plan.length < 8) { plan.push(m); homeBudget -= h.cost; } else later.push(m);
   }

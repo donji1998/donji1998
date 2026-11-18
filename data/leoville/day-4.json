@@ -1,6 +1,6 @@
 {
-  "_note": "Day 4: 14 likes on the Day 3 video, 81 comments (most of them by matsdeclercq). subscribers is a PLACEHOLDER until the real number is in.",
-  "subscribers": 100,
+  "_note": "Day 4: 97 subscribers total, 14 likes on the Day 3 video, 81 comments (most of them by matsdeclercq).",
+  "subscribers": 97,
   "video": {
     "id": "day-3",
     "title": "We built him a ROBOT HOUSE Day 3",
@@ -396,6 +396,64 @@
       "author": "@matsdeclercq-m5c",
       "text": "Can it move too",
       "name": "Mats"
+    }
+  ],
+  "publicSubscribers": [
+    {
+      "handle": "@ayalnehmulatu4937",
+      "name": "Ayalneh Mulatu"
+    },
+    {
+      "handle": "@tamineeshinasharkey7057",
+      "name": "Taminee Shinasharkey"
+    },
+    {
+      "handle": "@leratomokoena8615",
+      "name": "Lerato Mokoena"
+    },
+    {
+      "handle": "@tanja3349",
+      "name": "Tanja"
+    },
+    {
+      "handle": "@JonahMayer-y9y",
+      "name": "PWR_Jonah"
+    },
+    {
+      "handle": "@LouiePlayz235",
+      "name": "LouiePlayz"
+    },
+    {
+      "handle": "@kratos-t2e",
+      "name": "kratos"
+    },
+    {
+      "handle": "@ORBIT12367",
+      "name": "ExtTalCat"
+    },
+    {
+      "handle": "@thiktaphonbonrak9860",
+      "name": "Thiktaphon Bonrak"
+    },
+    {
+      "handle": "@RaydeBruijn",
+      "name": "Ray de Bruijn"
+    },
+    {
+      "handle": "@AmboAmarD",
+      "name": "Ambo"
+    },
+    {
+      "handle": "@Arvinteeluck",
+      "name": "Minijr"
+    },
+    {
+      "handle": "@jemsherlock",
+      "name": "James Sherlock"
+    },
+    {
+      "handle": "@doodleandarkeyeditzYT",
+      "name": "doodle and arkey editz"
     }
   ]
 }
