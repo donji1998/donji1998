@@ -65,8 +65,9 @@ export function signMesh(sign, w = 8, h = 2) {
 // ---------- housing ----------
 const HOUSE_WALL = ['#f4e3c1', '#f7efe2', '#e9d3b4', '#dfe9ef', '#f3d9cf'];
 const HOUSE_ROOF = ['#c2553f', '#8f4a3a', '#5d7d9a', '#7a8b52', '#a8623a'];
-function house(p, r) {
-  const wall = HOUSE_WALL[r() * 5 | 0], roof = HOUSE_ROOF[r() * 5 | 0];
+function house(p, r, b = {}) {
+  const w0 = HOUSE_WALL[r() * 5 | 0], r0 = HOUSE_ROOF[r() * 5 | 0];
+  const wall = b.wall ?? w0, roof = b.roof ?? r0;   // a resident may ask for a colour
   p.box(8, 3.6, 6.5, wall, 0, 0, 0).gable(8.8, 3, 7.4, roof, 0, 3.6, 0);
   p.box(1.3, 2.3, 0.2, shade(roof, 0.7), 0, 0, 3.3).box(1.5, 1.3, 0.2, GLASS, -2.5, 1.4, 3.3).box(1.5, 1.3, 0.2, GLASS, 2.5, 1.4, 3.3);
   p.box(0.9, 2.2, 0.9, shade(wall, 0.8), 2.4, 4.2, -1);
@@ -301,12 +302,43 @@ function pumpHouse(p) {
   p.box(0.7, 1.2, 0.7, '#7c95ad', 2.2, 0, 1.2).box(0.9, 0.2, 0.3, '#7c95ad', 2.2, 1.1, 1.5).cyl(0.6, 0.6, 0.3, '#5cb3d8', 2.2, 0, 2, 14);
 }
 
+// small vegetable beds and a scarecrow next to a house
+function farmPlot(p) {
+  for (let k = 0; k < 3; k++) p.box(1.6, 0.35, 3.2, '#7b5a3a', -6.6 + k * 2.1, 0, 7.8).box(1.4, 0.3, 3, k % 2 ? '#6dbb5f' : '#c9a23c', -6.6 + k * 2.1, 0.35, 7.8);
+  p.cyl(0.08, 0.08, 2.4, '#7a5a3c', -3.6, 0, 9.4, 5).box(1.4, 0.12, 0.12, '#7a5a3c', -3.6, 1.8, 9.4).ball(0.3, '#e8c58a', -3.6, 2.3, 9.4).box(0.8, 0.8, 0.4, '#3d6fd6', -3.6, 1.3, 9.4);
+}
+// a log cabin with a stone chimney, for living up on the mountain
+function cabin(p) {
+  const log = '#8a5a3a', dark = '#6b4a33';
+  p.box(8, 0.6, 6.5, '#8d94a0', 0, 0, 0);
+  for (let k = 0; k < 6; k++) p.box(8, 0.5, 6, k % 2 ? log : dark, 0, 0.6 + k * 0.5, 0);
+  p.gable(9, 2.8, 7.4, '#4a3a2c', 0, 3.6, 0);
+  p.box(1.3, 2.2, 0.2, '#3a2418', 0, 0.6, 3.05).box(1.4, 1.1, 0.2, GLASS, -2.4, 1.6, 3.05).box(1.4, 1.1, 0.2, GLASS, 2.4, 1.6, 3.05);
+  p.box(1.2, 5.6, 1.2, '#9aa1ab', 3.2, 0.6, -1.6);
+  p.box(9, 0.3, 3, '#8a6a4a', 0, 0.3, 4.6);   // porch
+  for (const x of [-4.2, 4.2]) p.cyl(0.12, 0.12, 1.2, '#6b4a33', x, 0.6, 5.9, 5);
+  p.box(1.2, 0.8, 0.8, '#8a5a3a', -5.2, 0, 3.6).box(1.3, 0.12, 0.9, '#6b4a33', -5.2, 0.8, 3.6);   // woodpile
+}
+// a fence around a lot and a basketball court in the garden
+function yard(p, b) {
+  const ex = b.extras ?? [];
+  if (ex.includes('fence')) {
+    for (const [x, z, w, d] of [[0, -6.5, 15, 0.15], [0, 9.5, 5.5, 0.15], [-7.5, 1.5, 0.15, 16], [7.5, 1.5, 0.15, 16]]) p.box(w, 1.1, d, '#f3efe6', x, 0, z);
+    for (const x of [-5.25, 5.25]) p.box(4.5, 1.1, 0.15, '#f3efe6', x, 0, 9.5);
+  }
+  if (ex.includes('court')) {
+    p.box(6.4, 0.1, 4.4, '#c8643c', 5.6, 0.02, -3.4).box(6.4, 0.11, 0.12, '#f6f3ea', 5.6, 0.02, -3.4).box(0.12, 0.11, 4.4, '#f6f3ea', 5.6, 0.02, -3.4);
+    p.cyl(0.08, 0.08, 3, '#8b93a1', 8.6, 0, -3.4, 6).box(0.1, 1, 1.4, '#f6f3ea', 8.5, 2.6, -3.4).add(new THREE.TorusGeometry(0.35, 0.04, 4, 12).rotateX(Math.PI / 2), '#e2523a', 8.15, 2.6, -3.4);
+    p.ball(0.25, '#e2803a', 4.6, 0, -2.6);
+  }
+}
+
 const BUILD = {
-  house: (p, b, r) => house(p, r), block: (p, b, r) => block(p, r), tower: (p, b, r) => tower(p, r),
+  house: (p, b, r) => { house(p, r, b); if (b.farm) farmPlot(p); }, block: (p, b, r) => block(p, r), tower: (p, b, r) => tower(p, r),
   mega: (p, b, r) => mega(p, r, 1), arco: (p, b, r) => mega(p, r, 1.9),
   shop: (p, b) => shop(p, b), civic: (p, b) => civic(p, b), townhall: p => townhall(p), cottage: p => cottage(p), sign: () => {},
   planehouse: (p, b) => planeHouse(p, b), villa: (p, b, r) => villa(p, r),
-  bungalow: (p, b, r) => bungalow(p, r), mansion: p => mansion(p), bunker: p => bunker(p), robothouse: p => robotHouse(p), carhouse: (p, b, r) => carHouse(p, r), pump: p => pumpHouse(p),
+  bungalow: (p, b, r) => bungalow(p, r), mansion: p => mansion(p), bunker: p => bunker(p), robothouse: p => robotHouse(p), carhouse: (p, b, r) => carHouse(p, r), pump: p => pumpHouse(p), cabin: p => cabin(p), yard: (p, b) => yard(p, b),
   stadium: p => stadium(p), funfair: p => funfair(p), harbor: p => harbor(p), airport: p => airport(p),
 };
 
@@ -327,6 +359,8 @@ export function buildingMesh(b) {
     else if (b.type === 'mansion') { s.scale.setScalar(0.62); s.position.set(0, 7.4, 6.0); }
     else if (b.type === 'bunker') { s.scale.setScalar(0.55); s.position.set(0, 4.5, 5.2); }
     else if (b.type === 'robothouse') { s.scale.setScalar(0.62); s.position.set(0, 1.6, 3.6); }
+    else if (b.type === 'cabin') { s.scale.setScalar(0.5); s.position.set(0, 4.4, 3.4); }
+    else if (b.type === 'mega') { s.scale.setScalar(0.62); s.position.set(0, 3.0, 7.3); }
     else if (b.type === 'pump') { s.scale.setScalar(0.4); s.position.set(0, 3.6, 1.8); }
     else if (b.style?.feature === 'columns') s.position.set(0, 4.3, 6.5);
     else s.position.set(0, 6.35, 4.62);
