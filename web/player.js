@@ -192,9 +192,10 @@ tiles.forEach((t, i) => setTile(i, t.at == null ? 1 : 0));
 const liveTiles = tiles.map((t, i) => i).filter(i => tiles[i].at != null);
 
 // ---------- buildings ----------
-const live = [];
+const live = [], allB = [];
 for (const b of ep.buildings) {
   const g = buildingMesh(b); scene.add(g);
+  allB.push({ g, b, big: ['block', 'tower', 'mega', 'arco', 'mansion', 'robothouse', 'civic'].includes(b.type) });
   if (b.at != null) { live.push({ g, at: b.at }); g.visible = false; }
 }
 const hero = characterFigure(); scene.add(hero);
@@ -374,6 +375,18 @@ function renderAt(t) {
     b.g.visible = k > 0;
     if (k > 0) { const kk = clamp(k); b.g.scale.set(easeOut(clamp(kk * 1.7)), Math.max(0.02, easeBack(kk)), easeOut(clamp(kk * 1.7))); }
   }
+  // a building standing between a low camera and what it looks at is hidden for that moment
+  for (const o of allB) if (o.b.at == null) o.g.visible = true;
+  if (camera.position.y < 30) {
+    const cx = camera.position.x, cz = camera.position.z, tx = a.x, tz = a.z, dx = tx - cx, dz = tz - cz, L2 = dx * dx + dz * dz || 1;
+    for (const o of allB) {
+      if (o.b.type === 'sign' || o.b.type === 'yard') continue;
+      const u = ((o.b.x - cx) * dx + (o.b.z - cz) * dz) / L2;
+      if (u <= 0 || u >= 1) continue;
+      const px = cx + u * dx - o.b.x, pz = cz + u * dz - o.b.z, near = Math.hypot(px, pz) < (o.big ? 9 : 7.5);
+      if (near && Math.hypot(o.b.x - tx, o.b.z - tz) > 9) o.g.visible = false;
+    }
+  }
   for (const idx of liveTiles) setTile(idx, easeOut(clamp((t - tiles[idx].at) / 0.35)));
   for (const idx of liveCobbles) setCobble(idx, clamp((t - cobbles[idx].at) / 0.2));
   if (liveCobbles.length) cobble.instanceMatrix.needsUpdate = true;
@@ -391,7 +404,7 @@ function renderAt(t) {
       const len = w.st.x1 - w.st.x0, u = (w.ph * 7 + t * w.sp) % (2 * len);
       x = w.st.x0 + (u < len ? u : 2 * len - u); z = w.st.z + w.side * (4.3 + w.off);
     }
-    if (sc && Math.hypot(x - camera.position.x, z - camera.position.z) < 16 && camera.position.y < 12) sc = 0;   // never block a close-up
+    if (sc && Math.hypot(x - camera.position.x, z - camera.position.z) < 22 && camera.position.y < 20) sc = 0;   // never block a close-up
     const hop = Math.abs(Math.sin(t * 7 + w.ph)) * 0.16;
     M4.compose(V.set(x, 0.2 + hop, z), Q.identity(), S.set(sc, sc * w.h, sc));
     bodies.setMatrixAt(k, M4); heads.setMatrixAt(k, M4);

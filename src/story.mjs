@@ -209,10 +209,13 @@ export function storyDay(prev, input, cfg) {
   const person = (m, x, z, at, ry = 0, title = 'Resident') => {
     const name = nameOf(m);
     const p = { id: m.author, name, handle: m.author, x, z, ry, at, colors: COLORS[hash(m.author) % COLORS.length] };
-    // whoever already stands here steps back a row, next to the others
+    // someone who moves to a new home leaves the old spot
+    for (let k = oldPeople.length - 1; k >= 0; k--) if (oldPeople[k].id === m.author) oldPeople.splice(k, 1);
+    // whoever already stands here steps back, row by row, until there is a free spot
     for (const o of oldPeople.filter(o => Math.hypot(o.x - x, o.z - z) < 1.4)) {
-      for (const dx of [1.15, -1.15, 3.45, -3.45, 0, 2.3, -2.3, 5.75, -5.75]) {
-        if (!taken(o.x + dx, z - 1.8, o) && Math.hypot(o.x + dx - x, z - 1.8 - z) >= 1.4) { o.x += dx; o.z = z - 1.8; break; }
+      search: for (const row of [1, 2, 3, 4, 5]) for (const dx of [1.15, -1.15, 3.45, -3.45, 0, 2.3, -2.3, 5.75, -5.75]) {
+        const nz = z - 1.8 * row;
+        if (!taken(o.x + dx, nz, o) && Math.hypot(o.x + dx - x, nz - z) >= 1.4) { o.x += dx; o.z = nz; break search; }
       }
     }
     people.push(p);

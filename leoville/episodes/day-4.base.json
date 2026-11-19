@@ -1338,43 +1338,11 @@
    "at": null
   },
   {
-   "id": "@UserFromRO",
-   "name": "UserFromRO",
-   "handle": "@UserFromRO",
-   "x": 46.75,
-   "z": 5.6000000000000005,
-   "ry": 0,
-   "colors": {
-    "hood": "#3d9bd6",
-    "hat": "#f08a24",
-    "pants": "#2f3542",
-    "skin": "#f4d6b8",
-    "hair": "#b5672e"
-   },
-   "at": null
-  },
-  {
-   "id": "@salihkeremince1475",
-   "name": "Salih",
-   "handle": "@salihkeremince1475",
-   "x": 52.5,
-   "z": 7.9,
-   "ry": 0,
-   "colors": {
-    "hood": "#46a36a",
-    "hat": "#e85a8c",
-    "pants": "#4a3a2c",
-    "skin": "#a8744d",
-    "hair": "#120c08"
-   },
-   "at": null
-  },
-  {
    "id": "@cnaaitsirh",
    "name": "cnaaitsirh",
    "handle": "@cnaaitsirh",
-   "x": 54.800000000000004,
-   "z": 7.4,
+   "x": 55.95,
+   "z": 3.8000000000000003,
    "ry": 0,
    "colors": {
     "hood": "#f08a24",
