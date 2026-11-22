@@ -350,7 +350,7 @@ function memorial(p) {
     p.cyl(0.45, 0.35, 0.5, '#9a8a7a', x, 0, z, 10);
     for (let k = 0; k < 5; k++) { const a = k / 5 * Math.PI * 2; p.ball(0.15, ['#ffffff', '#ff9fc0', '#ffd24a', '#c9b6ff', '#ff6b6b'][k], x + Math.cos(a) * 0.2, 0.5, z + Math.sin(a) * 0.2); }
   }
-  p.cyl(0.06, 0.06, 1.5, '#5b5650', 0, 0, -0.9, 6);
+  for (const x of [-1.6, 1.6]) p.cyl(0.06, 0.06, 2.7, '#5b5650', x, 0, -0.9, 6);   // posts holding the plaque
 }
 
 const BUILD = {
@@ -379,7 +379,7 @@ export function buildingMesh(b) {
     else if (b.type === 'mansion') { s.scale.setScalar(0.62); s.position.set(0, 7.4, 6.0); }
     else if (b.type === 'bunker') { s.scale.setScalar(0.55); s.position.set(0, 4.5, 5.2); }
     else if (b.type === 'robothouse') { s.scale.setScalar(0.62); s.position.set(0, 1.6, 3.6); }
-    else if (b.type === 'memorial') { s.scale.setScalar(0.32); s.position.set(0, 1.55, -0.85); }
+    else if (b.type === 'memorial') { s.scale.setScalar(0.4); s.position.set(0, 2.45, -0.85); }   // above the backrest, both lines readable
     else if (b.type === 'cabin') { s.scale.setScalar(0.5); s.position.set(0, 4.4, 3.4); }
     else if (b.type === 'mega') { s.scale.setScalar(0.62); s.position.set(0, 3.0, 7.3); }
     else if (b.type === 'pump') { s.scale.setScalar(0.4); s.position.set(0, 3.6, 1.8); }
