@@ -140,10 +140,13 @@ scene.children.filter(o => o.isInstancedMesh && o.count > 1000 || (o.isInstanced
 
 // aerial view of the island
 const camera = new THREE.PerspectiveCamera(horiz ? 32 : 46, W / H, 1, 3000);
-const focus = q.has('focus') ? extra.find(b => b.type === q.get('focus')) : null;
+const focusKey = q.get('focus') === 'statue' ? 'robothouse' : q.get('focus');
+const focus = q.has('focus') ? extra.find(b => b.type === focusKey) : null;
 if (focus) {   // aim at one building (e.g. ?focus=planehouse)
   const fx = IC.x + (focus.x - 30) * 1.25, fz = IC.z + focus.z * 1.25;
-  if (horiz) { camera.position.set(fx - 3, 58, fz + 50); camera.lookAt(fx - 3, 0, fz + 6); }
+  if (horiz && q.get('focus') === 'statue') { camera.position.set(fx - 5, 26, fz + 52); camera.lookAt(fx - 5, 19, fz); }
+  else if (horiz) { camera.position.set(fx - 3, 58, fz + 50); camera.lookAt(fx - 3, 0, fz + 6); }
+  else if (q.get('focus') === 'statue') { camera.position.set(fx + 2, 30, fz + 44); camera.lookAt(fx + 2, 16, fz); }
   else if (focus.type === 'robothouse') { camera.position.set(fx + 3, 30, fz + 70); camera.lookAt(fx + 3, -1, fz); }
   else { camera.position.set(fx + 2, 70, fz + 70); camera.lookAt(fx + 2, 0, fz + 16); }
 } else if (horiz) { camera.position.set(IC.x - 14, 125, IC.z + 100); camera.lookAt(IC.x - 14, 0, IC.z + 8); }
