@@ -34,14 +34,16 @@ const WISHES = {
   football: { kw: /football (field|pitch)|soccer (field|pitch)|stadium/i, icon: '⚽', name: 'football field', cost: 40000 },
   power: { kw: /electricity|power ?plant|strom/i, icon: '⚡', name: 'power plant', cost: 60000 },
   detector: { kw: /metal detector/i, icon: '🧲', name: 'metal detector', cost: 2000 },
+  market: { kw: /\bmarket\b|supermarket|grocery/i, icon: '🛒', name: 'market', cost: 30000 },
 };
 for (const [k, r] of Object.entries(ROLES)) if (r.kind === 'shop' && !WISHES[k]) WISHES[k] = { kw: new RegExp(r.kw, 'i'), role: k };
 
-const MOVE = /add me|at me in|move in|moving in|in your house|in the room|live (with|here)|my name is|call me|i sub|subscribed|i am subscribe|go on the island|let me (live|stay)|give me an? |(can|could|may) i (please )?(have|get|live)\b.{0,30}\b(house|home|bungalo\w*|villa|mansion|bunker|apartment|flat|room|plane|robot|mountain)|big house|would (want|like|lika)|i'?m subscrib|\bfor me\b|i want an? .{0,15}\b(house|home)\b|^.{0,18}\b(house|home)\b.{0,6}$/i;
+const MOVE = /add me|at me in|move in|moving in|in your house|in the room|live (with|here)|my name is|call me|i sub|subscribed|i am subscribe|go on the island|let me (live|stay)|give me an? |(can|could|may) i (please )?(have|get|live)\b.{0,30}\b(house|home|bungalo\w*|villa|mansion|bunker|apartment|flat|room|plane|robot|mountain)|big house|would (want|like|lika)|i'?m subscrib|\bfor me\b|i want an? .{0,15}\b(house|home)\b|i need an? .{0,12}\b(shack|hut|house|home)\b|^.{0,18}\b(house|home)\b.{0,6}$/i;
 // what kind of home someone asks for
-const HOME = [['mountain', /mountain/i], ['tower', /bigger than|tallest|skyscraper|\bshard\b|really big house|huge house/i], ['green', /green ?house/i], ['farmhouse', /farm ?(home|house)/i], ['bunker', /bunker/i], ['robothouse', /robot/i], ['mansion', /mansion/i], ['villa', /villa|big house/i], ['bungalow', /bungal/i], ['carhouse', /\bm5\b|\bbmw\b|\bf90\b|car ?house/i], ['plane', /(air)?plane|\bjet\b/i], ['house', /\b(i|me|my)\b.{0,30}\b(house|home)\b|^an? [\p{L}]+ (house|home)\b/iu]];
+const HOME = [['shack', /\bshack\b|\bhut\b/i], ['mountain', /mountain/i], ['tower', /bigger than|tallest|skyscraper|\bshard\b|really big house|huge house/i], ['green', /green ?house/i], ['farmhouse', /farm ?(home|house)/i], ['bunker', /bunker/i], ['robothouse', /robot/i], ['mansion', /mansion/i], ['villa', /villa|big house/i], ['bungalow', /bungal/i], ['carhouse', /\bm5\b|\bbmw\b|\bf90\b|car ?house/i], ['plane', /(air)?plane|\bjet\b/i], ['house', /\b(i|me|my)\b.{0,30}\b(house|home)\b|^an? [\p{L}]+ (house|home)\b/iu]];
 const NOT_MINE = /everybody|everyone|all of us|for all/i;
 const JOIN = /live (in|at) (the|his|her) (\w+ )?(house|home|plane|bunker|mansion)\s+with/i;
+const JOIN_WHO = /(?:live|move in|stay) with ([\p{L}]{3,15})\b/iu;
 const IAM = /\bi'?m an? ([\p{L}]{3,12})\b/iu;
 // "make me the principal", "can I be the president", "when im principal"
 const JOB = /(?:make me|can i|could i|may i|i want to|i wanna|when i'?m|let me|i'?ll|i will)\s+(?:please\s+)?(?:be\s+|b\s+)?(?:the\s+|a\s+|an\s+)?(?:(military|vice|super|big|best)\s+)?(principal|headmaster|teacher|police ?chief|sheriff|police|cop|doctor|nurse|president|mayor|government|king|queen|leader|boss|banker|farmer|firefighter|fire chief|judge)/i;
@@ -53,7 +55,7 @@ const FAMILY = /\b(my )?(sister|brother|son|daughter|kids?|child|children|cousin
 const WITH_LEO = /(add|at) me in (the|your) (room|house)|in your house|in the room|with (you|leo)/i;
 const OWN = /separate house|own house|my own (house|home)|own home/i;
 const GREET = /^(hi|hai|hey|hello|hallo|yo)\b|welcome|^[\p{Extended_Pictographic}\s‍️]+$/iu;
-const NAME = /(?:my name is|call me|i'?m called)\s+([\p{L}]{2,15})/iu;
+const NAME = /(?:my name is|call me|i'?m called)\s+(?!the\b)([\p{L}]{2,15})/iu;
 const CUSTOM = /^(?:build|get|make|add|open)?\s*(?:an?|the|some)\s+([\p{L} ]{3,24}?)[.!]*$|^(?:build|get|make|open)\s+(?:an?|the)\s+([\p{L} ]{3,24}?)[.!]*$/iu;
 
 const cap = s => s.replace(/(^|\s)(\p{L})/gu, (m, a, b) => a + b.toUpperCase());
@@ -63,6 +65,7 @@ const pretty = h => {
   if (camel) x = camel[0];
   return cap(x.toLowerCase());
 };
+const poss = n => /s$/i.test(n) ? n + "'" : n + "'s";
 const lc = w => w.key.startsWith('custom:') ? w.name : w.name.toLowerCase();
 const COLORS = [
   { hood: '#e2523a', hat: '#2f6fd6', pants: '#3a3f4d', skin: '#f1c6a0', hair: '#3b2a1e' },
@@ -76,7 +79,7 @@ const COLORS = [
 /** Read the comments: who moves in, who says hi, what people want built. */
 export function readComments(comments, subscribed, blocklist = []) {
   const subs = subscribed ? new Set(subscribed.map(h => cleanHandle(h).toLowerCase())) : null;
-  const movers = [], greets = [], wishes = {}, order = [], jobs = [], replies = [], family = [], promises = [], all = [], lonely = [], upgrades = [];
+  const movers = [], greets = [], wishes = {}, order = [], jobs = [], replies = [], family = [], promises = [], all = [], lonely = [], upgrades = [], titles = [], memorial = [], namedShops = [];
   for (const raw of comments) {
     const c = { author: cleanHandle(raw.author), text: cleanText(raw.text, 200).replace(/İ/g, 'I').replace(/ı/g, 'i').replace(/[’‘`´]/g, "'"), likes: raw.likes ?? 0, name: raw.name };
     if (!c.text || isBlocked(c, blocklist)) continue;
@@ -85,11 +88,12 @@ export function readComments(comments, subscribed, blocklist = []) {
       const name = c.name ?? (c.text.match(NAME)?.[1] ? cap(c.text.match(NAME)[1].toLowerCase()) : null);
       const old = movers.find(m => m.author === c.author);
       const join = c.text.match(JOIN);
-      const kind = join || WITH_LEO.test(c.text) || NOT_MINE.test(c.text) ? null : HOME.find(([, re]) => re.test(c.text))?.[0] ?? null;
+      const joinWho = !join && !WITH_LEO.test(c.text) ? c.text.match(JOIN_WHO)?.[1]?.toLowerCase() ?? null : null;
+      const kind = join || joinWho || WITH_LEO.test(c.text) || NOT_MINE.test(c.text) ? null : HOME.find(([, re]) => re.test(c.text))?.[0] ?? null;
       const special = kind && kind !== 'house' ? kind : null;
       const own = OWN.test(c.text) || !!kind;
-      const extra = { joinWhat: join ? (join[3] ?? '').trim().toLowerCase() || join[4].toLowerCase() : null, iam: c.text.match(IAM)?.[1]?.toLowerCase() ?? null };
-      if (old) { old.withLeo ||= WITH_LEO.test(c.text); old.own ||= own; old.special ??= special; old.name ??= name; old.joinWhat ??= extra.joinWhat; old.iam ??= extra.iam; }
+      const extra = { joinWhat: join ? (join[3] ?? '').trim().toLowerCase() || join[4].toLowerCase() : null, joinWho, iam: c.text.match(IAM)?.[1]?.toLowerCase() ?? null };
+      if (old) { old.withLeo ||= WITH_LEO.test(c.text); old.own ||= own; old.special ??= special; old.name ??= name; old.joinWhat ??= extra.joinWhat; old.joinWho ??= extra.joinWho; old.iam ??= extra.iam; }
       else movers.push({ ...c, name, withLeo: WITH_LEO.test(c.text), own, special, ...extra });
     }
     const j = c.text.match(JOB);
@@ -102,6 +106,16 @@ export function readComments(comments, subscribed, blocklist = []) {
     if (DOLLAR.test(c.text)) replies.push({ ...c, kind: 'dollar' });
     if (/\bi (will|'?ll)\b|if i (become|am|'?m)\b/i.test(c.text) && !j) promises.push(c);
     if (/revolution|overthrow/i.test(c.text)) replies.push({ ...c, kind: 'king' });
+    if (/\bgta ?(6|vi|six)\b/i.test(c.text)) replies.push({ ...c, kind: 'gta' });
+    if (/\bwe want jobs\b|\bgive us jobs\b/i.test(c.text)) replies.push({ ...c, kind: 'jobs' });
+    if (/candidate for (president|mayor)/i.test(c.text) && !jobs.some(x => x.author === c.author && x.role === 'leader')) jobs.push({ ...c, role: 'leader', word: c.text.match(/candidate for (president|mayor)/i)[1].toLowerCase(), nick: null });
+    const tt = c.text.match(/\bbe the ([\p{L} ]{3,20}?) of (?:the )?town\b/iu) ?? c.text.match(/\bcall me (?:the )?((?!the\b)[\p{L} ]{3,20}?)[.!]*$/iu);
+    if (tt && !/^[\p{L}]+$/u.test(tt[1]) || tt && /\bman\b|maker|king|queen|boss/i.test(tt[1])) titles.push({ ...c, title: tt[1].toLowerCase().trim(), town: /of (?:the )?town/i.test(c.text) });
+    if (/statue of (you|leo)/i.test(c.text)) upgrades.push({ ...c, extras: ['statue'] });
+    if (/grand ?(parents|ma|pa|mother|father)|passed away|\bdied\b/i.test(c.text) && /hono(u)?r|remember|memory/i.test(c.text)) memorial.push(c);
+    const named = c.text.match(/\b(?:shop|store|restaurant|place|caf[eé]) called ([\p{L}\d]{3,20})/iu);
+    if (named) { const k = 'custom:' + named[1].toLowerCase(), e = wishes[k] ??= { key: k, votes: 0, by: [], label: named[1], icon: /burger/i.test(c.text) ? '🍔' : '🏪' };
+      if (!e.by.includes(c.author)) { e.votes++; e.by.push(c.author); } if (!order.includes(k)) order.push(k); namedShops.push({ ...c, shop: named[1] }); }
     if (/move in with me|i'?m lonely|i am lonely|someone (can|could) move in/i.test(c.text)) lonely.push(c);
     const up = c.text.match(/around my (\w+)|my (garden|yard)\b/i);
     if (up) upgrades.push({ ...c, extras: [/fence/i.test(c.text) && 'fence', /basket|court/i.test(c.text) && 'court'].filter(Boolean) });
@@ -109,7 +123,7 @@ export function readComments(comments, subscribed, blocklist = []) {
     if (FAMILY.test(c.text)) family.push({ ...c, who: c.text.match(FAMILY)[2].toLowerCase() });
     if (GREET.test(c.text) && c.text.length < 40) greets.push(c);
     let found = false;
-    const hits = Object.entries(WISHES).map(([k, w]) => [k, c.text.search(w.kw)]).filter(([, i]) => i >= 0).sort((a, b) => a[1] - b[1]);
+    const hits = /\b(?:shop|store|restaurant|place|caf[eé]) called\b/i.test(c.text) ? [] : Object.entries(WISHES).map(([k, w]) => [k, c.text.search(w.kw)]).filter(([, i]) => i >= 0).sort((a, b) => a[1] - b[1]);
     for (const [k] of hits) {
       found = true;
       const e = wishes[k] ??= { key: k, votes: 0, by: [] };
@@ -136,11 +150,11 @@ export function readComments(comments, subscribed, blocklist = []) {
   const [topA, topN] = Object.entries(byAuthor).sort((a, b) => b[1] - a[1])[0] ?? [];
   const flood = topN >= 20 && topN >= all.length * 0.3 ? { author: topA, n: topN, contest: all.some(c => c.author === topA && /spam contest/i.test(c.text)),
     title: all.filter(c => c.author === topA).map(c => c.text.match(/\bi am ((?:the |a )?[\w ]{0,20}spammer)/i)?.[1]).filter(Boolean).sort((a, b) => b.length - a.length)[0] } : null;
-  return { movers, greets, ranked, jobs, replies, family, order, promises, spam, all, lonely, upgrades, flood };
+  return { movers, greets, ranked, jobs, replies, family, order, promises, spam, all, lonely, upgrades, flood, titles, memorial, namedShops };
 }
 
 function wishInfo(w) {
-  if (w.key.startsWith('custom:')) return { icon: '🏪', name: w.label, cost: 28000, build: { type: 'shop', shop: true } };
+  if (w.key.startsWith('custom:')) return { icon: w.icon ?? '🏪', name: w.label, cost: 28000, build: { type: 'shop', shop: true } };
   const d = WISHES[w.key];
   if (d.role) { const r = ROLES[d.role]; return { icon: r.icon, name: r.name.en, cost: r.cost, role: d.role, build: { type: r.kind } }; }
   return { icon: d.icon, name: d.name, cost: d.cost, build: d.build };
@@ -158,12 +172,12 @@ export function storyDay(prev, input, cfg) {
   // so commenters who say they subscribed are believed unless input.onlySubscribers is set.
   const pub = (input.publicSubscribers ?? []).map(p => ({ handle: cleanHandle(p.handle ?? p), name: p.name ?? null }));
   const pubName = new Map(pub.map(p => [p.handle.toLowerCase(), p.name]));
-  const { movers, greets, ranked: today, jobs, replies, family, order: wishOrder, promises, spam, all, lonely, upgrades, flood } = readComments(input.comments ?? [], input.onlySubscribers ? pub.map(p => p.handle) : null, cfg.blocklist);
+  const { movers, greets, ranked: today, jobs, replies, family, order: wishOrder, promises, spam, all, lonely, upgrades, flood, titles, memorial, namedShops } = readComments(input.comments ?? [], input.onlySubscribers ? pub.map(p => p.handle) : null, cfg.blocklist);
   // wishes add up over the days: yesterday's votes still count
   const merged = new Map();
-  for (const [k, e] of Object.entries(s.wishes)) merged.set(k, { key: k, votes: e.votes, by: [...e.by], label: e.label, first: e.first ?? 0 });
+  for (const [k, e] of Object.entries(s.wishes)) merged.set(k, { key: k, votes: e.votes, by: [...e.by], label: e.label, icon: e.icon, first: e.first ?? 0 });
   today.forEach((w, i) => {
-    const e = merged.get(w.key) ?? { key: w.key, votes: 0, by: [], label: w.label, first: 1000 + wishOrder.indexOf(w.key) };
+    const e = merged.get(w.key) ?? { key: w.key, votes: 0, by: [], label: w.label, icon: w.icon, first: 1000 + wishOrder.indexOf(w.key) };
     for (const h of w.by) if (!e.by.includes(h)) { e.by.push(h); e.votes++; }
     merged.set(w.key, e);
   });
@@ -228,11 +242,20 @@ export function storyDay(prev, input, cfg) {
   const overview = { x: 0, z: R * 0.06, dist: R * 3.7, pitch: 62, yaw: 0 };
   shot({ type: 'intro', cam: overview, cam2: { ...overview, dist: R * 3.45 }, ring: { x: 5, z: 6, r: 62 } }, [[[`Day *${s.day}* in`, `*${town}!*`], 2.2]]);
 
+  // a new challenger for yesterday's comment spammer
+  if (flood) s.lastFlood = { author: flood.author, title: flood.title };
+  const champ = prev.lastFlood, byA = {};
+  for (const c of all) if (/spam/i.test(c.text)) (byA[c.author] ??= []).push(c);
+  const rivalA = champ && !flood ? Object.keys(byA).find(a => a !== champ.author && byA[a].length >= 3) : null;
+  const rival = rivalA ? { author: rivalA, name: all.find(c => c.author === rivalA && c.name)?.name ?? s.citizens[rivalA]?.name ?? pretty(rivalA), items: byA[rivalA] } : null;
+  const champName = champ ? s.citizens[champ.author]?.name ?? pretty(champ.author) : null;
+
   // 2. greetings
   const firstDay = (prev.people ?? []).length === 0;
   const loud = [...jobs, ...movers.filter(m => m.special), ...replies].filter((c, i, a) => a.findIndex(x => x.author === c.author) === i);
   const spamItems = flood ? all.filter(c => c.author === flood.author && /spammer|spam contest|metal detector|lonely/i.test(c.text)).filter((c, i, a) => a.findIndex(x => (x.text.match(/spammer|contest|detector|lonely/i)?.[0] ?? x.text).toLowerCase() === (c.text.match(/spammer|contest|detector|lonely/i)?.[0] ?? c.text).toLowerCase()) === i).slice(0, 4)
-    : spam ? Array.from({ length: 3 }, () => ({ author: spam.author, text: spam.text })) : [];
+    : spam ? Array.from({ length: 3 }, () => ({ author: spam.author, text: spam.text }))
+    : rival ? rival.items.filter((c, i, a) => a.findIndex(x => x.text.toLowerCase() === c.text.toLowerCase()) === i).slice(0, 3) : [];
   const g = (firstDay ? greets : [...spamItems, ...loud, ...greets]).slice(0, 4);
   shot({ type: 'greet', cam: { x: door.x, y: 1.7, z: door.z, dist: 11, pitch: 7, yaw: -8 }, cam2: { x: door.x, y: 1.7, z: door.z, dist: 9.5, pitch: 6, yaw: 4 },
     actor: { ...door, ry: 0, anim: 'wave' },
@@ -247,6 +270,7 @@ export function storyDay(prev, input, cfg) {
     : spam ? [[[`*${fmt(nComments)}* comments yesterday…`], 2.0],
         [[`…and *${spam.n}* of them are from *${s.citizens[spam.author]?.name ?? all.find(c => c.author === spam.author && c.name)?.name ?? pretty(spam.author)}*,`, `who just typed *"${spam.text}"!*`], 2.8],
         [['Still, that\'s', `*${money(spam.n * eco.perComment)}* for the town!`], 2.2]]
+    : rival ? [[[`*${fmt(nComments)}* comments yesterday…`], 2.0], [[`…and *${rival.name}* wants`, `${poss(champName)} *spam crown!*`], 2.6]]
     : [[[`*${fmt(nComments)}* comments yesterday…`], 2.0], [['…and you have', '*big plans!*'], 2.0]]);
 
   // 3. new residents
@@ -290,6 +314,7 @@ export function storyDay(prev, input, cfg) {
     villa: { type: 'villa', cost: 9000, icon: '🏡', label: (n, m) => /big house/i.test(m.text) ? `${n}'s big house` : `${n}'s villa`, ask: m => /big house/i.test(m.text) ? ['a *big house…*'] : ['a *villa…*'], quick: 'a *villa!*' },
     bungalow: { type: 'bungalow', cost: 4000, icon: '🏠', label: n => `${n}'s bungalow`, ask: ['a *bungalow…*'], quick: 'a *bungalow!*' },
     carhouse: { type: 'carhouse', cost: 6000, icon: '🏎️', label: n => `${n}'s M5 house`, ask: ['a house with an *M5…*'], quick: 'a house *with an M5!*' },
+    shack: { type: 'cabin', cost: 3000, icon: '🛖', label: n => `${n}'s little shack`, ask: ['a *little shack…*'], quick: 'a *little shack!*' },
     mountain: { type: 'cabin', cost: 8000, icon: '⛰️', label: n => `${n}'s mountain cabin`, verb: 'wanted', ask: ['to live on the *mountain…*'], done: 'A cabin by the spring!', big: true, spot: { x: -84, z: -100 } },
     tower: { type: 'mega', cost: 25000, icon: '🏙️', label: n => `${n}'s tower`, ask: m => /shard/i.test(m.text) ? ['a house bigger', 'than *the Shard…*'] : ['a *huge* house…'], done: 'The tallest home on the island!', big: true },
     green: { type: 'house', cost: HOUSE.cost, icon: '💚', label: n => `${n}'s green house`, ask: ['a *green house…*'], quick: 'a *green house!*', rec: { wall: '#8fd27a', roof: '#3f8f4e' } },
@@ -299,7 +324,7 @@ export function storyDay(prev, input, cfg) {
   // whoever waited since yesterday comes first
   const waiting = (s.homeQueue ?? []).filter(q => !s.citizens[q.author] || s.citizens[q.author].title !== 'Home owner');
   for (const q of waiting) if (!movers.some(m => m.author === q.author)) movers.push({ ...q });
-  const ownAll = [...waiting.map(q => movers.find(m => m.author === q.author)), ...movers.filter(m => m.own && !mates.includes(m) && !waiting.some(q => q.author === m.author))]
+  const ownAll = [...waiting.map(q => movers.find(m => m.author === q.author)).filter(m => m && !m.joinWho), ...movers.filter(m => m.own && !m.joinWho && !mates.includes(m) && !waiting.some(q => q.author === m.author))]
     .filter(m => m && !(s.citizens[m.author]?.title === 'Home owner'));
   const montage = ownAll.length > 2;
   const own = [];
@@ -308,10 +333,11 @@ export function storyDay(prev, input, cfg) {
   let homeBudget = montage ? Math.max(0, income + Math.floor((s.cash - income) * 0.5) - reserve) : s.cash;
   const plan = [], later = [];
   const isWaiting = m => waiting.some(q => q.author === m.author), fresh = ownAll.filter(m => !isWaiting(m));
+  let cashLeft = s.cash;
   // people from the waiting list always go first
   for (const m of montage ? [...ownAll.filter(isWaiting), ...fresh.filter(m => HOMES[m.special ?? 'house'].big), ...fresh.filter(m => !HOMES[m.special ?? 'house'].big)] : ownAll.slice(0, 2)) {
-    const h = HOMES[m.special ?? 'house'];
-    if (h.cost <= homeBudget && h.cost <= s.cash && plan.length < 8) { plan.push(m); homeBudget -= h.cost; } else later.push(m);
+    const h = HOMES[m.special ?? 'house'], promised = s.day >= 5 && isWaiting(m);
+    if (h.cost <= (promised ? cashLeft : Math.min(homeBudget, cashLeft)) && plan.length < 8) { plan.push(m); homeBudget -= h.cost; cashLeft -= h.cost; } else later.push(m);
   }
   s.homeQueue = later.map(m => ({ author: m.author, text: m.text, name: m.name, special: m.special, own: true }));
   const ordered = montage ? [...plan.filter(m => !HOMES[m.special ?? 'house'].big), ...plan.filter(m => HOMES[m.special ?? 'house'].big)] : plan;
@@ -347,25 +373,30 @@ export function storyDay(prev, input, cfg) {
   for (const u of upgrades.filter(u => u.extras.length)) {
     const home = [...s.buildings].reverse().find(b => b.owner === u.author && b.i != null);
     if (!home) continue;
-    const t0 = now, name = s.citizens[u.author]?.name ?? nameOf(u), cost = 1500 * u.extras.length;
+    const t0 = now, name = s.citizens[u.author]?.name ?? nameOf(u), cost = 1500 * u.extras.filter(e => e !== 'statue').length;
     s.buildings.push({ id: s.seq++, type: 'yard', x: home.x, z: home.z, day: s.day, extras: u.extras, _at: t0 + 1.2 });
-    const what = u.extras.map(e => ({ fence: 'a *fence*', court: 'a *basketball court*' })[e]);
-    const sh = shot({ type: 'build', cam: { x: home.x - 1, y: 0, z: home.z + 3, dist: 66, pitch: 46, yaw: -10 }, cam2: { x: home.x - 1, y: 0, z: home.z + 3, dist: 60, pitch: 44, yaw: -2 },
-      panel: { kind: 'price', amount: '−' + money(cost), label: `${name}'s garden`, at: 1.25 } },
-    [[[`*${name}* wanted`, what.join(' and ') + '…'], 2.4], [['Done!'], 1.4]], 0.3);
+    const what = u.extras.map(e => ({ fence: 'a *fence*', court: 'a *basketball court*', statue: `a *statue of ${who}*` })[e]);
+    const statue = u.extras.includes('statue');
+    const sh = shot({ type: 'build', cam: statue ? { x: home.x, y: 15, z: home.z, dist: 30, pitch: 14, yaw: -12 } : { x: home.x - 1, y: 0, z: home.z + 3, dist: 66, pitch: 46, yaw: -10 },
+      cam2: statue ? { x: home.x, y: 15, z: home.z, dist: 27, pitch: 13, yaw: -4 } : { x: home.x - 1, y: 0, z: home.z + 3, dist: 60, pitch: 44, yaw: -2 },
+      panel: cost ? { kind: 'price', amount: '−' + money(cost), label: `${name}'s garden`, at: 1.25 } : null },
+    [[[`*${name}* wanted`, what.join(' and ') + (statue && home.type === 'robothouse' ? ' on the *robot head…*' : '…')], 2.6], [[cost ? 'Done!' : `Done, and paid with ${poss(name)} *comment money!*`], cost ? 1.4 : 2.4]], 0.3);
     s.cash -= cost; move('cash', t0 + 1.25, s.cash, 0.5);
     void sh;
   }
 
   // 6b. moving in with someone who already has a special home ("can I live in the plane house with him")
   const JOIN_TYPE = { plane: 'planehouse', bunker: 'bunker', mansion: 'mansion', robot: 'robothouse', house: 'house' };
-  for (const m of movers.filter(m => m.joinWhat && !s.citizens[m.author])) {
-    const host = [...s.buildings].reverse().find(b => b.owner && b.type === (JOIN_TYPE[m.joinWhat] ?? m.joinWhat));
+  const canJoin = m => !s.citizens[m.author] || (m.joinWho && s.citizens[m.author].title !== 'Home owner' && !String(s.citizens[m.author].title).startsWith('Roommate'));
+  for (const m of movers.filter(m => (m.joinWhat || m.joinWho) && canJoin(m))) {
+    const host = m.joinWho ? [...s.buildings].reverse().find(b => b.owner && b.owner !== m.author && [s.citizens[b.owner]?.name, pretty(b.owner)].some(n => n && n.toLowerCase() === m.joinWho))
+      : [...s.buildings].reverse().find(b => b.owner && b.type === (JOIN_TYPE[m.joinWhat] ?? m.joinWhat));
     if (!host) continue;
     const hostName = s.citizens[host.owner]?.name ?? pretty(host.owner), name = nameOf(m);
     const sh = shot({ type: 'join', cam: { x: host.x + 2, y: 3, z: host.z + 6, dist: 34, pitch: 14, yaw: 10 }, cam2: { x: host.x + 2, y: 3, z: host.z + 6, dist: 31, pitch: 13, yaw: 4 },
       panel: { kind: 'greet', items: [{ author: m.author, text: cleanText(m.text, 64), hue: hash(m.author) % 360 }] } },
-    [[[`*${name}* moves in`, `with *${hostName}!*`], 2.4], m.iam ? [[`By the way, ${name}`, `is a *${m.iam}!*`], 2.2] : null], 0.3);
+    [[[`*${name}* moves in`, `with *${hostName}!*`], 2.4], m.iam ? [[`By the way, ${name}`, `is a *${m.iam}!*`], 2.2] : null,
+     prev.roommateWanted === host.owner ? [[`*${hostName}* is not`, '*lonely* anymore!'], 2.2] : null], 0.3);
     const p = person(m, host.x + 6.2, host.z + 8.4, sh.t0 + 0.8, -0.3, 'Roommate of ' + hostName);
     tags.push({ x: p.x, y: 3.0, z: p.z, text: p.name, sub: m.iam ? `the ${m.iam}` : null, t0: sh.t0 + 1.0, t1: sh.t1 });
     own.push(m);
@@ -497,7 +528,7 @@ export function storyDay(prev, input, cfg) {
     const cands = s.election.candidates, votes = s.election.votes, total = Object.values(votes).reduce((a, b) => a + b, 0);
     shot({ type: 'election', cam: { x: door.x, y: 3, z: door.z, dist: 30, pitch: 14, yaw: -10 }, cam2: { x: door.x, y: 3, z: door.z, dist: 27, pitch: 13, yaw: -4 },
       actor: { ...door, ry: 0, anim: 'look' },
-      panel: { kind: 'hires', icon: '🗳️', title: 'ELECTION: WHO LEADS LEOVILLE?', rows: cands.slice(0, 5).map(c => ({ handle: c.name, title: `${votes[c.author] ?? 0} vote${(votes[c.author] ?? 0) === 1 ? '' : 's'} · ${c.word}`, hue: hash(c.author) % 360 })), note: 'Reply with a name to vote!' } },
+      panel: { kind: 'hires', icon: '🗳️', title: 'ELECTION: WHO LEADS LEOVILLE?', rows: cands.slice(0, 6).map(c => ({ handle: c.name, title: `${votes[c.author] ?? 0} vote${(votes[c.author] ?? 0) === 1 ? '' : 's'} · ${c.word}`, hue: hash(c.author) % 360 })), note: 'Reply with a name to vote!' } },
     [fresh.length ? [[names(fresh.map(nameOf)), `${fresh.length > 1 ? 'want' : 'wants'} to be *${fresh.length > 1 ? 'president' : fresh[0].word}* too!`], 2.6] : null,
      [[`The election has`, `*${cands.length}* candidates now!`], 2.2],
      ...(() => {
@@ -525,8 +556,27 @@ export function storyDay(prev, input, cfg) {
     shot({ type: 'reply', cam: { x: door.x, y: 1.7, z: door.z, dist: 11, pitch: 7, yaw: 8 }, actor: { ...door, ry: 0, anim: 'look' },
       panel: { kind: 'greet', items: [{ author: r.author, text: cleanText(r.text, 64), hue: hash(r.author) % 360 }] } },
     r.kind === 'king' ? [[[`A revolution, *${rn}?*`], 1.8], [[`Leoville has no king…`, '*yet!*'], 2.2]]
+      : r.kind === 'gta' ? [[['Made before *GTA 6?*'], 1.8], [[`Yes! *${town}* came first!`], 2.2]]
+      : r.kind === 'jobs' ? [[[`"We want jobs!"`, `says *${rn}…*`], 2.0], namedShops[0] ? [[`*${namedShops[0].name ?? s.citizens[namedShops[0].author]?.name ?? pretty(namedShops[0].author)}* has an idea:`, `a shop called *${namedShops[0].shop}!*`], 2.6] : [['The first jobs come', 'with the *school!*'], 2.2]]
       : [[[/d ?bucks/i.test(r.text) ? `"D bucks", *${rn}?*` : `Dollars, *${rn}?*`], 1.6], [['Sorry, Leoville pays', 'in *euros!*'], 2.2]], 0.3);
   }
+  // 10a. new titles people asked for
+  const tl = titles.filter((x, i, a) => a.findIndex(y => y.author === x.author) === i).slice(0, 2);
+  if (tl.length) {
+    const tn = t => s.citizens[t.author]?.name ?? t.name ?? pretty(t.author);
+    tl.forEach(t => { if (s.citizens[t.author]) s.citizens[t.author].nick = t.title; });
+    shot({ type: 'titles', cam: { x: door.x, y: 1.7, z: door.z, dist: 11, pitch: 7, yaw: -6 }, actor: { ...door, ry: 0, anim: 'cheer' },
+      panel: { kind: 'greet', items: tl.map(t => ({ author: t.author, text: cleanText(t.text, 64), hue: hash(t.author) % 360 })) } },
+    tl.map((t, k) => [k ? [`And *${tn(t)}* is`, `*"the ${t.title}"!*`] : t.town ? [`*${tn(t)}* is now the town's`, `official *${t.title}!*`] : [`*${tn(t)}* is now`, `*"the ${t.title}"!*`], 2.6]), 0.3);
+  }
+  // 10a2. a quiet place to remember someone
+  for (const mm of memorial.slice(0, 1)) {
+    const mn = s.citizens[mm.author]?.name ?? mm.name ?? pretty(mm.author), spot = { x: H.x - 13, z: H.z + 6.2 };
+    s.buildings.push({ id: s.seq++, type: 'memorial', x: spot.x, z: spot.z, day: s.day, sign: { icon: '🌷', name: 'In loving memory', handle: `${poss(mn)} grandparents` }, _at: now + 1.0 });
+    shot({ type: 'memorial', cam: { x: spot.x, y: 1.0, z: spot.z + 0.5, dist: 15, pitch: 16, yaw: -10 }, cam2: { x: spot.x, y: 1.0, z: spot.z + 0.5, dist: 13.5, pitch: 15, yaw: -2 } },
+    [[[`*${poss(mn)}* grandparents`, 'passed away…'], 2.4], [['So we placed a bench', 'and flowers in their *memory.*'], 3.0]], 0.6);
+  }
+
   // 10b. a home owner who feels lonely asks for a roommate
   for (const l of lonely.filter((x, i, a) => a.findIndex(y => y.author === x.author) === i).slice(0, 1)) {
     const home = [...s.buildings].reverse().find(b => b.owner === l.author);
@@ -540,7 +590,7 @@ export function storyDay(prev, input, cfg) {
   }
 
   for (const k of built) merged.delete(k);
-  s.wishes = Object.fromEntries([...merged.entries()].map(([k, e]) => [k, { votes: e.votes, by: e.by, label: e.label ?? want.find(w => w.key === k)?.name, first: e.first }]));
+  s.wishes = Object.fromEntries([...merged.entries()].map(([k, e]) => [k, { votes: e.votes, by: e.by, label: e.label ?? want.find(w => w.key === k)?.name, ...(e.icon ? { icon: e.icon } : {}), first: e.first }]));
   const open = want.filter(w => !built.includes(w.key) && !(w.role && s.buildings.some(b => b.role === w.role)));
   if (open.length) {
     const top = open.slice(0, 6);

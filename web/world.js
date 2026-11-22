@@ -326,6 +326,12 @@ function yard(p, b) {
     for (const [x, z, w, d] of [[0, -6.5, 15, 0.15], [0, 9.5, 5.5, 0.15], [-7.5, 1.5, 0.15, 16], [7.5, 1.5, 0.15, 16]]) p.box(w, 1.1, d, '#f3efe6', x, 0, z);
     for (const x of [-5.25, 5.25]) p.box(4.5, 1.1, 0.15, '#f3efe6', x, 0, 9.5);
   }
+  if (ex.includes('statue')) {   // a golden Leo on top of the robot's head
+    const y = 13.5, x = -1.7;   // standing on the head, beside the antenna
+    p.box(2, 0.5, 2, '#8d94a0', x, y, 0.6).cyl(0.55, 0.7, 1.7, '#e0b43a', x, y + 0.5, 0.6, 12).ball(0.5, '#f0c87a', x, y + 2.1, 0.6)
+      .add(new THREE.SphereGeometry(0.55, 12, 8, 0, Math.PI * 2, 0, Math.PI / 2), '#d4a72c', x, y + 2.65, 0.6).ball(0.16, '#f3e1a0', x, y + 3.2, 0.6)
+      .add(new THREE.BoxGeometry(0.3, 1.3, 0.3).rotateZ(-0.5), '#e0b43a', x + 0.85, y + 1.8, 0.6);
+  }
   if (ex.includes('court')) {
     // in the front garden, where you can see it from the street
     const cx = -3.4, cz = 7.3;
@@ -335,12 +341,24 @@ function yard(p, b) {
   }
 }
 
+// a bench, flowers and a small plaque to remember someone
+function memorial(p) {
+  p.box(4.6, 0.1, 2.6, '#cfc9bb', 0, 0, 0.3);
+  p.box(3, 0.15, 0.9, '#8a5a3a', 0, 0.75, 0).box(3, 0.7, 0.15, '#8a5a3a', 0, 0.9, -0.4);
+  for (const x of [-1.3, 1.3]) p.box(0.15, 0.75, 0.8, '#5b5650', x, 0, 0);
+  for (const [x, z] of [[-2, 0.9], [2, 0.9]]) {
+    p.cyl(0.45, 0.35, 0.5, '#9a8a7a', x, 0, z, 10);
+    for (let k = 0; k < 5; k++) { const a = k / 5 * Math.PI * 2; p.ball(0.15, ['#ffffff', '#ff9fc0', '#ffd24a', '#c9b6ff', '#ff6b6b'][k], x + Math.cos(a) * 0.2, 0.5, z + Math.sin(a) * 0.2); }
+  }
+  p.cyl(0.06, 0.06, 1.5, '#5b5650', 0, 0, -0.9, 6);
+}
+
 const BUILD = {
   house: (p, b, r) => { house(p, r, b); if (b.farm) farmPlot(p); }, block: (p, b, r) => block(p, r), tower: (p, b, r) => tower(p, r),
   mega: (p, b, r) => mega(p, r, 1), arco: (p, b, r) => mega(p, r, 1.9),
   shop: (p, b) => shop(p, b), civic: (p, b) => civic(p, b), townhall: p => townhall(p), cottage: p => cottage(p), sign: () => {},
   planehouse: (p, b) => planeHouse(p, b), villa: (p, b, r) => villa(p, r),
-  bungalow: (p, b, r) => bungalow(p, r), mansion: p => mansion(p), bunker: p => bunker(p), robothouse: p => robotHouse(p), carhouse: (p, b, r) => carHouse(p, r), pump: p => pumpHouse(p), cabin: p => cabin(p), yard: (p, b) => yard(p, b),
+  bungalow: (p, b, r) => bungalow(p, r), mansion: p => mansion(p), bunker: p => bunker(p), robothouse: p => robotHouse(p), carhouse: (p, b, r) => carHouse(p, r), pump: p => pumpHouse(p), memorial: p => memorial(p), cabin: p => cabin(p), yard: (p, b) => yard(p, b),
   stadium: p => stadium(p), funfair: p => funfair(p), harbor: p => harbor(p), airport: p => airport(p),
 };
 
@@ -361,6 +379,7 @@ export function buildingMesh(b) {
     else if (b.type === 'mansion') { s.scale.setScalar(0.62); s.position.set(0, 7.4, 6.0); }
     else if (b.type === 'bunker') { s.scale.setScalar(0.55); s.position.set(0, 4.5, 5.2); }
     else if (b.type === 'robothouse') { s.scale.setScalar(0.62); s.position.set(0, 1.6, 3.6); }
+    else if (b.type === 'memorial') { s.scale.setScalar(0.32); s.position.set(0, 1.55, -0.85); }
     else if (b.type === 'cabin') { s.scale.setScalar(0.5); s.position.set(0, 4.4, 3.4); }
     else if (b.type === 'mega') { s.scale.setScalar(0.62); s.position.set(0, 3.0, 7.3); }
     else if (b.type === 'pump') { s.scale.setScalar(0.4); s.position.set(0, 3.6, 1.8); }

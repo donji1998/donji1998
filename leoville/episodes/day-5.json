@@ -1,6 +1,6 @@
 {
  "version": 1,
- "day": 4,
+ "day": 5,
  "city": "Leoville",
  "lang": "en",
  "locale": "en-US",
@@ -14,11 +14,11 @@
   "tents": "sleeping in tents",
   "free": "free"
  },
- "duration": 82.6,
+ "duration": 94.97,
  "shots": [
   {
-   "t0": 0,
-   "t1": 2.3000000000000003,
+   "t0": 0.0,
+   "t1": 2.382,
    "type": "intro",
    "cam": {
     "x": 0,
@@ -42,17 +42,18 @@
    "captions": [
     {
      "lines": [
-      "Day *4* in",
+      "Day *5* in",
       "*Leoville!*"
      ],
-     "t0": 0.1,
-     "t1": 2.3000000000000003
+     "t0": 0.3,
+     "t1": 2.162,
+     "speech": 1.312
     }
    ]
   },
   {
-   "t0": 2.3000000000000003,
-   "t1": 15,
+   "t0": 2.382,
+   "t1": 7.475,
    "type": "greet",
    "cam": {
     "x": 30.5,
@@ -80,79 +81,50 @@
     "kind": "greet",
     "items": [
      {
-      "author": "@matsdeclercq-m5c",
-      "text": "Make a comment spam contest",
-      "hue": 209
+      "author": "@tamineeshinasharkey7057",
+      "text": "spam",
+      "hue": 187
      },
      {
-      "author": "@matsdeclercq-m5c",
-      "text": "A metal detector plsss",
-      "hue": 209
+      "author": "@tamineeshinasharkey7057",
+      "text": "Comment spam",
+      "hue": 187
      },
      {
-      "author": "@matsdeclercq-m5c",
-      "text": "Pls move in with me I am lonely",
-      "hue": 209
+      "author": "@tamineeshinasharkey7057",
+      "text": "I'm comment spam",
+      "hue": 187
      },
      {
-      "author": "@matsdeclercq-m5c",
-      "text": "I am money spammer",
-      "hue": 209
+      "author": "@Kalilay77Yt",
+      "text": "I am proudly gonna become a candidate for president",
+      "hue": 5
      }
     ]
    },
    "captions": [
     {
      "lines": [
-      "*81* comments yesterday…"
+      "*35* comments yesterday…"
      ],
-     "t0": 2.4000000000000004,
-     "t1": 4.4
+     "t0": 2.502,
+     "t1": 4.674,
+     "speech": 1.622
     },
     {
      "lines": [
-      "…and *62* of them",
-      "are from *Mats!*"
+      "…and *Taminee* wants",
+      "Mats' *spam crown!*"
      ],
-     "t0": 4.4,
-     "t1": 6.800000000000001
-    },
-    {
-     "lines": [
-      "He calls himself",
-      "*\"the town comment spammer\"!*"
-     ],
-     "t0": 6.800000000000001,
-     "t1": 9.200000000000001
-    },
-    {
-     "lines": [
-      "He wants a comment",
-      "spam *contest…*"
-     ],
-     "t0": 9.200000000000001,
-     "t1": 11.200000000000001
-    },
-    {
-     "lines": [
-      "…but he already *won!*"
-     ],
-     "t0": 11.200000000000001,
-     "t1": 12.8
-    },
-    {
-     "lines": [
-      "Still, that's",
-      "*€124* for the town!"
-     ],
-     "t0": 12.8,
-     "t1": 15
+     "t0": 4.674,
+     "t1": 7.255,
+     "speech": 2.032
     }
    ]
   },
   {
-   "t0": 15,
-   "t1": 19.3,
+   "t0": 7.475,
+   "t1": 12.933,
    "type": "followers",
    "cam": {
     "x": 18,
@@ -173,31 +145,33 @@
     "title": "RESIDENTS",
     "y": "YESTERDAY",
     "t": "TODAY",
-    "from": 89,
-    "to": 98,
-    "c0": 2.1,
-    "c1": 3.1
+    "from": 98,
+    "to": 107,
+    "c0": 2.748,
+    "c1": 3.89
    },
    "captions": [
     {
      "lines": [
-      "Yesterday: *89* residents."
+      "Yesterday: *98* residents."
      ],
-     "t0": 15.1,
-     "t1": 17.1
+     "t0": 7.595,
+     "t1": 10.224,
+     "speech": 2.078
     },
     {
      "lines": [
-      "Today, we are *98!*"
+      "Today, we are *107!*"
      ],
-     "t0": 17.1,
-     "t1": 19.3
+     "t0": 10.224,
+     "t1": 12.713,
+     "speech": 1.939
     }
    ]
   },
   {
-   "t0": 19.3,
-   "t1": 22.400000000000002,
+   "t0": 12.933,
+   "t1": 16.841,
    "type": "income",
    "cam": {
     "x": 6,
@@ -223,13 +197,13 @@
      },
      {
       "icon": "❤️",
-      "label": "14 likes",
-      "amount": "+€14"
+      "label": "12 likes",
+      "amount": "+€12"
      },
      {
       "icon": "💬",
-      "label": "81 comments",
-      "amount": "+€162"
+      "label": "35 comments",
+      "amount": "+€70"
      }
     ]
    },
@@ -237,127 +211,101 @@
     {
      "lines": [
       "That brings",
-      "*€9,176* into the budget!"
+      "*€9,082* into the budget!"
      ],
-     "t0": 19.400000000000002,
-     "t1": 22.400000000000002
+     "t0": 13.053,
+     "t1": 16.621,
+     "speech": 3.019
     }
    ]
   },
   {
-   "t0": 22.400000000000002,
-   "t1": 24.700000000000003,
+   "t0": 16.841,
+   "t1": 19.345,
    "type": "build",
    "cam": {
-    "x": 123.3,
+    "x": 9.3,
+    "y": 4.5,
+    "z": 28,
+    "dist": 45,
+    "pitch": 16,
+    "yaw": -12
+   },
+   "cam2": {
+    "x": 9.3,
+    "y": 4.5,
+    "z": 28,
+    "dist": 41.25,
+    "pitch": 15,
+    "yaw": -5
+   },
+   "panel": {
+    "kind": "price",
+    "amount": "−€12,000",
+    "label": "cnaaitsirh's mansion",
+    "at": 0.607
+   },
+   "captions": [
+    {
+     "lines": [
+      "*cnaaitsirh* gets",
+      "a *mansion!*"
+     ],
+     "t0": 16.961,
+     "t1": 19.125,
+     "speech": 1.614
+    }
+   ]
+  },
+  {
+   "t0": 19.345,
+   "t1": 23.757,
+   "type": "build",
+   "cam": {
+    "x": -82.2,
     "y": 3.6,
-    "z": 4,
+    "z": -96,
     "dist": 36,
     "pitch": 16,
     "yaw": -12
    },
    "cam2": {
-    "x": 123.3,
+    "x": -82.2,
     "y": 3.6,
-    "z": 4,
+    "z": -96,
     "dist": 33,
     "pitch": 15,
     "yaw": -5
    },
    "panel": {
     "kind": "price",
-    "amount": "−€6,000",
-    "label": "UserFromRO's M5 house",
-    "at": 0.55
+    "amount": "−€8,000",
+    "label": "Bob's mountain cabin",
+    "at": 1.275
    },
    "captions": [
     {
      "lines": [
-      "*UserFromRO* gets",
-      "a house *with an M5!*"
+      "*Bob* wanted",
+      "to live on the *mountain…*"
      ],
-     "t0": 22.500000000000004,
-     "t1": 24.500000000000004
-    }
-   ]
-  },
-  {
-   "t0": 24.700000000000003,
-   "t1": 27.000000000000004,
-   "type": "build",
-   "cam": {
-    "x": 24.3,
-    "y": 3.6,
-    "z": 28,
-    "dist": 36,
-    "pitch": 16,
-    "yaw": -12
-   },
-   "cam2": {
-    "x": 24.3,
-    "y": 3.6,
-    "z": 28,
-    "dist": 33,
-    "pitch": 15,
-    "yaw": -5
-   },
-   "panel": {
-    "kind": "price",
-    "amount": "−€9,000",
-    "label": "Salih's villa",
-    "at": 0.55
-   },
-   "captions": [
+     "t0": 19.465,
+     "t1": 21.675,
+     "speech": 1.66
+    },
     {
      "lines": [
-      "*Salih* gets",
-      "a *villa!*"
+      "A cabin by the spring!"
      ],
-     "t0": 24.800000000000004,
-     "t1": 26.800000000000004
+     "t0": 21.675,
+     "t1": 23.537,
+     "speech": 1.312
     }
    ]
   },
   {
-   "t0": 27.000000000000004,
-   "t1": 29.300000000000004,
-   "type": "build",
-   "cam": {
-    "x": 39.3,
-    "y": 3.6,
-    "z": 28,
-    "dist": 36,
-    "pitch": 16,
-    "yaw": -12
-   },
-   "cam2": {
-    "x": 39.3,
-    "y": 3.6,
-    "z": 28,
-    "dist": 33,
-    "pitch": 15,
-    "yaw": -5
-   },
-   "panel": {
-    "kind": "price",
-    "amount": "−€3,000",
-    "label": "Sanulatesade's house",
-    "at": 0.55
-   },
-   "captions": [
-    {
-     "lines": [
-      "*Sanulatesade* gets",
-      "a *house!*"
-     ],
-     "t0": 27.100000000000005,
-     "t1": 29.100000000000005
-    }
-   ]
-  },
-  {
-   "t0": 29.300000000000004,
-   "t1": 32.300000000000004,
+   "t0": 23.757,
+   "t1": 27.682,
    "type": "queue",
    "cam": {
     "x": 8,
@@ -379,24 +327,24 @@
     "title": "YOUR HOME COMES NEXT",
     "rows": [
      {
-      "handle": "cnaaitsirh",
-      "title": "mansion",
-      "hue": 239
-     },
-     {
       "handle": "Iain",
       "title": "tower",
       "hue": 14
      },
      {
-      "handle": "Bob",
-      "title": "mountain cabin",
-      "hue": 58
-     },
-     {
       "handle": "Kalilay",
       "title": "farm home",
       "hue": 5
+     },
+     {
+      "handle": "Camille",
+      "title": "green house",
+      "hue": 169
+     },
+     {
+      "handle": "Minijr",
+      "title": "house",
+      "hue": 328
      }
     ],
     "more": 3,
@@ -405,61 +353,110 @@
    "captions": [
     {
      "lines": [
-      "*cnaaitsirh*, *Iain* and *Bob*:",
+      "*Iain*, *Kalilay* and *Camille*:",
       "your homes come *next!*"
      ],
-     "t0": 29.400000000000006,
-     "t1": 32.00000000000001
+     "t0": 23.877,
+     "t1": 27.462,
+     "speech": 3.035
     }
    ]
   },
   {
-   "t0": 32.300000000000004,
-   "t1": 36.5,
+   "t0": 27.682,
+   "t1": 34.489,
    "type": "build",
    "cam": {
-    "x": 90.5,
-    "y": 0,
-    "z": 3,
-    "dist": 66,
-    "pitch": 46,
-    "yaw": -10
+    "x": 106.5,
+    "y": 15,
+    "z": 0,
+    "dist": 30,
+    "pitch": 14,
+    "yaw": -12
    },
    "cam2": {
-    "x": 90.5,
-    "y": 0,
-    "z": 3,
-    "dist": 60,
-    "pitch": 44,
-    "yaw": -2
+    "x": 106.5,
+    "y": 15,
+    "z": 0,
+    "dist": 27,
+    "pitch": 13,
+    "yaw": -4
+   },
+   "panel": null,
+   "captions": [
+    {
+     "lines": [
+      "*Mats* wanted",
+      "a *statue of Leo* on the *robot head…*"
+     ],
+     "t0": 27.802,
+     "t1": 31.456,
+     "speech": 3.104
+    },
+    {
+     "lines": [
+      "Done, and paid with Mats' *comment money!*"
+     ],
+     "t0": 31.456,
+     "t1": 34.269,
+     "speech": 2.264
+    }
+   ]
+  },
+  {
+   "t0": 34.489,
+   "t1": 39.11,
+   "type": "join",
+   "cam": {
+    "x": 108.5,
+    "y": 3,
+    "z": 6,
+    "dist": 34,
+    "pitch": 14,
+    "yaw": 10
+   },
+   "cam2": {
+    "x": 108.5,
+    "y": 3,
+    "z": 6,
+    "dist": 31,
+    "pitch": 13,
+    "yaw": 4
    },
    "panel": {
-    "kind": "price",
-    "amount": "−€3,000",
-    "label": "Thomas's garden",
-    "at": 1.25
+    "kind": "greet",
+    "items": [
+     {
+      "author": "@tamineeshinasharkey7057",
+      "text": "I want a pineapple house btw",
+      "hue": 187
+     }
+    ]
    },
    "captions": [
     {
      "lines": [
-      "*Thomas* wanted",
-      "a *fence* and a *basketball court*…"
+      "*Taminee* moves in",
+      "with *Mats!*"
      ],
-     "t0": 32.400000000000006,
-     "t1": 34.800000000000004
+     "t0": 34.609,
+     "t1": 36.819,
+     "speech": 1.66
     },
     {
      "lines": [
-      "Done!"
+      "*Mats* is not",
+      "*lonely* anymore!"
      ],
-     "t0": 34.800000000000004,
-     "t1": 36.2
+     "t0": 36.819,
+     "t1": 38.89,
+     "speech": 1.521
     }
    ]
   },
   {
-   "t0": 36.5,
-   "t1": 42.1,
+   "t0": 39.11,
+   "t1": 45.261,
    "type": "movein",
    "cam": {
     "x": 52.5,
@@ -480,24 +477,26 @@
    "captions": [
     {
      "lines": [
-      "*Kalilay*, *Camille* and *5 more*",
+      "*Terry*, *Ishan* and *4 more*",
       "move into the *apartment block!*"
      ],
-     "t0": 36.6,
-     "t1": 39.2
+     "t0": 39.23,
+     "t1": 43.19,
+     "speech": 3.41
     },
     {
      "lines": [
-      "Welcome *Ayalneh* and *Lerato*!"
+      "Welcome *neleski1*!"
      ],
-     "t0": 39.2,
-     "t1": 41.800000000000004
+     "t0": 43.19,
+     "t1": 45.041,
+     "speech": 1.3
     }
    ]
   },
   {
-   "t0": 42.1,
-   "t1": 51.900000000000006,
+   "t0": 45.261,
+   "t1": 55.115,
    "type": "election",
    "cam": {
     "x": 30.5,
@@ -533,7 +532,7 @@
      },
      {
       "handle": "Divish",
-      "title": "1 vote · government",
+      "title": "2 votes · government",
       "hue": 330
      },
      {
@@ -548,8 +547,13 @@
      },
      {
       "handle": "doodle",
-      "title": "0 votes · president",
+      "title": "2 votes · president",
       "hue": 38
+     },
+     {
+      "handle": "Kalilay",
+      "title": "0 votes · president",
+      "hue": 5
      }
     ],
     "note": "Reply with a name to vote!"
@@ -557,41 +561,45 @@
    "captions": [
     {
      "lines": [
-      "*doodle*",
+      "*Kalilay*",
       "wants to be *president* too!"
      ],
-     "t0": 42.2,
-     "t1": 44.800000000000004
+     "t0": 45.381,
+     "t1": 47.753,
+     "speech": 1.823
     },
     {
      "lines": [
       "The election has",
-      "*5* candidates now!"
+      "*6* candidates now!"
      ],
-     "t0": 44.800000000000004,
-     "t1": 47.00000000000001
+     "t0": 47.753,
+     "t1": 50.3,
+     "speech": 1.997
     },
     {
      "lines": [
-      "*Divish* and *Alex*",
-      "have *1 vote* each!"
+      "*Divish* and *doodle*",
+      "have *2 votes* each!"
      ],
-     "t0": 47.00000000000001,
-     "t1": 49.60000000000001
+     "t0": 50.3,
+     "t1": 52.987,
+     "speech": 2.136
     },
     {
      "lines": [
       "Reply with a *name*",
       "to vote!"
      ],
-     "t0": 49.60000000000001,
-     "t1": 51.60000000000001
+     "t0": 52.987,
+     "t1": 54.895,
+     "speech": 1.358
     }
    ]
   },
   {
-   "t0": 51.900000000000006,
-   "t1": 56.10000000000001,
+   "t0": 55.115,
+   "t1": 61.237,
    "type": "reply",
    "cam": {
     "x": 30.5,
@@ -612,7 +620,7 @@
     "items": [
      {
       "author": "@doodleandarkeyeditzYT",
-      "text": "I want to be president i will make dollars named d bucks",
+      "text": "We want jobs",
       "hue": 38
      }
     ]
@@ -620,24 +628,27 @@
    "captions": [
     {
      "lines": [
-      "\"D bucks\", *doodle?*"
+      "\"We want jobs!\"",
+      "says *doodle…*"
      ],
-     "t0": 52.00000000000001,
-     "t1": 53.60000000000001
+     "t0": 55.235,
+     "t1": 57.422,
+     "speech": 1.637
     },
     {
      "lines": [
-      "Sorry, Leoville pays",
-      "in *euros!*"
+      "*Thomas* has an idea:",
+      "a shop called *LeoBurg!*"
      ],
-     "t0": 53.60000000000001,
-     "t1": 55.80000000000001
+     "t0": 57.422,
+     "t1": 61.017,
+     "speech": 3.045
     }
    ]
   },
   {
-   "t0": 56.10000000000001,
-   "t1": 60.50000000000001,
+   "t0": 61.237,
+   "t1": 65.828,
    "type": "reply",
    "cam": {
     "x": 30.5,
@@ -657,82 +668,129 @@
     "kind": "greet",
     "items": [
      {
-      "author": "@barhoum_gaming4755",
-      "text": "I want to start a revolution against the king",
-      "hue": 258
+      "author": "@UsEr-1jo5H7k1oi.k",
+      "text": "This town was made before gta 6",
+      "hue": 78
      }
     ]
    },
    "captions": [
     {
      "lines": [
-      "A revolution, *Barhoum?*"
+      "Made before *GTA 6?*"
      ],
-     "t0": 56.20000000000001,
-     "t1": 58.00000000000001
+     "t0": 61.357,
+     "t1": 63.556,
+     "speech": 1.649
     },
     {
      "lines": [
-      "Leoville has no king…",
-      "*yet!*"
+      "Yes! *Leoville* came first!"
      ],
-     "t0": 58.00000000000001,
-     "t1": 60.20000000000001
+     "t0": 63.556,
+     "t1": 65.608,
+     "speech": 1.502
     }
    ]
   },
   {
-   "t0": 60.50000000000001,
-   "t1": 65.50000000000001,
-   "type": "lonely",
+   "t0": 65.828,
+   "t1": 71.355,
+   "type": "titles",
    "cam": {
-    "x": 108.3,
-    "y": 7.5,
-    "z": 4,
-    "dist": 60,
-    "pitch": 14,
-    "yaw": 12
+    "x": 30.5,
+    "y": 1.7,
+    "z": 5.3,
+    "dist": 11,
+    "pitch": 7,
+    "yaw": -6
    },
-   "cam2": {
-    "x": 108.3,
-    "y": 7.5,
-    "z": 4,
-    "dist": 55,
-    "pitch": 13,
-    "yaw": 4
+   "actor": {
+    "x": 30.5,
+    "z": 5.3,
+    "ry": 0,
+    "anim": "cheer"
    },
    "panel": {
     "kind": "greet",
     "items": [
      {
       "author": "@matsdeclercq-m5c",
-      "text": "Someone can move in with me",
+      "text": "Can I be the joke maker of town",
       "hue": 209
+     },
+     {
+      "author": "@Not14Redmi-t5o",
+      "text": "Make people call me the automation man",
+      "hue": 139
      }
     ]
    },
    "captions": [
     {
      "lines": [
-      "*Mats* is lonely",
-      "in the *robot house…*"
+      "*Mats* is now the town's",
+      "official *joke maker!*"
      ],
-     "t0": 60.60000000000001,
-     "t1": 62.80000000000001
+     "t0": 65.948,
+     "t1": 68.634,
+     "speech": 2.136
     },
     {
      "lines": [
-      "Who wants to",
-      "move in with *Mats?*"
+      "And *Not14redmi* is",
+      "*\"the automation man\"!*"
      ],
-     "t0": 62.80000000000001,
-     "t1": 65.20000000000002
+     "t0": 68.634,
+     "t1": 71.135,
+     "speech": 1.95
     }
    ]
   },
   {
-   "t0": 65.50000000000001,
-   "t1": 70.00000000000001,
+   "t0": 71.355,
+   "t1": 77.044,
+   "type": "memorial",
+   "cam": {
+    "x": 17,
+    "y": 1,
+    "z": 6.7,
+    "dist": 15,
+    "pitch": 16,
+    "yaw": -10
+   },
+   "cam2": {
+    "x": 17,
+    "y": 1,
+    "z": 6.7,
+    "dist": 13.5,
+    "pitch": 15,
+    "yaw": -2
+   },
+   "captions": [
+    {
+     "lines": [
+      "*Mats'* grandparents",
+      "passed away…"
+     ],
+     "t0": 71.475,
+     "t1": 73.696,
+     "speech": 1.672
+    },
+    {
+     "lines": [
+      "So we placed a bench",
+      "and flowers in their *memory.*"
+     ],
+     "t0": 73.696,
+     "t1": 76.824,
+     "speech": 2.577
+    }
+   ]
+  },
+  {
+   "t0": 77.044,
+   "t1": 81.681,
    "type": "votes",
    "cam": {
     "x": 8,
@@ -790,22 +848,24 @@
       "And what do you",
       "want *next?*"
      ],
-     "t0": 65.60000000000001,
-     "t1": 67.60000000000001
+     "t0": 77.164,
+     "t1": 78.705,
+     "speech": 0.991
     },
     {
      "lines": [
       "*Military Base* and *school*",
       "are *tied!*"
      ],
-     "t0": 67.60000000000001,
-     "t1": 70.00000000000001
+     "t0": 78.705,
+     "t1": 81.461,
+     "speech": 2.206
     }
    ]
   },
   {
-   "t0": 70.00000000000001,
-   "t1": 77.10000000000002,
+   "t0": 81.681,
+   "t1": 90.113,
    "type": "goal",
    "cam": {
     "x": 0,
@@ -824,7 +884,7 @@
    "panel": {
     "kind": "goal",
     "title": "NEXT: SCHOOL",
-    "cur": 11376,
+    "cur": 458,
     "target": 120000,
     "money": true,
     "unit": ""
@@ -835,30 +895,33 @@
       "The school costs",
       "*€120,000.*"
      ],
-     "t0": 70.10000000000001,
-     "t1": 72.50000000000001
+     "t0": 81.801,
+     "t1": 85.101,
+     "speech": 2.75
     },
     {
      "lines": [
       "Today we spent a lot",
       "on *your homes…*"
      ],
-     "t0": 72.50000000000001,
-     "t1": 74.70000000000002
+     "t0": 85.101,
+     "t1": 87.416,
+     "speech": 1.765
     },
     {
      "lines": [
       "Keep subscribing,",
       "and we can *build it!*"
      ],
-     "t0": 74.70000000000002,
-     "t1": 77.10000000000002
+     "t0": 87.416,
+     "t1": 89.893,
+     "speech": 1.927
     }
    ]
   },
   {
-   "t0": 77.10000000000002,
-   "t1": 82.60000000000002,
+   "t0": 90.113,
+   "t1": 94.974,
    "type": "outro",
    "cam": {
     "x": 29.6,
@@ -888,16 +951,18 @@
       "Who should lead",
       "*Leoville?*"
      ],
-     "t0": 77.20000000000002,
-     "t1": 79.60000000000002
+     "t0": 90.233,
+     "t1": 91.894,
+     "speech": 1.111
     },
     {
      "lines": [
       "Vote in the",
       "*comments!*"
      ],
-     "t0": 79.60000000000002,
-     "t1": 82.00000000000003
+     "t0": 91.894,
+     "t1": 93.674,
+     "speech": 1.231
     }
    ]
   }
@@ -905,146 +970,130 @@
  "tracks": {
   "cash": [
    [
-    0,
-    23200
-   ],
-   [
-    20.7,
-    23200
-   ],
-   [
-    22,
-    32376
-   ],
-   [
-    22.950000000000003,
-    32376
-   ],
-   [
-    23.550000000000004,
-    26376
-   ],
-   [
-    25.250000000000004,
-    26376
-   ],
-   [
-    25.850000000000005,
-    17376
-   ],
-   [
-    27.550000000000004,
-    17376
-   ],
-   [
-    28.150000000000006,
-    14376
-   ],
-   [
-    33.550000000000004,
-    14376
-   ],
-   [
-    34.050000000000004,
+    0.0,
     11376
+   ],
+   [
+    14.609,
+    11376
+   ],
+   [
+    16.166,
+    20458
+   ],
+   [
+    17.448,
+    20458
+   ],
+   [
+    18.097,
+    8458
+   ],
+   [
+    20.62,
+    8458
+   ],
+   [
+    21.223,
+    458
+   ],
+   [
+    29.418,
+    458
+   ],
+   [
+    30.121,
+    458
    ]
   ],
   "residents": [
    [
-    0,
-    89
-   ],
-   [
-    17.1,
-    89
-   ],
-   [
-    18.1,
+    0.0,
     98
+   ],
+   [
+    10.224,
+    98
+   ],
+   [
+    11.365,
+    107
    ]
   ],
   "housing": [
    [
-    0,
-    172
-   ],
-   [
-    22.900000000000002,
-    172
-   ],
-   [
-    23.400000000000002,
-    178
-   ],
-   [
-    25.200000000000003,
-    178
-   ],
-   [
-    25.700000000000003,
-    184
-   ],
-   [
-    27.500000000000004,
-    184
-   ],
-   [
-    28.000000000000004,
+    0.0,
     190
+   ],
+   [
+    17.394,
+    190
+   ],
+   [
+    17.935,
+    196
+   ],
+   [
+    20.57,
+    196
+   ],
+   [
+    21.072,
+    202
    ]
   ]
  },
  "tags": [
   {
-   "x": 125.5,
+   "x": 11.5,
    "y": 3,
-   "z": 7.2,
-   "text": "UserFromRO",
+   "z": 33.6,
+   "text": "cnaaitsirh",
    "sub": null,
-   "t0": 23.400000000000002,
-   "t1": 24.700000000000003
+   "t0": 17.935,
+   "t1": 19.345
   },
   {
-   "x": 26.5,
+   "x": -80,
    "y": 3,
-   "z": 31.2,
-   "text": "Salih",
-   "sub": "@salihkeremince1475",
-   "t0": 25.700000000000003,
-   "t1": 27.000000000000004
+   "z": -92.8,
+   "text": "Bob",
+   "sub": "@bobduur",
+   "t0": 21.474,
+   "t1": 23.757
   },
   {
-   "x": 41.5,
+   "x": 112.7,
    "y": 3,
-   "z": 31.2,
-   "text": "Sanulatesade",
-   "sub": "@sanulatesade",
-   "t0": 28.000000000000004,
-   "t1": 29.300000000000004
+   "z": 8.4,
+   "text": "Taminee",
+   "sub": null,
+   "t0": 35.438,
+   "t1": 39.11
   },
   {
    "x": 50.2,
    "y": 3,
    "z": 7.4,
-   "text": "Kalilay",
-   "t0": 37.1,
-   "t1": 42.1
+   "text": "Terry",
+   "t0": 39.992,
+   "t1": 45.261
   },
   {
    "x": 52.5,
    "y": 3,
    "z": 7.9,
-   "text": "Camille",
-   "t0": 37.45,
-   "t1": 42.1
+   "text": "Ishan",
+   "t0": 40.525,
+   "t1": 45.261
   },
   {
    "x": 54.800000000000004,
    "y": 3,
    "z": 7.4,
-   "text": "Iain",
-   "t0": 37.800000000000004,
-   "t1": 42.1
+   "text": "Veeranuch",
+   "t0": 41.058,
+   "t1": 45.261
   }
  ],
  "cars": false,
@@ -1338,11 +1387,59 @@
    "at": null
   },
   {
-   "id": "@cnaaitsirh",
-   "name": "cnaaitsirh",
-   "handle": "@cnaaitsirh",
-   "x": 55.95,
-   "z": 3.8000000000000003,
+   "id": "@UserFromRO",
+   "name": "UserFromRO",
+   "handle": "@UserFromRO",
+   "x": 125.5,
+   "z": 7.2,
+   "ry": -0.25,
+   "colors": {
+    "hood": "#3d9bd6",
+    "hat": "#f08a24",
+    "pants": "#2f3542",
+    "skin": "#f4d6b8",
+    "hair": "#b5672e"
+   },
+   "at": null
+  },
+  {
+   "id": "@salihkeremince1475",
+   "name": "Salih",
+   "handle": "@salihkeremince1475",
+   "x": 26.5,
+   "z": 31.2,
+   "ry": -0.25,
+   "colors": {
+    "hood": "#46a36a",
+    "hat": "#e85a8c",
+    "pants": "#4a3a2c",
+    "skin": "#a8744d",
+    "hair": "#120c08"
+   },
+   "at": null
+  },
+  {
+   "id": "@sanulatesade",
+   "name": "Sanulatesade",
+   "handle": "@sanulatesade",
+   "x": 41.5,
+   "z": 31.2,
+   "ry": -0.25,
+   "colors": {
+    "hood": "#3d9bd6",
+    "hat": "#f08a24",
+    "pants": "#2f3542",
+    "skin": "#f4d6b8",
+    "hair": "#b5672e"
+   },
+   "at": null
+  },
+  {
+   "id": "@Kalilay77Yt",
+   "name": "Kalilay",
+   "handle": "@Kalilay77Yt",
+   "x": 46.75,
+   "z": 5.6000000000000005,
    "ry": 0,
    "colors": {
     "hood": "#f08a24",
@@ -1354,61 +1451,45 @@
    "at": null
   },
   {
-   "id": "@UserFromRO",
-   "name": "UserFromRO",
-   "handle": "@UserFromRO",
-   "x": 125.5,
-   "z": 7.2,
-   "ry": -0.25,
-   "at": 23.3,
+   "id": "@camillehanton7279",
+   "name": "Camille",
+   "handle": "@camillehanton7279",
+   "x": 53.65,
+   "z": 4.300000000000001,
+   "ry": 0,
    "colors": {
-    "hood": "#3d9bd6",
-    "hat": "#f08a24",
-    "pants": "#2f3542",
-    "skin": "#f4d6b8",
-    "hair": "#b5672e"
-   }
+    "hood": "#8a6fb8",
+    "hat": "#ffd24a",
+    "pants": "#2e4a6b",
+    "skin": "#d9a878",
+    "hair": "#1d1712"
+   },
+   "at": null
   },
   {
-   "id": "@salihkeremince1475",
-   "name": "Salih",
-   "handle": "@salihkeremince1475",
-   "x": 26.5,
-   "z": 31.2,
-   "ry": -0.25,
-   "at": 25.6,
+   "id": "@iainmcdowall7943",
+   "name": "Iain",
+   "handle": "@iainmcdowall7943",
+   "x": 55.95,
+   "z": 3.8000000000000003,
+   "ry": 0,
    "colors": {
     "hood": "#46a36a",
     "hat": "#e85a8c",
     "pants": "#4a3a2c",
     "skin": "#a8744d",
     "hair": "#120c08"
-   }
+   },
+   "at": null
   },
   {
-   "id": "@sanulatesade",
-   "name": "Sanulatesade",
-   "handle": "@sanulatesade",
-   "x": 41.5,
-   "z": 31.2,
+   "id": "@cnaaitsirh",
+   "name": "cnaaitsirh",
+   "handle": "@cnaaitsirh",
+   "x": 11.5,
+   "z": 33.6,
    "ry": -0.25,
-   "at": 27.900000000000002,
-   "colors": {
-    "hood": "#3d9bd6",
-    "hat": "#f08a24",
-    "pants": "#2f3542",
-    "skin": "#f4d6b8",
-    "hair": "#b5672e"
-   }
-  },
-  {
-   "id": "@Kalilay77Yt",
-   "name": "Kalilay",
-   "handle": "@Kalilay77Yt",
-   "x": 50.2,
-   "z": 7.4,
-   "ry": 0,
-   "at": 36.9,
+   "at": 17.827,
    "colors": {
     "hood": "#f08a24",
     "hat": "#8a6fb8",
@@ -1418,13 +1499,29 @@
    }
   },
   {
-   "id": "@camillehanton7279",
-   "name": "Camille",
-   "handle": "@camillehanton7279",
-   "x": 52.5,
-   "z": 7.9,
-   "ry": 0,
-   "at": 37.25,
+   "id": "@bobduur",
+   "name": "Bob",
+   "handle": "@bobduur",
+   "x": -80,
+   "z": -92.8,
+   "ry": -0.25,
+   "at": 21.273,
+   "colors": {
+    "hood": "#ef7fb0",
+    "hat": "#46a36a",
+    "pants": "#34405a",
+    "skin": "#7a4f33",
+    "hair": "#120c08"
+   }
+  },
+  {
+   "id": "@tamineeshinasharkey7057",
+   "name": "Taminee",
+   "handle": "@tamineeshinasharkey7057",
+   "x": 112.7,
+   "z": 8.4,
+   "ry": -0.3,
+   "at": 35.254,
    "colors": {
     "hood": "#8a6fb8",
     "hat": "#ffd24a",
@@ -1434,13 +1531,45 @@
    }
   },
   {
-   "id": "@iainmcdowall7943",
-   "name": "Iain",
-   "handle": "@iainmcdowall7943",
+   "id": "@terrywu4753",
+   "name": "Terry",
+   "handle": "@terrywu4753",
+   "x": 50.2,
+   "z": 7.4,
+   "ry": 0,
+   "at": 39.687,
+   "colors": {
+    "hood": "#ef7fb0",
+    "hat": "#46a36a",
+    "pants": "#34405a",
+    "skin": "#7a4f33",
+    "hair": "#120c08"
+   }
+  },
+  {
+   "id": "@ishan_the_rial_frend",
+   "name": "Ishan",
+   "handle": "@ishan_the_rial_frend",
+   "x": 52.5,
+   "z": 7.9,
+   "ry": 0,
+   "at": 40.22,
+   "colors": {
+    "hood": "#8a6fb8",
+    "hat": "#ffd24a",
+    "pants": "#2e4a6b",
+    "skin": "#d9a878",
+    "hair": "#1d1712"
+   }
+  },
+  {
+   "id": "@VeeranuchKaewkabthong",
+   "name": "Veeranuch",
+   "handle": "@VeeranuchKaewkabthong",
    "x": 54.800000000000004,
    "z": 7.4,
    "ry": 0,
-   "at": 37.6,
+   "at": 40.753,
    "colors": {
     "hood": "#46a36a",
     "hat": "#e85a8c",
@@ -1655,7 +1784,7 @@
     "name": "UserFromRO's M5 house",
     "handle": "@UserFromRO"
    },
-   "at": 22.900000000000002
+   "at": null
   },
   {
    "id": 13,
@@ -1673,7 +1802,7 @@
     "name": "Salih's villa",
     "handle": "@salihkeremince1475"
    },
-   "at": 25.200000000000003
+   "at": null
   },
   {
    "id": 14,
@@ -1691,7 +1820,7 @@
     "name": "Sanulatesade's house",
     "handle": "@sanulatesade"
    },
-   "at": 27.500000000000004
+   "at": null
   },
   {
    "id": 15,
@@ -1703,7 +1832,66 @@
     "fence",
     "court"
    ],
-   "at": 33.50000000000001
+   "at": null
+  },
+  {
+   "id": 16,
+   "i": 0,
+   "j": 1,
+   "x": 7.5,
+   "z": 24,
+   "day": 5,
+   "seed": 403,
+   "type": "mansion",
+   "cap": 6,
+   "owner": "@cnaaitsirh",
+   "sign": {
+    "icon": "🏛️",
+    "name": "cnaaitsirh's mansion",
+    "handle": "@cnaaitsirh"
+   },
+   "at": 17.394
+  },
+  {
+   "id": 17,
+   "x": -84,
+   "z": -100,
+   "ry": 0.5,
+   "day": 5,
+   "seed": 418,
+   "type": "cabin",
+   "cap": 6,
+   "owner": "@bobduur",
+   "sign": {
+    "icon": "⛰️",
+    "name": "Bob's mountain cabin",
+    "handle": "@bobduur"
+   },
+   "at": 20.57
+  },
+  {
+   "id": 18,
+   "type": "yard",
+   "x": 106.5,
+   "z": 0,
+   "day": 5,
+   "extras": [
+    "statue"
+   ],
+   "at": 29.348
+  },
+  {
+   "id": 19,
+   "type": "memorial",
+   "x": 17,
+   "z": 6.2,
+   "day": 5,
+   "sign": {
+    "icon": "🌷",
+    "name": "In loving memory",
+    "handle": "Mats' grandparents"
+   },
+   "at": 72.308
   }
  ],
  "tiles": [
@@ -1848,7 +2036,7 @@
    "w": 15,
    "d": 6,
    "cobble": true,
-   "at": 22.6
+   "at": null
   }
  ],
  "island": {
@@ -2309,21 +2497,21 @@
   "z0": -16,
   "z1": 24
  },
- "residentsHome": 37,
+ "residentsHome": 41,
  "summary": {
-  "before": 89,
-  "after": 98,
+  "before": 98,
+  "after": 107,
   "gained": 9,
-  "income": 9176,
-  "cash": 11376,
-  "housing": 190,
+  "income": 9082,
+  "cash": 458,
+  "housing": 202,
   "built": 4,
   "queue": 0,
   "roommates": [],
   "ownHouses": [
-   "@UserFromRO",
-   "@salihkeremince1475",
-   "@sanulatesade"
+   "@cnaaitsirh",
+   "@bobduur",
+   "@tamineeshinasharkey7057"
   ],
   "wishes": [
    "military base 3",
@@ -2333,7 +2521,9 @@
    "apartment block 2",
    "Police Station 2",
    "football field 1",
+   "market 1",
    "factory 1",
+   "LeoBurg 1",
    "Hospital 1",
    "airport 1",
    "Comment Spam Contest 1",
@@ -2352,14 +2542,16 @@
    "Anime Art Mascine 1"
   ],
   "jobs": [
-   "@doodleandarkeyeditzYT:leader"
+   "@Kalilay77Yt:leader"
   ],
   "election": [
    "@Iknowlightyagamiiskira",
    "@Divish26",
    "@illegal_football_player",
    "@Alex-o7z6q",
-   "@doodleandarkeyeditzYT"
+   "@doodleandarkeyeditzYT",
+   "@Kalilay77Yt"
   ]
- }
+ },
+ "audio": "day-5.wav"
 }
