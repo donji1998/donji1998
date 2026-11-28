@@ -107,3 +107,9 @@ html, body { margin: 0; height: 100%; background: #0c0f1c; overflow: hidden; fon
 .votes .r .i { font-size: 22px; } .votes .r b { color: var(--gold); font-size: 22px; text-align: right; }
 .votes .bar { height: 14px; border-radius: 7px; background: #ffffff1a; overflow: hidden; }
 .votes .bar i { display: block; height: 100%; border-radius: 7px; background: linear-gradient(90deg, var(--gold), #ff9d3c); transform-origin: left; }
+
+/* long lists (elections, job boards) sit higher and tighter so captions never cover them */
+.hires.tall { top: 196px; padding: 10px 18px; }
+.hires.tall .r { padding: 1px 0; font-size: 16px; }
+.hires.tall .r .avatar { width: 26px; height: 26px; font-size: 14px; }
+.hires.tall .note { margin-top: 6px; font-size: 15px; }

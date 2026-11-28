@@ -51,7 +51,7 @@ else input = await fetchInput(cfg, process.env.YOUTUBE_API_KEY ?? cfg.apiKey);
 write(inputFile, input);
 
 // village stage: while the town is small every comment gets its own moment
-const village = (prev.stage ?? 'village') === 'village' && (input.subscribers ?? 0) + 1 <= (cfg.villageUntil ?? 120);
+const village = (prev.stage ?? 'village') === 'village' && (input.subscribers ?? 0) + 1 <= (cfg.villageUntil ?? 1000);
 const { state, episode } = village ? storyDay(prev, input, cfg) : runDay(prev, input, cfg);
 if (!village) state.stage = 'city';
 write(path.join(dir, 'state', `day-${day}.json`), state);

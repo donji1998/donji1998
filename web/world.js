@@ -68,6 +68,9 @@ const HOUSE_ROOF = ['#c2553f', '#8f4a3a', '#5d7d9a', '#7a8b52', '#a8623a'];
 function house(p, r, b = {}) {
   const w0 = HOUSE_WALL[r() * 5 | 0], r0 = HOUSE_ROOF[r() * 5 | 0];
   const wall = b.wall ?? w0, roof = b.roof ?? r0;   // a resident may ask for a colour
+  if (b.pool) {   // a swimming pool next to the house
+    p.box(5.2, 0.3, 3.6, '#e9eef2', 5.8, 0, 1.2).box(4.4, 0.32, 2.8, '#4fc3f7', 5.8, 0.02, 1.2).box(0.9, 0.5, 0.4, '#f3efe6', 7.6, 0.3, 3.2);
+  }
   p.box(8, 3.6, 6.5, wall, 0, 0, 0).gable(8.8, 3, 7.4, roof, 0, 3.6, 0);
   p.box(1.3, 2.3, 0.2, shade(roof, 0.7), 0, 0, 3.3).box(1.5, 1.3, 0.2, GLASS, -2.5, 1.4, 3.3).box(1.5, 1.3, 0.2, GLASS, 2.5, 1.4, 3.3);
   p.box(0.9, 2.2, 0.9, shade(wall, 0.8), 2.4, 4.2, -1);
@@ -331,6 +334,11 @@ function yard(p, b) {
     p.box(2, 0.5, 2, '#8d94a0', x, y, 0.6).cyl(0.55, 0.7, 1.7, '#e0b43a', x, y + 0.5, 0.6, 12).ball(0.5, '#f0c87a', x, y + 2.1, 0.6)
       .add(new THREE.SphereGeometry(0.55, 12, 8, 0, Math.PI * 2, 0, Math.PI / 2), '#d4a72c', x, y + 2.65, 0.6).ball(0.16, '#f3e1a0', x, y + 3.2, 0.6)
       .add(new THREE.BoxGeometry(0.3, 1.3, 0.3).rotateZ(-0.5), '#e0b43a', x + 0.85, y + 1.8, 0.6);
+  }
+  if (ex.includes('vi')) {   // a giant 'VI' behind the house
+    const col = '#ff4fa3', z = -5.5, y = 0;
+    p.add(new THREE.BoxGeometry(0.9, 6, 0.9).rotateZ(0.32), col, -2.0, y + 3.1, z).add(new THREE.BoxGeometry(0.9, 6, 0.9).rotateZ(-0.32), col, 0.0, y + 3.1, z);
+    p.box(0.9, 5.8, 0.9, '#ffb03a', 2.4, y, z).box(4.6, 0.3, 1.6, '#3a3f4d', 0.2, 0, z);
   }
   if (ex.includes('court')) {
     // in the front garden, where you can see it from the street

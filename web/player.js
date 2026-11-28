@@ -283,7 +283,7 @@ const PANELS = {
     return lt => { show(el, lt > p.at + 1.15 ? 0 : pop(lt, 0.3), 'grid'); show(pr, lt > p.at + 1.25 ? 0 : pop(lt, p.at)); };
   },
   hires(p) {
-    const el = mk('hires', `<h4>${p.icon} ${esc(p.title)}</h4>` + p.rows.map(r => `<div class="r">${avatar(r.handle, r.hue)}<span>${esc(r.handle)}</span><i>${esc(r.title)}</i></div>`).join('')
+    const el = mk('hires' + (p.rows.length > 5 ? ' tall' : ''), `<h4>${p.icon} ${esc(p.title)}</h4>` + p.rows.map(r => `<div class="r">${avatar(r.handle, r.hue)}<span>${esc(r.handle)}</span><i>${esc(r.title)}</i></div>`).join('')
       + (p.more ? `<div class="r"><span>+${p.more}</span></div>` : '') + (p.note ? `<div class="note">${esc(p.note)}</div>` : ''));
     const rows = [...el.querySelectorAll('.r, .note')];
     return lt => { show(el, pop(lt, 0.3)); rows.forEach((r, k) => { r.style.opacity = clamp(pop(lt, 0.7 + k * 0.35, 0.2)); }); };

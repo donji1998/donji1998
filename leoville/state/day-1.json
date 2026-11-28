@@ -333,6 +333,7 @@
  },
  "homeQueue": [],
  "candidates": {},
+ "jobBoard": {},
  "goal": {
   "key": "school",
   "cost": 120000

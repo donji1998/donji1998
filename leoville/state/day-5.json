@@ -994,6 +994,14 @@
    }
   ]
  },
+ "jobBoard": {
+  "@thomasrichardson8510": {
+   "job": "works at LeoBurg",
+   "icon": "🍔",
+   "name": "Thomas",
+   "day": 5
+  }
+ },
  "goal": {
   "key": "school",
   "cost": 120000
